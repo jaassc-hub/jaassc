@@ -1,0 +1,227 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ---------- Administracion / usuarios y roles ----------
+// Presidente y Tesorero siempre tienen acceso total. Secretaria, Fiscal y Vocal
+// solo tienen acceso a los modulos que el administrador les habilite en "permisos"
+// (un JSON con las claves de modulo, ej. ["abonados","pagos"]).
+
+enum RolUsuario {
+  PRESIDENTE
+  TESORERO
+  SECRETARIA
+  FISCAL
+  VOCAL
+  COBRADOR // acceso exclusivo a registrar/ver pagos, pensado para cobradores externos
+}
+
+model Usuario {
+  id           String     @id @default(cuid())
+  username     String     @unique
+  passwordHash String
+  nombre       String?
+  rol          RolUsuario @default(VOCAL)
+  permisos     String     @default("[]") // JSON string array de claves de modulo
+  activo       Boolean    @default(true)
+  createdAt    DateTime   @default(now())
+}
+
+// Configuracion editable del recibo (secciones visibles, orden, textos libres)
+// se guarda como JSON en "valor" para poder reacomodar sin migrar el esquema.
+model Configuracion {
+  id    String @id @default(cuid())
+  clave String @unique
+  valor String // JSON string
+}
+
+// Registro de los mensajes de WhatsApp enviados (o que fallaron), para que el
+// tesorero pueda ver que se avisaron los pagos y detectar numeros mal escritos.
+enum EstadoMensaje {
+  ENVIADO
+  ERROR
+}
+
+model MensajeWhatsapp {
+  id        String        @id @default(cuid())
+  pagoId    String?
+  telefono  String
+  mensaje   String
+  estado    EstadoMensaje
+  error     String?
+  createdAt DateTime      @default(now())
+}
+
+// ---------- Barrios / zonas ----------
+// Cada barrio tiene un prefijo de codigo (GUA, 3MY, SNJ, LEM...) y un contador
+// correlativo para generar el codigo del siguiente pegue automaticamente.
+
+model Barrio {
+  id          String   @id @default(cuid())
+  nombre      String   @unique
+  prefijo     String   @unique // Ej: GUA, 3MY, SNJ, LEM
+  ultimoNum   Int      @default(0) // ultimo numero correlativo usado
+  pegues      Pegue[]
+  createdAt   DateTime @default(now())
+}
+
+// ---------- Servicios y tarifas ----------
+// Un servicio es "Agua Potable", "Alcantarillado", "Tren de Aseo", etc.
+// El precio (tarifa) del servicio es editable unicamente por el administrador.
+
+model Servicio {
+  id        String              @id @default(cuid())
+  nombre    String              @unique
+  precio    Float // tarifa mensual de este servicio
+  activo    Boolean             @default(true)
+  pegues    PegueServicio[]
+  createdAt DateTime            @default(now())
+  updatedAt DateTime            @updatedAt
+}
+
+// ---------- Abonados ----------
+
+model Abonado {
+  id           String   @id @default(cuid())
+  nombre       String
+  identidad    String?  @unique // numero de identidad, usado para el portal publico. Puede quedar vacio temporalmente.
+  identidadAutocompletada Boolean @default(false) // true si el propio abonado la agrego desde el portal
+  pin          String?  // codigo de acceso al portal publico (alternativa a la identidad)
+  telefono     String?
+  direccion    String?
+  activo       Boolean  @default(true)
+  pegues       Pegue[]
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+// ---------- Pegues ----------
+// Un abonado puede tener muchos pegues. Un pegue pertenece a un solo abonado.
+// El codigo se genera automaticamente (PREFIJO + correlativo, ej GUA001) pero
+// puede ser editado manualmente por el administrador.
+
+enum EstadoPegue {
+  ACTIVO
+  CORTADO
+  INACTIVO
+}
+
+model Pegue {
+  id           String          @id @default(cuid())
+  codigo       String          @unique // Ej: GUA001
+  abonado      Abonado         @relation(fields: [abonadoId], references: [id])
+  abonadoId    String
+  barrio       Barrio          @relation(fields: [barrioId], references: [id])
+  barrioId     String
+  estado       EstadoPegue     @default(ACTIVO)
+  servicios    PegueServicio[]
+  pagos        Pago[]
+  eventos      EventoPegue[]
+  cuotas       CuotaPegue[]
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+}
+
+// Relacion muchos-a-muchos entre Pegue y Servicio (que servicios tiene habilitados
+// cada pegue). Se guarda el precio "congelado" al momento de habilitarlo, aunque
+// por defecto se usa el precio actual del servicio.
+
+model PegueServicio {
+  id         String   @id @default(cuid())
+  pegue      Pegue    @relation(fields: [pegueId], references: [id], onDelete: Cascade)
+  pegueId    String
+  servicio   Servicio @relation(fields: [servicioId], references: [id])
+  servicioId String
+  habilitado Boolean  @default(true)
+
+  @@unique([pegueId, servicioId])
+}
+
+// ---------- Pagos ----------
+// Un pago cubre un mes/anio especifico de un pegue. Ademas del pago normal de
+// tarifa, puede incluir mora y/o reconexion.
+
+enum MetodoPago {
+  EFECTIVO
+  TRANSFERENCIA
+  DEPOSITO
+  OTRO
+}
+
+model Pago {
+  id             String     @id @default(cuid())
+  pegue          Pegue      @relation(fields: [pegueId], references: [id])
+  pegueId        String
+  mesPagado      Int        // 1-12, mes que se esta cancelando
+  anioPagado     Int        // anio que se esta cancelando
+  montoServicios Float      // suma de tarifas de servicios habilitados
+  montoMora      Float      @default(0)
+  montoReconexion Float     @default(0)
+  montoDescuento Float      @default(0) // descuento o regalia aplicada a todo el recibo (una sola vez)
+  motivoDescuento String?   // motivo del descuento/regalia (automatico o escrito a mano)
+  mesesMora      Int        @default(0) // meses de mora al momento de pagar
+  total          Float
+  metodoPago     MetodoPago @default(EFECTIVO)
+  referencia     String?    // numero de transferencia/deposito, opcional
+  observaciones  String?
+  loteId         String?    // agrupa varios meses pagados juntos en un mismo cobro/recibo
+  numeroRecibo   String?    // correlativo visible, ej "26-0428" (anio + numero). Igual para todo el lote.
+  emitidoPor     String?    // nombre/usuario de quien proceso el cobro, para trazabilidad
+  fechaPago      DateTime   @default(now()) // fecha real en que se recibio el dinero
+  createdAt      DateTime   @default(now())
+
+  @@unique([pegueId, mesPagado, anioPagado]) // no se puede pagar dos veces el mismo mes de un pegue
+}
+
+// Contador correlativo de recibos, uno por anio de emision (ej. 2026 -> 428).
+model ContadorRecibo {
+  id     String @id @default(cuid())
+  anio   Int    @unique
+  ultimo Int    @default(0)
+}
+
+// ---------- Historial de eventos del pegue ----------
+// Registra cortes, reconexiones y reactivaciones con fecha, para tener
+// trazabilidad completa en el historial del pegue.
+
+enum TipoEvento {
+  CORTE
+  RECONEXION
+  REACTIVACION
+  INHABILITACION
+}
+
+model EventoPegue {
+  id      String     @id @default(cuid())
+  pegue   Pegue      @relation(fields: [pegueId], references: [id])
+  pegueId String
+  tipo    TipoEvento
+  nota    String?
+  fecha   DateTime   @default(now())
+}
+
+// ---------- Cuotas de conexion (derecho de pegue) ----------
+// Al crear un pegue nuevo se le puede cobrar un derecho de conexion, de contado o
+// en cuotas. Cada fila es una cuota individual; si se paga de contado se crea una
+// sola cuota ya marcada como pagada, para dejar el mismo registro/trazabilidad.
+
+model CuotaPegue {
+  id         String     @id @default(cuid())
+  pegue      Pegue      @relation(fields: [pegueId], references: [id])
+  pegueId    String
+  numero     Int        // 1, 2, 3... orden de la cuota dentro del plan
+  totalCuotas Int       // cuantas cuotas tiene el plan completo (para mostrar "2 de 4")
+  monto      Float
+  pagada     Boolean    @default(false)
+  fechaPago  DateTime?
+  metodoPago MetodoPago?
+  referencia String?
+  numeroRecibo String?  // correlativo del recibo, comparte la misma numeracion que los pagos mensuales
+  emitidoPor String?
+  createdAt  DateTime   @default(now())
+}

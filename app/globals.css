@@ -1,0 +1,76 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --azul: #0f40bc;
+  --azul-dark: #0b2d84;
+  --naranja: #f2790b;
+}
+
+body {
+  background-color: #f5f7fa;
+  color: #1a1a1a;
+}
+
+.btn-primario {
+  @apply bg-azul text-white px-4 py-2 rounded-lg font-medium hover:bg-azul-dark transition-colors disabled:opacity-50;
+}
+
+.btn-secundario {
+  @apply bg-naranja text-white px-4 py-2 rounded-lg font-medium hover:bg-naranja-dark transition-colors disabled:opacity-50;
+}
+
+.btn-outline {
+  @apply border-2 border-azul text-azul px-4 py-2 rounded-lg font-medium hover:bg-azul hover:text-white transition-colors;
+}
+
+.card {
+  @apply bg-white rounded-xl shadow-sm border border-gray-200 p-5;
+}
+
+.input {
+  @apply w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-azul;
+}
+
+.label {
+  @apply text-sm font-medium text-gray-600 mb-1 block;
+}
+
+.badge-verde {
+  @apply bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-xs font-semibold;
+}
+
+.badge-rojo {
+  @apply bg-red-100 text-red-700 px-2 py-0.5 rounded-full text-xs font-semibold;
+}
+
+.badge-naranja {
+  @apply bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full text-xs font-semibold;
+}
+
+@media print {
+  .no-imprimir {
+    display: none !important;
+  }
+  body {
+    background: white;
+  }
+  .recibo-print {
+    box-shadow: none !important;
+    border: 1px solid #ccc !important;
+  }
+  .ticket-recibo {
+    color: #000 !important;
+    box-shadow: none !important;
+    border: none !important;
+    width: auto !important;
+  }
+  .ticket-recibo * {
+    color: #000 !important;
+    background: transparent !important;
+  }
+  @page {
+    margin: 4mm;
+  }
+}
