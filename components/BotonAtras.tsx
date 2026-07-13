@@ -7,7 +7,6 @@ export default function BotonAtras({ href, label = "Atrás" }: { href?: string; 
   const router = useRouter();
   return (
     <button
-      type="button"
       onClick={() => (href ? router.push(href) : router.back())}
       className="no-imprimir flex items-center gap-1.5 text-azul text-sm font-medium mb-3 hover:underline"
     >

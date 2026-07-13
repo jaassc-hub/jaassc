@@ -7,7 +7,7 @@ const PLACEHOLDERS = [
   "{nombre}", "{codigo}", "{barrio}", "{meses}", "{total}", "{numeroRecibo}", "{fecha}", "{junta}",
 ];
 
-export default function WhatsappClient({
+export default function AvisosClient({
   configInicial,
   credencialesConfiguradas,
   mensajesIniciales,
@@ -27,7 +27,7 @@ export default function WhatsappClient({
   async function guardar() {
     setGuardando(true);
     setMensaje("");
-    const res = await fetch("/api/config/whatsapp", {
+    const res = await fetch("/api/config/avisos", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(config),
@@ -40,14 +40,14 @@ export default function WhatsappClient({
     if (!telefonoPrueba) return;
     setEnviandoPrueba(true);
     setResultadoPrueba("");
-    const res = await fetch("/api/whatsapp/prueba", {
+    const res = await fetch("/api/avisos/prueba", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ telefono: telefonoPrueba }),
     });
     setEnviandoPrueba(false);
     const data = await res.json();
-    setResultadoPrueba(res.ok ? "✓ Mensaje enviado, revise el WhatsApp de esa línea." : `Error: ${data.error}`);
+    setResultadoPrueba(res.ok ? "✓ Mensaje enviado, revíselo en ese teléfono." : `Error: ${data.error}`);
   }
 
   return (
@@ -57,7 +57,7 @@ export default function WhatsappClient({
           <p className="text-sm text-orange-700">
             ⚠ Todavía no hay credenciales de Twilio en el servidor
             (<code>TWILIO_ACCOUNT_SID</code> / <code>TWILIO_AUTH_TOKEN</code> en su archivo
-            <code> .env</code>). Puede configurar todo lo demás aquí, pero los mensajes no se
+            <code> .env</code>). Puede configurar todo lo demás aquí, pero los avisos no se
             enviarán hasta que agregue esas dos variables y reinicie el sistema.
           </p>
         </div>
@@ -70,8 +70,20 @@ export default function WhatsappClient({
             checked={config.activo}
             onChange={(e) => setConfig({ ...config, activo: e.target.checked })}
           />
-          Activar aviso automático por WhatsApp
+          Activar aviso automático de pago
         </label>
+
+        <div>
+          <label className="label">Canal de envío</label>
+          <select className="input" value={config.canal} onChange={(e) => setConfig({ ...config, canal: e.target.value })}>
+            <option value="SMS">SMS (mensaje de texto)</option>
+            <option value="WHATSAPP">WhatsApp</option>
+          </select>
+          <p className="text-xs text-gray-400 mt-1">
+            Use SMS mientras espera la aprobación de WhatsApp por parte de Meta — el mismo
+            número de Twilio sirve para los dos, solo cambie esta opción cuando le aprueben.
+          </p>
+        </div>
 
         <div>
           <label className="label">Número de envío (el que le dio Twilio)</label>
@@ -122,8 +134,9 @@ export default function WhatsappClient({
         </div>
         {resultadoPrueba && <p className="text-sm text-gray-600">{resultadoPrueba}</p>}
         <p className="text-xs text-gray-400">
-          Si está usando el sandbox de Twilio, primero debe "unir" ese número desde su
-          WhatsApp con el código que le dio Twilio, o el mensaje no llegará.
+          La prueba usa el canal que tenga seleccionado arriba (guárdelo primero). Si está
+          probando WhatsApp con el sandbox de Twilio, primero debe "unir" ese número desde su
+          WhatsApp con el código que le dio Twilio.
         </p>
       </div>
 
@@ -138,7 +151,9 @@ export default function WhatsappClient({
                 <XCircle size={16} className="text-red-500 shrink-0 mt-0.5" />
               )}
               <div>
-                <p>{m.telefono}</p>
+                <p>
+                  {m.telefono} <span className="text-gray-400">· {m.canal}</span>
+                </p>
                 <p className="text-xs text-gray-400">
                   {new Date(m.createdAt).toLocaleString("es-HN")}
                   {m.error && ` · ${m.error}`}

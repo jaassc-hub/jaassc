@@ -349,7 +349,26 @@ npx prisma db push
 npm run dev
 ```
 
-## 15. Pendiente para la próxima conversación
+## 15. Novedades de esta actualización (avisos por SMS, además de WhatsApp)
+
+- **Avisos de pago ahora por SMS o WhatsApp**, con el mismo número de Twilio — se cambia
+  con un solo campo en **Configuración → Avisos de pago**, sin tocar código.
+- Recomendado: empiece con **SMS** (no depende de la aprobación de Meta, funciona apenas
+  tenga su número de Twilio y el "compliance profile" aprobado). Cuando le aprueben
+  WhatsApp más adelante, solo cambie el canal a "WhatsApp" — el mensaje, el número, y todo
+  lo demás queda igual.
+- El registro de "Últimos mensajes" ahora también muestra por cuál canal se mandó cada uno.
+- La ruta y los archivos de este módulo se renombraron de "whatsapp" a "avisos" para
+  reflejar que ya no es exclusivo de WhatsApp — si tenía la página vieja
+  `/admin/configuracion/whatsapp` guardada en favoritos, ahora es
+  `/admin/configuracion/avisos`.
+
+```bash
+npx prisma db push
+npm run dev
+```
+
+## 16. Pendiente para la próxima conversación
 
 Quedó anotado para cuando usted diga:
 - Ayuda migrando sus abonados/pegues desde una hoja de Excel.
@@ -357,7 +376,7 @@ Quedó anotado para cuando usted diga:
   cobro tarda un par de segundos porque cada clic hace una consulta nueva a la base de
   datos en Neon; hay formas de acelerarlo, mas adelante lo vemos con calma).
 
-## 16. Notas importantes
+## 17. Notas importantes
 
 - Si alguna vez le vuelve a aparecer una pregunta pidiendo "resetear" el schema de la base
   de datos: **cancele con Ctrl+C y no acepte**. Eso borra todos los datos. Use siempre

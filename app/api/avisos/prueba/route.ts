@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { obtenerUsuarioActual } from "@/lib/auth";
 import { tienePermiso } from "@/lib/permisos";
-import { enviarWhatsapp } from "@/lib/whatsapp";
+import { enviarAviso } from "@/lib/avisos";
 
 export async function POST(req: NextRequest) {
   const usuarioActual = await obtenerUsuarioActual();
@@ -14,8 +14,8 @@ export async function POST(req: NextRequest) {
   }
 
   const mensaje =
-    "Este es un mensaje de prueba de su sistema de la Junta de Agua. Si lo recibió, todo está funcionando correctamente. ✅";
-  const resultado = await enviarWhatsapp(telefono, mensaje);
+    "Este es un mensaje de prueba de su sistema de la Junta de Agua. Si lo recibió, todo está funcionando correctamente.";
+  const resultado = await enviarAviso(telefono, mensaje);
 
   if (!resultado.ok) {
     return NextResponse.json({ error: resultado.error }, { status: 400 });

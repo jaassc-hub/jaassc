@@ -50,6 +50,7 @@ enum EstadoMensaje {
 model MensajeWhatsapp {
   id        String        @id @default(cuid())
   pagoId    String?
+  canal     String        @default("WHATSAPP") // "SMS" o "WHATSAPP"
   telefono  String
   mensaje   String
   estado    EstadoMensaje

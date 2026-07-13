@@ -51,11 +51,12 @@ export default async function ConfiguracionPage() {
             </p>
           </Link>
 
-          <Link href="/admin/configuracion/whatsapp" className="card hover:shadow-md transition-shadow">
+          <Link href="/admin/configuracion/avisos" className="card hover:shadow-md transition-shadow">
             <MessageCircle className="text-azul mb-2" size={24} strokeWidth={1.8} />
-            <p className="font-semibold text-azul">Avisos por WhatsApp</p>
+            <p className="font-semibold text-azul">Avisos de pago (SMS / WhatsApp)</p>
             <p className="text-sm text-gray-500 mt-1">
-              Active o desactive el mensaje automático de pago recibido, y edite su contenido.
+              Active o desactive el aviso automático de pago recibido, elija el canal y
+              edite el mensaje.
             </p>
           </Link>
 

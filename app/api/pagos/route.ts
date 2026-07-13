@@ -4,7 +4,7 @@ import { mesesDeMora, calcularMontoMora, mesesConsecutivos, siguienteMesPendient
 import { obtenerUsuarioActual } from "@/lib/auth";
 import { asegurarPin } from "@/lib/pin";
 import { MORA_DEFAULT } from "@/lib/moraConfig";
-import { obtenerConfigWhatsapp, enviarWhatsapp, llenarPlantilla } from "@/lib/whatsapp";
+import { obtenerConfigAvisos, enviarAviso, llenarPlantilla } from "@/lib/avisos";
 import { randomUUID } from "crypto";
 
 export async function GET(req: NextRequest) {
@@ -178,12 +178,12 @@ export async function POST(req: NextRequest) {
     const totalGeneral = pagosCreados.reduce((s, p) => s + p.total, 0);
     const mesesMoraMax = Math.max(...pagosCreados.map((p) => p.mesesMora));
 
-    // Notificacion por WhatsApp (si esta activada y el abonado tiene telefono).
-    // Nunca debe interrumpir la respuesta del cobro, aunque falle el envio.
+    // Notificacion de pago (SMS o WhatsApp, segun este configurado). Nunca debe
+    // interrumpir la respuesta del cobro, aunque falle el envio.
     try {
-      const configWa = await obtenerConfigWhatsapp();
-      if (configWa.activo && pegue.abonado.telefono) {
-        const mensaje = llenarPlantilla(configWa.plantilla, {
+      const configAvisos = await obtenerConfigAvisos();
+      if (configAvisos.activo && pegue.abonado.telefono) {
+        const mensaje = llenarPlantilla(configAvisos.plantilla, {
           nombre: pegue.abonado.nombre,
           codigo: pegue.codigo,
           barrio: pegue.barrio.nombre,
@@ -193,7 +193,7 @@ export async function POST(req: NextRequest) {
           fecha: fecha.toLocaleDateString("es-HN"),
           junta: process.env.NEXT_PUBLIC_JUNTA_NOMBRE || "Junta de Agua",
         });
-        await enviarWhatsapp(pegue.abonado.telefono, mensaje, pagosCreados[0].id);
+        await enviarAviso(pegue.abonado.telefono, mensaje, pagosCreados[0].id);
       }
     } catch {
       // silenciosamente ignorado: el pago ya quedo registrado de todas formas

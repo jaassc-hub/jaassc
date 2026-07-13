@@ -148,84 +148,85 @@ async function importarAbonados() {
 async function importarPagos() {
   const pagos = JSON.parse(fs.readFileSync(path.join(CARPETA, "pagos.json"), "utf-8"));
 
-  let creados = 0, saltadosDuplicado = 0, errores = 0;
-  const anioMaxRecibo = {};
+  console.log(`Cargando pegues...`);
+  const pegues = await prisma.pegue.findMany({ select: { id: true, codigo: true } });
+  const pegueIdPorCodigo = Object.fromEntries(pegues.map((p) => [p.codigo, p.id]));
 
+  // Se arma toda la lista de filas a insertar en memoria (sin tocar la base de datos todavia)
+  const filas = [];
+  let sinPegue = 0;
   for (const p of pagos) {
-    const pegue = await prisma.pegue.findUnique({ where: { codigo: p.codigo } });
-    if (!pegue) {
+    const pegueId = pegueIdPorCodigo[p.codigo];
+    if (!pegueId) {
       console.warn(`SALTADO recibo ${p.numeroRecibo}: no existe el pegue ${p.codigo}. Corra primero "abonados".`);
-      errores++;
+      sinPegue++;
       continue;
     }
-
     const loteId = p.meses.length > 1 ? `migrado-${p.numeroRecibo}` : null;
     const fecha = new Date(p.fechaPago);
 
-    for (let i = 0; i < p.meses.length; i++) {
-      const mes = p.meses[i];
+    p.meses.forEach((mes, i) => {
       const esPrimero = i === 0;
-      const yaExiste = await prisma.pago.findUnique({
-        where: { pegueId_mesPagado_anioPagado: { pegueId: pegue.id, mesPagado: mes, anioPagado: p.anio } },
-      }).catch(() => null);
-
-      if (yaExiste) {
-        saltadosDuplicado++;
-        continue;
-      }
-
       const total =
         p.tarifaMensual +
         (esPrimero ? p.montoMora : 0) +
         (esPrimero ? p.montoReconexion : 0) -
         (esPrimero ? p.montoDescuento : 0);
 
-      try {
-        await prisma.pago.create({
-          data: {
-            pegueId: pegue.id,
-            mesPagado: mes,
-            anioPagado: p.anio,
-            montoServicios: p.tarifaMensual,
-            montoMora: esPrimero ? p.montoMora : 0,
-            montoReconexion: esPrimero ? p.montoReconexion : 0,
-            montoDescuento: esPrimero ? p.montoDescuento : 0,
-            motivoDescuento: esPrimero ? p.motivoDescuento : null,
-            mesesMora: 0, // dato historico, no se recalcula
-            total,
-            metodoPago: p.metodoPago,
-            observaciones: "Migrado desde Excel",
-            loteId,
-            numeroRecibo: p.numeroRecibo,
-            emitidoPor: "Importado de Excel",
-            fechaPago: fecha,
-          },
-        });
-        creados++;
-        const anioRecibo = parseInt(p.numeroRecibo.split("-")[0]);
-        const numRecibo = parseInt(p.numeroRecibo.split("-")[1]);
-        anioMaxRecibo[anioRecibo] = Math.max(anioMaxRecibo[anioRecibo] || 0, numRecibo);
-      } catch (e) {
-        console.error(`ERROR en recibo ${p.numeroRecibo} (${p.codigo}, mes ${mes}/${p.anio}):`, e.message);
-        errores++;
-      }
-    }
+      filas.push({
+        pegueId,
+        mesPagado: mes,
+        anioPagado: p.anio,
+        montoServicios: p.tarifaMensual,
+        montoMora: esPrimero ? p.montoMora : 0,
+        montoReconexion: esPrimero ? p.montoReconexion : 0,
+        montoDescuento: esPrimero ? p.montoDescuento : 0,
+        motivoDescuento: esPrimero ? p.motivoDescuento : null,
+        mesesMora: 0,
+        total,
+        metodoPago: p.metodoPago,
+        observaciones: "Migrado desde Excel",
+        loteId,
+        numeroRecibo: p.numeroRecibo,
+        emitidoPor: "Importado de Excel",
+        fechaPago: fecha,
+      });
+    });
   }
 
+  console.log(`${filas.length} pagos por insertar (en lotes de 200)...`);
+
+  let insertados = 0;
+  const LOTE = 200;
+  for (let i = 0; i < filas.length; i += LOTE) {
+    const bloque = filas.slice(i, i + LOTE);
+    const resultado = await prisma.pago.createMany({ data: bloque, skipDuplicates: true });
+    insertados += resultado.count;
+    console.log(`  ${Math.min(i + LOTE, filas.length)} / ${filas.length} procesados (${insertados} nuevos hasta ahora)...`);
+  }
+
+  const saltadosDuplicado = filas.length - insertados;
+
   // Actualizar el contador de correlativo para que los recibos nuevos sigan despues del ultimo migrado
-  for (const [anioCorto, num] of Object.entries(anioMaxRecibo)) {
+  const anioMaxRecibo = {};
+  for (const p of pagos) {
+    const [anioCorto, num] = p.numeroRecibo.split("-");
     const anioCompleto = 2000 + parseInt(anioCorto);
-    const actual = await prisma.contadorRecibo.findUnique({ where: { anio: anioCompleto } });
+    anioMaxRecibo[anioCompleto] = Math.max(anioMaxRecibo[anioCompleto] || 0, parseInt(num));
+  }
+  for (const [anio, num] of Object.entries(anioMaxRecibo)) {
+    const anioInt = parseInt(anio);
+    const actual = await prisma.contadorRecibo.findUnique({ where: { anio: anioInt } });
     if (!actual || actual.ultimo < num) {
       await prisma.contadorRecibo.upsert({
-        where: { anio: anioCompleto },
+        where: { anio: anioInt },
         update: { ultimo: num },
-        create: { anio: anioCompleto, ultimo: num },
+        create: { anio: anioInt, ultimo: num },
       });
     }
   }
 
-  console.log(`\nPagos creados: ${creados} | ya existían (se saltaron): ${saltadosDuplicado} | errores: ${errores}`);
+  console.log(`\nPagos creados: ${insertados} | ya existían (se saltaron): ${saltadosDuplicado} | sin pegue: ${sinPegue}`);
 
   const rutaRevisar = path.join(CARPETA, "revisar_manualmente.json");
   if (fs.existsSync(rutaRevisar)) {
