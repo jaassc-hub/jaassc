@@ -3,7 +3,7 @@
 import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { Search, History, AlertTriangle, CreditCard, Printer, Banknote, Gift } from "lucide-react";
+import { Search, History, AlertTriangle, CreditCard, Printer, Banknote, Gift, Settings2 } from "lucide-react";
 import {
   mesesDeMora,
   calcularMontoMora,
@@ -371,9 +371,18 @@ function RegistrarPagoInner() {
                   <span className="badge-naranja mt-1 inline-block">Pegue inhabilitado</span>
                 )}
               </div>
-              <button onClick={cargarHistorial} className="btn-outline text-xs whitespace-nowrap flex items-center gap-1.5">
-                <History size={14} /> {mostrarHistorial ? "Ocultar historial" : "Ver historial"}
-              </button>
+              <div className="flex flex-col items-end gap-2">
+                <Link
+                  href={`/admin/pegues/${pegue.id}`}
+                  target="_blank"
+                  className="btn-outline text-xs whitespace-nowrap flex items-center gap-1.5"
+                >
+                  <Settings2 size={14} /> Ver / administrar pegue
+                </Link>
+                <button onClick={cargarHistorial} className="btn-outline text-xs whitespace-nowrap flex items-center gap-1.5">
+                  <History size={14} /> {mostrarHistorial ? "Ocultar historial" : "Ver historial"}
+                </button>
+              </div>
             </div>
 
             {pegue.cuotas && pegue.cuotas.some((c: any) => !c.pagada) && (
@@ -628,10 +637,17 @@ function RegistrarPagoInner() {
 
             {error && <p className="text-red-600 text-sm">{error}</p>}
 
-            <button onClick={confirmarPago} disabled={guardando} className="btn-primario w-full flex items-center justify-center gap-2 text-base py-3.5">
-              <Printer size={18} />
-              {guardando ? "Guardando..." : `Cobrar L ${totalGeneral.toFixed(2)} e imprimir recibo`}
-            </button>
+            {pegue.estado === "INACTIVO" ? (
+              <div className="bg-orange-50 border border-orange-200 rounded-lg p-3 text-sm text-orange-700 text-center">
+                Este pegue está <b>inhabilitado</b> — no se le puede cobrar hasta que lo reactive
+                (con un motivo) desde <Link href={`/admin/pegues/${pegue.id}`} className="underline font-medium">su ficha</Link>.
+              </div>
+            ) : (
+              <button onClick={confirmarPago} disabled={guardando} className="btn-primario w-full flex items-center justify-center gap-2 text-base py-3.5">
+                <Printer size={18} />
+                {guardando ? "Guardando..." : `Cobrar L ${totalGeneral.toFixed(2)} e imprimir recibo`}
+              </button>
+            )}
           </div>
         </>
       )}

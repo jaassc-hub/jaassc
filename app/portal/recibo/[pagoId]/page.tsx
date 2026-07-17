@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { CONFIG_DEFAULT } from "@/lib/reciboConfig";
 import { IMPRESORA_DEFAULT } from "@/lib/impresoraConfig";
 import { coincideClave } from "@/lib/portalAuth";
+import { mesesDeMora, sujetoACorte, siguienteMesPendiente } from "@/lib/mora";
 import Link from "next/link";
 import TicketRecibo from "@/components/TicketRecibo";
 import ImprimirBoton from "./ImprimirBoton";
@@ -43,6 +44,14 @@ export default async function ReciboPublicoPage({
   const impresora = impresoraRow ? JSON.parse(impresoraRow.valor) : IMPRESORA_DEFAULT;
   const junta = process.env.NEXT_PUBLIC_JUNTA_NOMBRE || "Junta de Agua";
 
+  const ultimoPago = await prisma.pago.findFirst({
+    where: { pegueId: pago.pegueId },
+    orderBy: [{ anioPagado: "desc" }, { mesPagado: "desc" }],
+  });
+  const pendiente = siguienteMesPendiente(ultimoPago, pago.pegue.createdAt);
+  const mesesMoraActual = mesesDeMora(pendiente.mes, pendiente.anio);
+  const corteActual = sujetoACorte(mesesMoraActual);
+
   return (
     <div className="max-w-lg mx-auto p-4 md:p-8">
       <div className="no-imprimir flex items-center justify-between mb-4">
@@ -73,8 +82,8 @@ export default async function ReciboPublicoPage({
           motivoDescuento={pago.motivoDescuento}
           total={pago.total}
           metodoPago={pago.metodoPago}
-          mesesMoraActual={pago.mesesMora}
-          corte={pago.mesesMora > 3}
+          mesesMoraActual={mesesMoraActual}
+          corte={corteActual}
           textoPie={config.textoPie}
           emitidoPor={pago.emitidoPor}
           anchoColumnas={impresora.anchoColumnas}

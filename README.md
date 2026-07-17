@@ -368,7 +368,82 @@ npx prisma db push
 npm run dev
 ```
 
-## 16. Pendiente para la próxima conversación
+## 16. Novedades de esta actualización (notas de mora, libro diario)
+
+- **Notas de mora** (`/admin/notas-mora`): genera avisos de pago pendiente, individuales o
+  masivos (todos los que deban más de X meses, configurable). A los abonados con más de un
+  pegue en mora se les desglosa la deuda por pegue y se suma un total. Incluye:
+  - Formas de pago y mensaje adicional (ej. recordatorio de reunión) que usted escribe
+    cada vez que genera las notas.
+  - Firmas configurables en **Configuración → Firmas**: suba la firma escaneada en PNG de
+    cada directivo (nombre, cargo, período) — cuando cambie la directiva, solo reemplace
+    eso ahí, sin tocar nada más. Al generar las notas puede elegir si aparecen las firmas
+    (imagen) o se deja el espacio en blanco para firmar a mano.
+  - Textos editables en **Configuración → Textos de nota de mora** (introducción,
+    reglamento, cierre, pie de página, montos por defecto).
+  - Tamaño de papel A4 o Carta.
+  - Se imprime con el botón de imprimir del navegador (Guardar como PDF), igual que los
+    recibos.
+- **Libro diario** (`/admin/libro-diario`): tabla de abonados por barrio con los 12 meses
+  del año y cuáles están pagados, para imprimir y archivar en físico. Año, barrio, tamaño
+  de papel y orientación (horizontal/vertical) configurables.
+- Se agregó el sello institucional (`public/sello.png`) que aparece en las notas de mora.
+
+Esta actualización **no cambia la base de datos** — todo lo nuevo usa la misma tabla de
+Configuración que ya existía. Solo hace falta desplegar el código nuevo:
+
+```bash
+npm run dev
+```
+
+## 17. Novedades de esta actualización (corrección de mora, control de pegues, actas)
+
+- **Corregido**: el recibo ya no muestra "sujeto a corte" ni "meses en mora" viejos
+  después de que el abonado se pone al día. Antes se mostraba el estado de mora que
+  tenía CADA mes pagado en el momento en que estaba vencido; ahora se muestra el estado
+  REAL del pegue después de aplicar ese pago.
+- **Ver/administrar el pegue desde el cobro**: en la pantalla de cobro hay un botón
+  "Ver / administrar pegue" que abre la ficha completa (cortar, inhabilitar, editar) en
+  una pestaña nueva, sin perder lo que estaba cobrando.
+- **Acceso directo a "Cobrar"** en el menú lateral, sin tener que pasar por el historial
+  de pagos primero (el botón de ahí sigue funcionando igual).
+- **Trazabilidad de cortes/inhabilitaciones/reactivaciones**: ahora se pide un motivo
+  obligatorio y se registra quién lo hizo. Desde el historial del pegue hay un enlace
+  "Ver constancia" para cada uno de estos eventos — imprimible en Carta, A4, o formato de
+  impresora matricial.
+- **Los pegues inhabilitados ya no se pueden cobrar** (ni desde el sistema ni intentando
+  forzarlo por API) — hay que reactivarlo primero (con motivo) desde su ficha.
+- **Acta de instalación**: al lado de cada pegue hay un botón "Acta de instalación" que
+  genera un documento formal con los datos del abonado, el costo del derecho de conexión
+  (de contado o en cuotas, con el desglose), la ubicación, y las cláusulas del servicio
+  (editables en Configuración → Cláusulas del acta de instalación, y también ajustables
+  al momento de generar cada acta).
+
+```bash
+npx prisma db push
+npm run dev
+```
+
+## 18. Sugerencias mías para más adelante
+
+Ya que me lo pidió, aquí van algunas ideas que se me ocurren, sin compromiso de hacerlas
+ya — dígame cuáles le interesan cuando quiera seguir:
+
+- **Firma digital del abonado en el acta**: ahora mismo el acta deja el espacio en blanco
+  para firmar a mano; se podría agregar una firma capturada en pantalla (con el dedo o
+  mouse) al momento de instalar el pegue, para los casos donde se hace todo desde una
+  tablet o computadora en el sitio.
+- **Recordatorio automático antes del corte**: ya que existen los avisos por SMS/WhatsApp,
+  se podría mandar un aviso automático al abonado apenas se cumplan sus meses en mora,
+  sin esperar a la nota de mora física.
+- **Historial de "quién editó qué"** más general (no solo cortes/inhabilitaciones) — por
+  ejemplo, quién cambió una tarifa o un servicio, para tener control total de cambios
+  sensibles.
+- **Reporte de pegues inhabilitados** en el informe de caja o como listado aparte, para
+  que la directiva revise periódicamente si alguno debería reactivarse o darse de baja
+  definitiva.
+
+## 19. Pendiente para la próxima conversación
 
 Quedó anotado para cuando usted diga:
 - Ayuda migrando sus abonados/pegues desde una hoja de Excel.
@@ -376,7 +451,7 @@ Quedó anotado para cuando usted diga:
   cobro tarda un par de segundos porque cada clic hace una consulta nueva a la base de
   datos en Neon; hay formas de acelerarlo, mas adelante lo vemos con calma).
 
-## 17. Notas importantes
+## 20. Notas importantes
 
 - Si alguna vez le vuelve a aparecer una pregunta pidiendo "resetear" el schema de la base
   de datos: **cancele con Ctrl+C y no acepte**. Eso borra todos los datos. Use siempre

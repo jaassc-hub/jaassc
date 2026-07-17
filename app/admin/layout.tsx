@@ -13,13 +13,19 @@ import {
   Wrench,
   MapPin,
   Settings,
+  FileWarning,
+  BookOpen,
+  Banknote,
 } from "lucide-react";
 
 const nav: { href: string; label: string; icon: any; modulo?: ModuloKey }[] = [
   { href: "/admin", label: "Panel", icon: LayoutDashboard },
+  { href: "/admin/pagos/nuevo", label: "Cobrar", icon: Banknote, modulo: "pagos" },
   { href: "/admin/abonados", label: "Pegues y abonados", icon: Users, modulo: "abonados" },
-  { href: "/admin/pagos", label: "Pagos", icon: Wallet, modulo: "pagos" },
+  { href: "/admin/pagos", label: "Historial de pagos", icon: Wallet, modulo: "pagos" },
   { href: "/admin/caja", label: "Informe de caja", icon: BarChart3, modulo: "caja" },
+  { href: "/admin/notas-mora", label: "Notas de mora", icon: FileWarning, modulo: "abonados" },
+  { href: "/admin/libro-diario", label: "Libro diario", icon: BookOpen, modulo: "caja" },
   { href: "/admin/servicios", label: "Servicios y tarifas", icon: Wrench, modulo: "servicios" },
   { href: "/admin/barrios", label: "Barrios / códigos", icon: MapPin, modulo: "barrios" },
   { href: "/admin/configuracion", label: "Configuración", icon: Settings, modulo: "configuracion" },
@@ -36,7 +42,7 @@ export default async function AdminLayout({
   const navVisible = nav.filter((item) => !item.modulo || tienePermiso(usuario, item.modulo));
 
   return (
-    <div className="min-h-screen flex bg-gray-50">
+    <div className="admin-shell min-h-screen flex bg-gray-50">
       <aside className="w-64 bg-azul text-white flex-col hidden md:flex no-imprimir">
         <div className="p-5 flex items-center gap-3 border-b border-white/10">
           <Logo size={36} />
@@ -72,7 +78,7 @@ export default async function AdminLayout({
         </div>
       </div>
 
-      <main className="flex-1 p-4 md:p-8 mt-14 md:mt-0 mb-16 md:mb-0 overflow-x-auto">
+      <main className="admin-main flex-1 p-4 md:p-8 mt-14 md:mt-0 mb-16 md:mb-0 overflow-x-auto">
         <BotonAtras />
         {children}
       </main>

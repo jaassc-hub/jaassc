@@ -78,6 +78,13 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Pegue no encontrado" }, { status: 404 });
   }
 
+  if (pegue.estado === "INACTIVO") {
+    return NextResponse.json(
+      { error: "Este pegue está inhabilitado. Debe reactivarlo (con motivo) antes de poder cobrarle." },
+      { status: 400 }
+    );
+  }
+
   await asegurarPin(pegue.abonadoId);
 
   // --- Validacion: no se puede pagar un mes distinto al siguiente pendiente ---

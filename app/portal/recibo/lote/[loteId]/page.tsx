@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { CONFIG_DEFAULT } from "@/lib/reciboConfig";
 import { IMPRESORA_DEFAULT } from "@/lib/impresoraConfig";
 import { coincideClave } from "@/lib/portalAuth";
+import { mesesDeMora, sujetoACorte, siguienteMesPendiente } from "@/lib/mora";
 import Link from "next/link";
 import TicketRecibo from "@/components/TicketRecibo";
 import ImprimirBoton from "../../[pagoId]/ImprimirBoton";
@@ -48,7 +49,13 @@ export default async function ReciboLotePublicoPage({
   const totalReconexion = pagos.reduce((s, p) => s + p.montoReconexion, 0);
   const totalDescuento = pagos.reduce((s, p) => s + p.montoDescuento, 0);
   const motivoDescuento = pagos.find((p) => p.motivoDescuento)?.motivoDescuento || null;
-  const mesesMoraMax = Math.max(...pagos.map((p) => p.mesesMora));
+  const ultimoPago = await prisma.pago.findFirst({
+    where: { pegueId: pagos[0].pegueId },
+    orderBy: [{ anioPagado: "desc" }, { mesPagado: "desc" }],
+  });
+  const pendiente = siguienteMesPendiente(ultimoPago, primero.pegue.createdAt);
+  const mesesMoraActual = mesesDeMora(pendiente.mes, pendiente.anio);
+  const corteActual = sujetoACorte(mesesMoraActual);
 
   return (
     <div className="max-w-lg mx-auto p-4 md:p-8">
@@ -80,8 +87,8 @@ export default async function ReciboLotePublicoPage({
           motivoDescuento={motivoDescuento}
           total={totalGeneral}
           metodoPago={primero.metodoPago}
-          mesesMoraActual={mesesMoraMax}
-          corte={mesesMoraMax > 3}
+          mesesMoraActual={mesesMoraActual}
+          corte={corteActual}
           textoPie={config.textoPie}
           emitidoPor={primero.emitidoPor}
           anchoColumnas={impresora.anchoColumnas}

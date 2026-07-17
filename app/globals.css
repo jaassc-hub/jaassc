@@ -74,3 +74,32 @@ body {
     margin: 4mm;
   }
 }
+
+@media print {
+  html, body {
+    background: white !important;
+    margin: 0 !important;
+  }
+  .admin-shell {
+    background: white !important;
+    display: block !important;
+  }
+  .admin-main {
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: visible !important;
+    max-width: none !important;
+  }
+  .nota-pagina {
+    break-after: page;
+    page-break-after: always;
+  }
+  .nota-mora,
+  .libro-diario {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: auto !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+  }
+}

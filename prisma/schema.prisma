@@ -120,6 +120,7 @@ model Pegue {
   barrio       Barrio          @relation(fields: [barrioId], references: [id])
   barrioId     String
   estado       EstadoPegue     @default(ACTIVO)
+  ubicacion    String?         // direccion/referencia donde esta instalado el pegue
   servicios    PegueServicio[]
   pagos        Pago[]
   eventos      EventoPegue[]
@@ -198,12 +199,13 @@ enum TipoEvento {
 }
 
 model EventoPegue {
-  id      String     @id @default(cuid())
-  pegue   Pegue      @relation(fields: [pegueId], references: [id])
-  pegueId String
-  tipo    TipoEvento
-  nota    String?
-  fecha   DateTime   @default(now())
+  id           String     @id @default(cuid())
+  pegue        Pegue      @relation(fields: [pegueId], references: [id])
+  pegueId      String
+  tipo         TipoEvento
+  nota         String?
+  realizadoPor String?    // usuario que hizo el cambio, para trazabilidad
+  fecha        DateTime   @default(now())
 }
 
 // ---------- Cuotas de conexion (derecho de pegue) ----------

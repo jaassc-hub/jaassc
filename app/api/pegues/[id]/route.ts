@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { obtenerUsuarioActual } from "@/lib/auth";
 
 export async function PATCH(
   req: NextRequest,
@@ -10,24 +11,37 @@ export async function PATCH(
   if (body.codigo !== undefined) data.codigo = body.codigo;
   if (body.estado !== undefined) data.estado = body.estado;
   if (body.barrioId !== undefined) data.barrioId = body.barrioId;
+  if (body.ubicacion !== undefined) data.ubicacion = body.ubicacion;
 
   try {
     const anterior = await prisma.pegue.findUnique({ where: { id: params.id } });
+    if (!anterior) {
+      return NextResponse.json({ error: "Pegue no encontrado" }, { status: 404 });
+    }
+
+    // Exigir motivo al cambiar el estado (corte, inhabilitacion o reactivacion)
+    if (body.estado !== undefined && anterior.estado !== body.estado && !body.motivo?.trim()) {
+      return NextResponse.json(
+        { error: "Debe indicar un motivo para este cambio de estado" },
+        { status: 400 }
+      );
+    }
 
     const pegue = await prisma.pegue.update({
       where: { id: params.id },
       data,
     });
 
-    // Si el estado cambio manualmente, se deja constancia en el historial
-    if (body.estado !== undefined && anterior && anterior.estado !== body.estado) {
+    if (body.estado !== undefined && anterior.estado !== body.estado) {
       const tipoEvento =
         body.estado === "CORTADO" ? "CORTE" : body.estado === "INACTIVO" ? "INHABILITACION" : "REACTIVACION";
+      const usuarioActual = await obtenerUsuarioActual();
       await prisma.eventoPegue.create({
         data: {
           pegueId: params.id,
           tipo: tipoEvento,
-          nota: "Cambio manual de estado desde el panel administrativo",
+          nota: body.motivo?.trim() || null,
+          realizadoPor: usuarioActual ? usuarioActual.nombre || usuarioActual.username : null,
         },
       });
     }

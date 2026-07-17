@@ -6,7 +6,17 @@ import BotonAtras from "@/components/BotonAtras";
 import TicketRecibo from "@/components/TicketRecibo";
 import { IMPRESORA_DEFAULT } from "@/lib/impresoraConfig";
 
-export default function ReciboLoteClient({ pagos, configInicial }: { pagos: any[]; configInicial: any }) {
+export default function ReciboLoteClient({
+  pagos,
+  configInicial,
+  mesesMoraActual,
+  corteActual,
+}: {
+  pagos: any[];
+  configInicial: any;
+  mesesMoraActual: number;
+  corteActual: boolean;
+}) {
   const [impresora, setImpresora] = useState(IMPRESORA_DEFAULT);
   const primero = pagos[0];
   const junta = process.env.NEXT_PUBLIC_JUNTA_NOMBRE || "Junta de Agua";
@@ -21,7 +31,6 @@ export default function ReciboLoteClient({ pagos, configInicial }: { pagos: any[
   const totalDescuento = pagos.reduce((s, p) => s + p.montoDescuento, 0);
   const motivoDescuento = pagos.find((p) => p.motivoDescuento)?.motivoDescuento || null;
   const totalGeneral = pagos.reduce((s, p) => s + p.total, 0);
-  const mesesMoraMax = Math.max(...pagos.map((p) => p.mesesMora));
 
   return (
     <div className="max-w-lg mx-auto p-4 md:p-8">
@@ -53,8 +62,8 @@ export default function ReciboLoteClient({ pagos, configInicial }: { pagos: any[
           motivoDescuento={motivoDescuento}
           total={totalGeneral}
           metodoPago={primero.metodoPago}
-          mesesMoraActual={mesesMoraMax}
-          corte={mesesMoraMax > 3}
+          mesesMoraActual={mesesMoraActual}
+          corte={corteActual}
           textoPie={configInicial.textoPie}
           emitidoPor={primero.emitidoPor}
           anchoColumnas={impresora.anchoColumnas}

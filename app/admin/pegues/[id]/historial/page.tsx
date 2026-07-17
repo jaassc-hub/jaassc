@@ -63,15 +63,30 @@ export default async function HistorialPeguePage({ params }: { params: { id: str
               </>
             ) : (
               <>
-                <p className="font-medium text-orange-700">
-                  {(item.detalle as any).tipo === "CORTE" && "Servicio cortado"}
-                  {(item.detalle as any).tipo === "RECONEXION" && "Reconexión pagada"}
-                  {(item.detalle as any).tipo === "REACTIVACION" && "Reactivado manualmente"}
-                  {(item.detalle as any).tipo === "INHABILITACION" && "Pegue inhabilitado"}
-                </p>
-                <p className="text-gray-400 text-xs">
-                  {new Date(item.fecha).toLocaleDateString("es-HN")}
-                </p>
+                <div>
+                  <p className="font-medium text-orange-700">
+                    {(item.detalle as any).tipo === "CORTE" && "Servicio cortado"}
+                    {(item.detalle as any).tipo === "RECONEXION" && "Reconexión pagada"}
+                    {(item.detalle as any).tipo === "REACTIVACION" && "Reactivado manualmente"}
+                    {(item.detalle as any).tipo === "INHABILITACION" && "Pegue inhabilitado"}
+                  </p>
+                  {(item.detalle as any).realizadoPor && (
+                    <p className="text-xs text-gray-400">Por: {(item.detalle as any).realizadoPor}</p>
+                  )}
+                  {(item.detalle as any).nota && (
+                    <p className="text-xs text-gray-500">Motivo: {(item.detalle as any).nota}</p>
+                  )}
+                </div>
+                <div className="text-right">
+                  <p className="text-gray-400 text-xs">
+                    {new Date(item.fecha).toLocaleDateString("es-HN")}
+                  </p>
+                  {["CORTE", "INHABILITACION", "REACTIVACION"].includes((item.detalle as any).tipo) && (
+                    <Link href={`/admin/eventos/${(item.detalle as any).id}`} className="text-azul text-xs font-medium">
+                      Ver constancia
+                    </Link>
+                  )}
+                </div>
               </>
             )}
           </div>

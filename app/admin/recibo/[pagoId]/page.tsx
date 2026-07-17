@@ -5,6 +5,7 @@ import { CONFIG_DEFAULT } from "@/lib/reciboConfig";
 import { obtenerUsuarioActual } from "@/lib/auth";
 import { tienePermiso } from "@/lib/permisos";
 import AccesoDenegado from "@/components/AccesoDenegado";
+import { mesesDeMora, sujetoACorte, siguienteMesPendiente } from "@/lib/mora";
 
 export default async function ReciboPage({ params }: { params: { pagoId: string } }) {
   const usuario = await obtenerUsuarioActual();
@@ -32,5 +33,21 @@ export default async function ReciboPage({ params }: { params: { pagoId: string 
 
   const config = configRow ? JSON.parse(configRow.valor) : CONFIG_DEFAULT;
 
-  return <ReciboClient pago={pago} configInicial={config} />;
+  // Estado de mora ACTUAL del pegue (post-pago), no el historico de ese pago puntual.
+  const ultimoPago = await prisma.pago.findFirst({
+    where: { pegueId: pago.pegueId },
+    orderBy: [{ anioPagado: "desc" }, { mesPagado: "desc" }],
+  });
+  const pendiente = siguienteMesPendiente(ultimoPago, pago.pegue.createdAt);
+  const mesesMoraActual = mesesDeMora(pendiente.mes, pendiente.anio);
+  const corteActual = sujetoACorte(mesesMoraActual);
+
+  return (
+    <ReciboClient
+      pago={pago}
+      configInicial={config}
+      mesesMoraActual={mesesMoraActual}
+      corteActual={corteActual}
+    />
+  );
 }

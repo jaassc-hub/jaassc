@@ -6,7 +6,17 @@ import BotonAtras from "@/components/BotonAtras";
 import TicketRecibo from "@/components/TicketRecibo";
 import { IMPRESORA_DEFAULT } from "@/lib/impresoraConfig";
 
-export default function ReciboClient({ pago, configInicial }: { pago: any; configInicial: any }) {
+export default function ReciboClient({
+  pago,
+  configInicial,
+  mesesMoraActual,
+  corteActual,
+}: {
+  pago: any;
+  configInicial: any;
+  mesesMoraActual: number;
+  corteActual: boolean;
+}) {
   const [config, setConfig] = useState(configInicial);
   const [impresora, setImpresora] = useState(IMPRESORA_DEFAULT);
   const [editando, setEditando] = useState(false);
@@ -18,7 +28,6 @@ export default function ReciboClient({ pago, configInicial }: { pago: any; confi
   }, []);
 
   const junta = process.env.NEXT_PUBLIC_JUNTA_NOMBRE || "Junta de Agua";
-  const corte = pago.mesesMora > 3;
 
   async function guardarConfig() {
     setGuardando(true);
@@ -131,8 +140,8 @@ export default function ReciboClient({ pago, configInicial }: { pago: any; confi
           motivoDescuento={pago.motivoDescuento}
           total={pago.total}
           metodoPago={pago.metodoPago}
-          mesesMoraActual={pago.mesesMora}
-          corte={corte}
+          mesesMoraActual={mesesMoraActual}
+          corte={corteActual}
           textoPie={config.textoPie}
           emitidoPor={pago.emitidoPor}
           pin={pago.pegue.abonado.pin}

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Wallet, History, Pencil, Ban, PauseCircle, PlayCircle } from "lucide-react";
+import { Wallet, History, Pencil, Ban, PauseCircle, PlayCircle, FileSignature } from "lucide-react";
 import BotonAtras from "@/components/BotonAtras";
 import { nombreMes } from "@/lib/mora";
 
@@ -73,15 +73,32 @@ export default function PegueDetalleClient({
     }
   }
 
-  async function cambiarEstado(estado: string) {
+  const [estadoPendiente, setEstadoPendiente] = useState<string | null>(null);
+  const [motivoEstado, setMotivoEstado] = useState("");
+  const [guardandoEstado, setGuardandoEstado] = useState(false);
+  const [errorEstado, setErrorEstado] = useState("");
+
+  async function confirmarCambioEstado() {
+    if (!motivoEstado.trim()) {
+      setErrorEstado("Escriba un motivo para este cambio.");
+      return;
+    }
+    setGuardandoEstado(true);
+    setErrorEstado("");
     const res = await fetch(`/api/pegues/${pegue.id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ estado }),
+      body: JSON.stringify({ estado: estadoPendiente, motivo: motivoEstado }),
     });
+    setGuardandoEstado(false);
     if (res.ok) {
       const actualizado = await res.json();
       setPegue({ ...pegue, ...actualizado });
+      setEstadoPendiente(null);
+      setMotivoEstado("");
+    } else {
+      const data = await res.json();
+      setErrorEstado(data.error || "Error al guardar");
     }
   }
 
@@ -124,6 +141,9 @@ export default function PegueDetalleClient({
           </Link>
           <Link href={`/admin/pegues/${pegue.id}/historial`} className="btn-outline text-sm flex items-center gap-1.5">
             <History size={16} /> Historial
+          </Link>
+          <Link href={`/admin/pegues/${pegue.id}/acta`} className="btn-outline text-sm flex items-center gap-1.5">
+            <FileSignature size={16} /> Acta de instalación
           </Link>
         </div>
       </div>
@@ -205,21 +225,50 @@ export default function PegueDetalleClient({
 
         <div className="border-t pt-3 flex flex-wrap gap-2">
           {pegue.estado !== "CORTADO" && (
-            <button onClick={() => cambiarEstado("CORTADO")} className="btn-outline text-xs flex items-center gap-1.5 border-red-300 text-red-600">
+            <button onClick={() => setEstadoPendiente("CORTADO")} className="btn-outline text-xs flex items-center gap-1.5 border-red-300 text-red-600">
               <Ban size={14} /> Cortar por mora
             </button>
           )}
           {pegue.estado !== "INACTIVO" && (
-            <button onClick={() => cambiarEstado("INACTIVO")} className="btn-outline text-xs flex items-center gap-1.5 border-orange-300 text-orange-600">
+            <button onClick={() => setEstadoPendiente("INACTIVO")} className="btn-outline text-xs flex items-center gap-1.5 border-orange-300 text-orange-600">
               <PauseCircle size={14} /> Inhabilitar (ausencia larga)
             </button>
           )}
           {pegue.estado !== "ACTIVO" && (
-            <button onClick={() => cambiarEstado("ACTIVO")} className="btn-outline text-xs flex items-center gap-1.5 border-green-300 text-green-700">
+            <button onClick={() => setEstadoPendiente("ACTIVO")} className="btn-outline text-xs flex items-center gap-1.5 border-green-300 text-green-700">
               <PlayCircle size={14} /> Reactivar
             </button>
           )}
         </div>
+
+        {estadoPendiente && (
+          <div className="border rounded-lg p-3 bg-gray-50 space-y-2 mt-1">
+            <p className="text-sm font-medium">
+              {estadoPendiente === "CORTADO" && "Cortar este pegue — motivo:"}
+              {estadoPendiente === "INACTIVO" && "Inhabilitar este pegue — motivo:"}
+              {estadoPendiente === "ACTIVO" && "Reactivar este pegue — motivo:"}
+            </p>
+            <textarea
+              className="input text-sm"
+              placeholder="Ej: Ausencia por 6 meses, viaje al extranjero..."
+              value={motivoEstado}
+              onChange={(e) => setMotivoEstado(e.target.value)}
+              autoFocus
+            />
+            {errorEstado && <p className="text-red-600 text-xs">{errorEstado}</p>}
+            <div className="flex gap-2">
+              <button onClick={confirmarCambioEstado} disabled={guardandoEstado} className="btn-primario text-xs">
+                {guardandoEstado ? "Guardando..." : "Confirmar"}
+              </button>
+              <button
+                onClick={() => { setEstadoPendiente(null); setMotivoEstado(""); setErrorEstado(""); }}
+                className="btn-outline text-xs"
+              >
+                Cancelar
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Cuotas de conexion */}
