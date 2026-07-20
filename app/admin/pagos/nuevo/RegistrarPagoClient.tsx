@@ -258,7 +258,7 @@ function RegistrarPagoInner() {
             autoFocus
           />
         </div>
-        <button disabled={buscando} className="btn-primario w-full mt-3 flex items-center justify-center gap-2 text-base py-3">
+        <button type="submit" disabled={buscando} className="btn-primario w-full mt-3 flex items-center justify-center gap-2 text-base py-3">
           <Search size={18} /> {buscando ? "Buscando..." : "Buscar"}
         </button>
       </form>
@@ -274,7 +274,7 @@ function RegistrarPagoInner() {
                 <p className="font-medium text-sm">{a.nombre}</p>
                 <div className="flex flex-wrap gap-1 mt-1">
                   {a.pegues.map((p: any) => (
-                    <button
+                    <button type="button"
                       key={p.id}
                       onClick={() => buscarPorCodigoDirecto(p.codigo)}
                       className="text-xs bg-azul/10 text-azul px-2 py-1 rounded-md hover:bg-azul/20"
@@ -322,12 +322,12 @@ function RegistrarPagoInner() {
                     onChange={(e) => setNuevaIdentidad(e.target.value)}
                     placeholder="Número de identidad"
                   />
-                  <button onClick={guardarIdentidad} disabled={guardandoIdentidad} className="btn-primario text-sm whitespace-nowrap">
+                  <button type="button" onClick={guardarIdentidad} disabled={guardandoIdentidad} className="btn-primario text-sm whitespace-nowrap">
                     Guardar
                   </button>
                 </div>
               ) : (
-                <button onClick={() => setEditandoIdentidad(true)} className="btn-outline text-sm">
+                <button type="button" onClick={() => setEditandoIdentidad(true)} className="btn-outline text-sm">
                   + Agregar identidad ahora
                 </button>
               )}
@@ -346,7 +346,7 @@ function RegistrarPagoInner() {
                       {p.codigo} ({p.barrio.nombre}) —{" "}
                       {p.estado === "CORTADO" ? "cortado" : `${p.mesesMora} mes(es) en mora`}
                     </span>
-                    <button onClick={() => buscarPorCodigoDirecto(p.codigo)} className="text-azul font-medium">
+                    <button type="button" onClick={() => buscarPorCodigoDirecto(p.codigo)} className="text-azul font-medium">
                       Cobrar este también
                     </button>
                   </li>
@@ -379,7 +379,7 @@ function RegistrarPagoInner() {
                 >
                   <Settings2 size={14} /> Ver / administrar pegue
                 </Link>
-                <button onClick={cargarHistorial} className="btn-outline text-xs whitespace-nowrap flex items-center gap-1.5">
+                <button type="button" onClick={cargarHistorial} className="btn-outline text-xs whitespace-nowrap flex items-center gap-1.5">
                   <History size={14} /> {mostrarHistorial ? "Ocultar historial" : "Ver historial"}
                 </button>
               </div>
@@ -643,7 +643,7 @@ function RegistrarPagoInner() {
                 (con un motivo) desde <Link href={`/admin/pegues/${pegue.id}`} className="underline font-medium">su ficha</Link>.
               </div>
             ) : (
-              <button onClick={confirmarPago} disabled={guardando} className="btn-primario w-full flex items-center justify-center gap-2 text-base py-3.5">
+              <button type="button" onClick={confirmarPago} disabled={guardando} className="btn-primario w-full flex items-center justify-center gap-2 text-base py-3.5">
                 <Printer size={18} />
                 {guardando ? "Guardando..." : `Cobrar L ${totalGeneral.toFixed(2)} e imprimir recibo`}
               </button>

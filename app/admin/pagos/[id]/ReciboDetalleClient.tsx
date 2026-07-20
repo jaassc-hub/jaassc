@@ -102,7 +102,7 @@ export default function ReciboDetalleClient({ pegue, recibo: reciboInicial }: { 
                 <div className="flex items-center gap-3">
                   <span className="font-medium">L {p.total.toFixed(2)}</span>
                   {recibo.length > 1 && (
-                    <button
+                    <button type="button"
                       onClick={() => quitarMes(p.id)}
                       disabled={quitandoId === p.id}
                       title="Quitar este mes del recibo"
@@ -115,7 +115,7 @@ export default function ReciboDetalleClient({ pegue, recibo: reciboInicial }: { 
               </div>
             ))}
           </div>
-          <button
+          <button type="button"
             onClick={agregarMes}
             disabled={agregando}
             className="btn-outline text-xs mt-2 flex items-center gap-1.5"
@@ -163,7 +163,7 @@ export default function ReciboDetalleClient({ pegue, recibo: reciboInicial }: { 
         {mensaje && <p className="text-sm text-gray-500">{mensaje}</p>}
 
         <div className="flex gap-2">
-          <button onClick={guardar} disabled={guardando} className="btn-primario text-sm">
+          <button type="button" onClick={guardar} disabled={guardando} className="btn-primario text-sm">
             {guardando ? "Guardando..." : "Guardar cambios"}
           </button>
           <Link
@@ -176,7 +176,7 @@ export default function ReciboDetalleClient({ pegue, recibo: reciboInicial }: { 
 
         <div className="border-t pt-3">
           {!confirmarEliminar ? (
-            <button
+            <button type="button"
               onClick={() => setConfirmarEliminar(true)}
               className="text-sm text-red-600 font-medium flex items-center gap-1.5"
             >
@@ -189,10 +189,10 @@ export default function ReciboDetalleClient({ pegue, recibo: reciboInicial }: { 
                 volverán a quedar pendientes para este pegue. Esta acción no se puede deshacer.
               </p>
               <div className="flex gap-2">
-                <button onClick={eliminarRecibo} disabled={eliminando} className="btn-primario text-sm bg-red-600 hover:bg-red-700">
+                <button type="button" onClick={eliminarRecibo} disabled={eliminando} className="btn-primario text-sm bg-red-600 hover:bg-red-700">
                   {eliminando ? "Eliminando..." : "Sí, eliminar todo el recibo"}
                 </button>
-                <button onClick={() => setConfirmarEliminar(false)} className="btn-outline text-sm">
+                <button type="button" onClick={() => setConfirmarEliminar(false)} className="btn-outline text-sm">
                   Cancelar
                 </button>
               </div>

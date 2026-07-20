@@ -137,7 +137,7 @@ export default function NuevoPegueClient({
                 )}
               </div>
             </div>
-            <button
+            <button type="button"
               onClick={() => setAbonadoSeleccionado(null)}
               className="text-sm text-azul font-medium"
             >
@@ -157,7 +157,7 @@ export default function NuevoPegueClient({
                   autoFocus
                 />
               </div>
-              <button disabled={buscando} className="btn-primario flex items-center gap-1.5">
+              <button type="submit" disabled={buscando} className="btn-primario flex items-center gap-1.5">
                 <Search size={16} /> Buscar
               </button>
             </form>
@@ -165,7 +165,7 @@ export default function NuevoPegueClient({
             {resultados.length > 0 && (
               <div className="border rounded-lg divide-y max-h-56 overflow-y-auto">
                 {resultados.map((a) => (
-                  <button
+                  <button type="button"
                     key={a.id}
                     onClick={() => setAbonadoSeleccionado(a)}
                     className="w-full text-left p-2 hover:bg-gray-50 text-sm"
@@ -181,7 +181,7 @@ export default function NuevoPegueClient({
 
             <div className="border-t pt-3">
               {!mostrarFormNuevo ? (
-                <button
+                <button type="button"
                   onClick={() => setMostrarFormNuevo(true)}
                   className="btn-outline text-sm flex items-center gap-1.5"
                 >
@@ -208,10 +208,10 @@ export default function NuevoPegueClient({
                     </div>
                   </div>
                   <div className="flex gap-2">
-                    <button onClick={crearAbonado} disabled={creandoAbonado} className="btn-primario text-sm">
+                    <button type="button" onClick={crearAbonado} disabled={creandoAbonado} className="btn-primario text-sm">
                       {creandoAbonado ? "Creando..." : "Crear abonado y continuar"}
                     </button>
-                    <button onClick={() => setMostrarFormNuevo(false)} className="btn-outline text-sm">
+                    <button type="button" onClick={() => setMostrarFormNuevo(false)} className="btn-outline text-sm">
                       Cancelar
                     </button>
                   </div>
@@ -337,7 +337,7 @@ export default function NuevoPegueClient({
 
         {error && <p className="text-red-600 text-sm">{error}</p>}
 
-        <button onClick={crearPegue} disabled={guardando} className="btn-primario w-full">
+        <button type="button" onClick={crearPegue} disabled={guardando} className="btn-primario w-full">
           {guardando ? "Guardando..." : "Guardar pegue"}
         </button>
       </div>

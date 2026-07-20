@@ -82,13 +82,13 @@ export default function NotasMoraClient({
 
         <div className="card max-w-2xl space-y-4 mt-6">
           <div className="flex gap-2">
-            <button
+            <button type="button"
               onClick={() => setModo("masivo")}
               className={modo === "masivo" ? "btn-primario text-sm" : "btn-outline text-sm"}
             >
               Masivo (todos los que deben)
             </button>
-            <button
+            <button type="button"
               onClick={() => setModo("individual")}
               className={modo === "individual" ? "btn-primario text-sm" : "btn-outline text-sm"}
             >
@@ -149,13 +149,13 @@ export default function NotasMoraClient({
               {formasPago.map((f, i) => (
                 <div key={i} className="flex gap-2">
                   <input className="input text-sm" value={f} onChange={(e) => actualizarForma(i, e.target.value)} />
-                  <button onClick={() => quitarForma(i)} className="text-red-500 shrink-0">
+                  <button type="button" onClick={() => quitarForma(i)} className="text-red-500 shrink-0">
                     <Trash2 size={16} />
                   </button>
                 </div>
               ))}
             </div>
-            <button onClick={agregarForma} className="btn-outline text-xs mt-2 flex items-center gap-1.5">
+            <button type="button" onClick={agregarForma} className="btn-outline text-xs mt-2 flex items-center gap-1.5">
               <Plus size={14} /> Agregar forma de pago
             </button>
           </div>
@@ -204,13 +204,13 @@ export default function NotasMoraClient({
 
           {error && <p className="text-red-600 text-sm">{error}</p>}
 
-          <button onClick={generar} disabled={buscando} className="btn-primario w-full flex items-center justify-center gap-2">
+          <button type="button" onClick={generar} disabled={buscando} className="btn-primario w-full flex items-center justify-center gap-2">
             <Search size={16} /> {buscando ? "Buscando..." : "Generar vista previa"}
           </button>
         </div>
 
         {notas && (
-          <button
+          <button type="button"
             onClick={() => window.print()}
             className="btn-primario mt-4 flex items-center gap-2"
           >

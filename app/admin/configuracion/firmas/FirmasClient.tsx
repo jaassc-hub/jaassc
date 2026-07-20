@@ -99,7 +99,7 @@ export default function FirmasClient({ configInicial }: { configInicial: { firma
                     onChange={(e) => e.target.files && subirImagen(f.id, e.target.files[0])}
                   />
                 </label>
-                <button onClick={() => quitar(f.id)} className="text-red-500 text-xs flex items-center gap-1">
+                <button type="button" onClick={() => quitar(f.id)} className="text-red-500 text-xs flex items-center gap-1">
                   <Trash2 size={14} /> Quitar firmante
                 </button>
               </div>
@@ -108,12 +108,12 @@ export default function FirmasClient({ configInicial }: { configInicial: { firma
         </div>
       ))}
 
-      <button onClick={agregar} className="btn-outline text-sm flex items-center gap-1.5">
+      <button type="button" onClick={agregar} className="btn-outline text-sm flex items-center gap-1.5">
         <Plus size={14} /> Agregar firmante
       </button>
 
       <div className="flex items-center gap-3 pt-2">
-        <button onClick={guardar} disabled={guardando} className="btn-primario text-sm">
+        <button type="button" onClick={guardar} disabled={guardando} className="btn-primario text-sm">
           {guardando ? "Guardando..." : "Guardar"}
         </button>
         {mensaje && <span className="text-sm text-gray-500">{mensaje}</span>}

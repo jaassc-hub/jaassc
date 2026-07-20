@@ -5,6 +5,7 @@ import { tienePermiso } from "@/lib/permisos";
 import AccesoDenegado from "@/components/AccesoDenegado";
 import { CLAUSULAS_DEFAULT } from "@/lib/clausulasConfig";
 import { FIRMAS_DEFAULT } from "@/lib/firmasConfig";
+import { generarCorrelativo } from "@/lib/correlativo";
 import ActaClient from "./ActaClient";
 
 export default async function ActaInstalacionPage({ params }: { params: { id: string } }) {
@@ -29,12 +30,28 @@ export default async function ActaInstalacionPage({ params }: { params: { id: st
 
   if (!pegue) notFound();
 
+  // El numero de acta se genera una sola vez y se reutiliza cada vez que se reimprime.
+  let peguesConActa = pegue;
+  if (!pegue.actaNumero) {
+    const numero = await prisma.$transaction((tx) => generarCorrelativo(tx, "ACTA"));
+    peguesConActa = await prisma.pegue.update({
+      where: { id: pegue.id },
+      data: { actaNumero: numero },
+      include: {
+        abonado: true,
+        barrio: true,
+        servicios: { include: { servicio: true } },
+        cuotas: { orderBy: { numero: "asc" } },
+      },
+    });
+  }
+
   const clausulas = clausulasRow ? JSON.parse(clausulasRow.valor).clausulas : CLAUSULAS_DEFAULT.clausulas;
   const firmas = firmasRow ? JSON.parse(firmasRow.valor).firmantes : FIRMAS_DEFAULT.firmantes;
 
   return (
     <ActaClient
-      pegue={JSON.parse(JSON.stringify(pegue))}
+      pegue={JSON.parse(JSON.stringify(peguesConActa))}
       clausulasIniciales={clausulas}
       firmantes={firmas}
       juntaNombre={process.env.NEXT_PUBLIC_JUNTA_NOMBRE || "Junta de Agua"}

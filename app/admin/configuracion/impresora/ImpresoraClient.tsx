@@ -51,7 +51,7 @@ export default function ImpresoraClient({ configInicial }: { configInicial: any 
           </select>
         </div>
 
-        <button onClick={guardar} disabled={guardando} className="btn-primario text-sm">
+        <button type="button" onClick={guardar} disabled={guardando} className="btn-primario text-sm">
           {guardando ? "Guardando..." : "Guardar"}
         </button>
         {mensaje && <span className="text-sm text-gray-500 ml-3">{mensaje}</span>}

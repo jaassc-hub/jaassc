@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { obtenerUsuarioActual } from "@/lib/auth";
+import { generarCorrelativo } from "@/lib/correlativo";
 
 export async function PATCH(
   req: NextRequest,
@@ -36,13 +37,17 @@ export async function PATCH(
       const tipoEvento =
         body.estado === "CORTADO" ? "CORTE" : body.estado === "INACTIVO" ? "INHABILITACION" : "REACTIVACION";
       const usuarioActual = await obtenerUsuarioActual();
-      await prisma.eventoPegue.create({
-        data: {
-          pegueId: params.id,
-          tipo: tipoEvento,
-          nota: body.motivo?.trim() || null,
-          realizadoPor: usuarioActual ? usuarioActual.nombre || usuarioActual.username : null,
-        },
+      await prisma.$transaction(async (tx) => {
+        const numeroRecibo = await generarCorrelativo(tx, "EVENTO");
+        await tx.eventoPegue.create({
+          data: {
+            pegueId: params.id,
+            tipo: tipoEvento,
+            nota: body.motivo?.trim() || null,
+            realizadoPor: usuarioActual ? usuarioActual.nombre || usuarioActual.username : null,
+            numeroRecibo,
+          },
+        });
       });
     }
 

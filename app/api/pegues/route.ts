@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { asegurarPin } from "@/lib/pin";
 import { obtenerUsuarioActual } from "@/lib/auth";
+import { generarCorrelativo } from "@/lib/correlativo";
 
 export async function GET(req: NextRequest) {
   const codigo = req.nextUrl.searchParams.get("codigo");
@@ -93,13 +94,7 @@ export async function POST(req: NextRequest) {
       // Derecho de conexion: de contado (queda registrado ya pagado), en cuotas
       // (queda pendiente por cobrar), o sin cobro (no se crea nada).
       if (costo > 0 && formaPagoConexion === "CONTADO") {
-        const anioEmision = new Date().getFullYear();
-        const contador = await tx.contadorRecibo.upsert({
-          where: { anio: anioEmision },
-          update: { ultimo: { increment: 1 } },
-          create: { anio: anioEmision, ultimo: 1 },
-        });
-        const numeroReciboConexion = `${String(anioEmision).slice(-2)}-${String(contador.ultimo).padStart(4, "0")}`;
+        const numeroReciboConexion = await generarCorrelativo(tx, "CONEXION");
 
         await tx.cuotaPegue.create({
           data: {

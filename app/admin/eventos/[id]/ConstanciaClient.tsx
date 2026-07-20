@@ -33,7 +33,7 @@ export default function ConstanciaClient({ evento, juntaNombre }: { evento: any;
             <option value="A4">Tamaño A4</option>
             <option value="MATRICIAL">Formato impresora matricial</option>
           </select>
-          <button onClick={() => window.print()} className="btn-primario text-sm flex items-center gap-1.5">
+          <button type="button" onClick={() => window.print()} className="btn-primario text-sm flex items-center gap-1.5">
             <Printer size={14} /> Imprimir
           </button>
         </div>
@@ -54,7 +54,8 @@ export default function ConstanciaClient({ evento, juntaNombre }: { evento: any;
           <p className="whitespace-pre">{"=".repeat(impresora.anchoColumnas)}</p>
           <p className="text-center font-bold">{titulo.toUpperCase()}</p>
           <p className="whitespace-pre">{"=".repeat(impresora.anchoColumnas)}</p>
-          <p className="mt-2">Fecha: {fecha.toLocaleDateString("es-HN")} {fecha.toLocaleTimeString("es-HN", { hour: "2-digit", minute: "2-digit" })}</p>
+          <p className="mt-2">Constancia # {evento.numeroRecibo || "—"}</p>
+          <p>Fecha: {fecha.toLocaleDateString("es-HN")} {fecha.toLocaleTimeString("es-HN", { hour: "2-digit", minute: "2-digit" })}</p>
           <p className="whitespace-pre mt-2">{"-".repeat(impresora.anchoColumnas)}</p>
           <p>Pegue: {evento.pegue.codigo}</p>
           <p>Abonado: {evento.pegue.abonado.nombre}</p>
@@ -82,6 +83,8 @@ export default function ConstanciaClient({ evento, juntaNombre }: { evento: any;
               <p className="text-sm text-gray-500">{juntaNombre}</p>
             </div>
           </div>
+
+          <p className="text-right text-xs text-gray-400 -mt-4 mb-4">Constancia #{evento.numeroRecibo || "—"}</p>
 
           <table className="w-full text-sm mb-6">
             <tbody>

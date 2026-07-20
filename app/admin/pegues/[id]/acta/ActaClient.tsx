@@ -67,7 +67,7 @@ export default function ActaClient({
             <label className="label">Ubicación donde se instaló (dirección o referencia)</label>
             <div className="flex gap-2">
               <input className="input" value={ubicacion} onChange={(e) => setUbicacion(e.target.value)} />
-              <button onClick={guardarUbicacion} disabled={guardandoUbicacion} className="btn-outline text-sm flex items-center gap-1.5 whitespace-nowrap">
+              <button type="button" onClick={guardarUbicacion} disabled={guardandoUbicacion} className="btn-outline text-sm flex items-center gap-1.5 whitespace-nowrap">
                 <Save size={14} /> Guardar
               </button>
             </div>
@@ -79,11 +79,11 @@ export default function ActaClient({
               {clausulas.map((c, i) => (
                 <div key={i} className="flex gap-2">
                   <textarea className="input text-sm" value={c} onChange={(e) => actualizarClausula(i, e.target.value)} />
-                  <button onClick={() => quitarClausula(i)} className="text-red-500 shrink-0"><Trash2 size={16} /></button>
+                  <button type="button" onClick={() => quitarClausula(i)} className="text-red-500 shrink-0"><Trash2 size={16} /></button>
                 </div>
               ))}
             </div>
-            <button onClick={agregarClausula} className="btn-outline text-xs mt-2 flex items-center gap-1.5">
+            <button type="button" onClick={agregarClausula} className="btn-outline text-xs mt-2 flex items-center gap-1.5">
               <Plus size={14} /> Agregar cláusula
             </button>
             <p className="text-xs text-gray-400 mt-1">
@@ -116,7 +116,7 @@ export default function ActaClient({
             </label>
           </div>
 
-          <button onClick={() => window.print()} className="btn-primario text-sm flex items-center gap-1.5">
+          <button type="button" onClick={() => window.print()} className="btn-primario text-sm flex items-center gap-1.5">
             <Printer size={14} /> Imprimir
           </button>
         </div>
@@ -137,6 +137,8 @@ export default function ActaClient({
             <p className="text-sm text-gray-500">{juntaNombre}</p>
           </div>
         </div>
+
+        <p className="text-right text-xs text-gray-400 -mt-4 mb-4">Acta #{pegue.actaNumero || "—"}</p>
 
         <p className="text-xs font-bold text-azul uppercase mb-2">Datos generales</p>
         <table className="w-full text-sm mb-4">

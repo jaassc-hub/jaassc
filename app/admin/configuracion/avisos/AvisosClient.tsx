@@ -108,7 +108,7 @@ export default function AvisosClient({
         </div>
 
         <div className="flex items-center gap-3">
-          <button onClick={guardar} disabled={guardando} className="btn-primario text-sm">
+          <button type="button" onClick={guardar} disabled={guardando} className="btn-primario text-sm">
             {guardando ? "Guardando..." : "Guardar"}
           </button>
           {mensaje && <span className="text-sm text-gray-500">{mensaje}</span>}
@@ -124,7 +124,7 @@ export default function AvisosClient({
             value={telefonoPrueba}
             onChange={(e) => setTelefonoPrueba(e.target.value)}
           />
-          <button
+          <button type="button"
             onClick={enviarPrueba}
             disabled={enviandoPrueba}
             className="btn-outline text-sm whitespace-nowrap flex items-center gap-1.5"

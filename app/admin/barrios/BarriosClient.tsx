@@ -74,7 +74,7 @@ export default function BarriosClient({
             onChange={(e) => setPrefijo(e.target.value.toUpperCase())}
           />
         </div>
-        <button className="btn-primario whitespace-nowrap">+ Agregar barrio</button>
+        <button type="submit" className="btn-primario whitespace-nowrap">+ Agregar barrio</button>
       </form>
 
       <div className="card divide-y">
@@ -101,18 +101,18 @@ export default function BarriosClient({
                   value={editNum}
                   onChange={(e) => setEditNum(e.target.value)}
                 />
-                <button
+                <button type="button"
                   onClick={() => guardarCorrelativo(b.id)}
                   className="btn-primario text-sm"
                 >
                   Guardar
                 </button>
-                <button onClick={() => setEditId(null)} className="btn-outline text-sm">
+                <button type="button" onClick={() => setEditId(null)} className="btn-outline text-sm">
                   Cancelar
                 </button>
               </div>
             ) : (
-              <button
+              <button type="button"
                 onClick={() => {
                   setEditId(b.id);
                   setEditNum(String(b.ultimoNum));

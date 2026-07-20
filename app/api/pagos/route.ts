@@ -5,6 +5,7 @@ import { obtenerUsuarioActual } from "@/lib/auth";
 import { asegurarPin } from "@/lib/pin";
 import { MORA_DEFAULT } from "@/lib/moraConfig";
 import { obtenerConfigAvisos, enviarAviso, llenarPlantilla } from "@/lib/avisos";
+import { generarCorrelativo } from "@/lib/correlativo";
 import { randomUUID } from "crypto";
 
 export async function GET(req: NextRequest) {
@@ -127,14 +128,8 @@ export async function POST(req: NextRequest) {
 
   try {
     const pagosCreados = await prisma.$transaction(async (tx) => {
-      // Correlativo de recibo: uno por anio de emision (hoy), compartido por todo el lote.
-      const anioEmision = new Date().getFullYear();
-      const contador = await tx.contadorRecibo.upsert({
-        where: { anio: anioEmision },
-        update: { ultimo: { increment: 1 } },
-        create: { anio: anioEmision, ultimo: 1 },
-      });
-      const numeroRecibo = `${String(anioEmision).slice(-2)}-${String(contador.ultimo).padStart(4, "0")}`;
+      // Correlativo de recibo tipo PAGO, independiente de conexiones/constancias/actas.
+      const numeroRecibo = await generarCorrelativo(tx, "PAGO");
 
       const creados = [];
       for (let i = 0; i < meses.length; i++) {

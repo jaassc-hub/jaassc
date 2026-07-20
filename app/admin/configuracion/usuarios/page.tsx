@@ -12,7 +12,7 @@ export default async function UsuariosPage() {
 
   const usuarios = await prisma.usuario.findMany({
     orderBy: { username: "asc" },
-    select: { id: true, username: true, nombre: true, rol: true, permisos: true, activo: true },
+    select: { id: true, username: true, nombre: true, email: true, rol: true, permisos: true, activo: true, debeCambiarPassword: true },
   });
 
   return (

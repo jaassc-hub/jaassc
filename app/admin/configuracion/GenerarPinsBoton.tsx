@@ -34,7 +34,7 @@ export default function GenerarPinsBoton() {
         se abre su ficha o se le cobra. Si prefiere generarlos todos de una vez (por ejemplo,
         para repartirlos en una reunión), use este botón.
       </p>
-      <button onClick={generar} disabled={cargando} className="btn-outline text-sm">
+      <button type="button" onClick={generar} disabled={cargando} className="btn-outline text-sm">
         {cargando ? "Generando..." : "Generar códigos faltantes ahora"}
       </button>
       {mensaje && <p className="text-sm text-gray-500 mt-2">{mensaje}</p>}

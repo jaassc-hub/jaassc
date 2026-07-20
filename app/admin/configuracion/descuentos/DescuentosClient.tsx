@@ -132,7 +132,7 @@ export default function DescuentosClient({ configInicial }: { configInicial: any
       </div>
 
       <div className="flex items-center gap-3">
-        <button onClick={guardar} disabled={guardando} className="btn-primario text-sm">
+        <button type="button" onClick={guardar} disabled={guardando} className="btn-primario text-sm">
           {guardando ? "Guardando..." : "Guardar"}
         </button>
         {mensaje && <span className="text-sm text-gray-500">{mensaje}</span>}

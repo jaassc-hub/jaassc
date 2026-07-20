@@ -2,15 +2,17 @@
 
 import { useState } from "react";
 import { MODULOS } from "@/lib/permisos";
-import { UserPlus } from "lucide-react";
+import { UserPlus, Pencil, KeyRound, Copy } from "lucide-react";
 
 type Usuario = {
   id: string;
   username: string;
   nombre: string | null;
+  email?: string | null;
   rol: string;
   permisos: string;
   activo: boolean;
+  debeCambiarPassword?: boolean;
 };
 
 const ROLES = ["PRESIDENTE", "TESORERO", "SECRETARIA", "FISCAL", "VOCAL", "COBRADOR"];
@@ -38,10 +40,19 @@ export default function UsuariosClient({
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [nombre, setNombre] = useState("");
+  const [email, setEmail] = useState("");
   const [rol, setRol] = useState("VOCAL");
   const [permisosSel, setPermisosSel] = useState<string[]>([]);
   const [error, setError] = useState("");
   const [guardando, setGuardando] = useState(false);
+
+  const [editandoId, setEditandoId] = useState<string | null>(null);
+  const [editNombre, setEditNombre] = useState("");
+  const [editEmail, setEditEmail] = useState("");
+  const [editPassword, setEditPassword] = useState("");
+  const [errorEdit, setErrorEdit] = useState("");
+  const [guardandoEdit, setGuardandoEdit] = useState(false);
+  const [passwordTemporal, setPasswordTemporal] = useState<{ id: string; valor: string } | null>(null);
 
   function togglePermisoNuevo(key: string) {
     setPermisosSel((prev) => (prev.includes(key) ? prev.filter((x) => x !== key) : [...prev, key]));
@@ -55,7 +66,7 @@ export default function UsuariosClient({
     const res = await fetch("/api/usuarios", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, password, nombre, rol, permisos: permisosSel }),
+      body: JSON.stringify({ username, password, nombre, email, rol, permisos: permisosSel }),
     });
     setGuardando(false);
     if (res.ok) {
@@ -65,6 +76,7 @@ export default function UsuariosClient({
       setUsername("");
       setPassword("");
       setNombre("");
+      setEmail("");
       setRol("VOCAL");
       setPermisosSel([]);
     } else {
@@ -81,8 +93,10 @@ export default function UsuariosClient({
     });
     if (res.ok) {
       const actualizado = await res.json();
-      setUsuarios(usuarios.map((u) => (u.id === id ? actualizado : u)));
+      setUsuarios(usuarios.map((u) => (u.id === id ? { ...u, ...actualizado } : u)));
+      return actualizado;
     }
+    return null;
   }
 
   function togglePermisoExistente(u: Usuario, key: string) {
@@ -91,10 +105,53 @@ export default function UsuariosClient({
     actualizar(u.id, { permisos: nuevos });
   }
 
+  function abrirEdicion(u: Usuario) {
+    setEditandoId(u.id);
+    setEditNombre(u.nombre || "");
+    setEditEmail(u.email || "");
+    setEditPassword("");
+    setErrorEdit("");
+  }
+
+  async function guardarEdicion(id: string) {
+    setGuardandoEdit(true);
+    setErrorEdit("");
+    const body: any = { nombre: editNombre, email: editEmail };
+    if (editPassword) body.password = editPassword;
+    const res = await fetch(`/api/usuarios/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+    setGuardandoEdit(false);
+    if (res.ok) {
+      const actualizado = await res.json();
+      setUsuarios(usuarios.map((u) => (u.id === id ? { ...u, ...actualizado } : u)));
+      setEditandoId(null);
+    } else {
+      const data = await res.json();
+      setErrorEdit(data.error || "Error al guardar");
+    }
+  }
+
+  async function regenerarPassword(id: string) {
+    if (!confirm("Esto le va a generar una contraseña temporal nueva, y el usuario tendrá que cambiarla al iniciar sesión. ¿Continuar?")) return;
+    const res = await fetch(`/api/usuarios/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ regenerarPassword: true }),
+    });
+    if (res.ok) {
+      const actualizado = await res.json();
+      setUsuarios(usuarios.map((u) => (u.id === id ? { ...u, ...actualizado } : u)));
+      setPasswordTemporal({ id, valor: actualizado.passwordTemporal });
+    }
+  }
+
   return (
     <div className="space-y-6 max-w-3xl">
       <div className="flex justify-end">
-        <button onClick={() => setMostrarForm(!mostrarForm)} className="btn-primario text-sm flex items-center gap-1.5">
+        <button type="button" onClick={() => setMostrarForm(!mostrarForm)} className="btn-primario text-sm flex items-center gap-1.5">
           <UserPlus size={16} /> {mostrarForm ? "Cancelar" : "Nuevo usuario"}
         </button>
       </div>
@@ -122,7 +179,12 @@ export default function UsuariosClient({
               <label className="label">Contraseña</label>
               <input type="password" className="input" value={password} onChange={(e) => setPassword(e.target.value)} />
             </div>
+            <div>
+              <label className="label">Correo (opcional)</label>
+              <input type="email" className="input" value={email} onChange={(e) => setEmail(e.target.value)} />
+            </div>
           </div>
+          <p className="text-xs text-gray-400">La contraseña debe tener al menos 8 caracteres, mezclando letras y números.</p>
 
           {ACCESO_TOTAL.includes(rol) ? null : ACCESO_FIJO.includes(rol) ? (
             <p className="text-sm text-gray-500 bg-gray-50 border rounded-lg px-3 py-2">
@@ -147,7 +209,7 @@ export default function UsuariosClient({
           )}
 
           {error && <p className="text-red-600 text-sm">{error}</p>}
-          <button disabled={guardando} className="btn-primario text-sm">
+          <button type="submit" disabled={guardando} className="btn-primario text-sm">
             {guardando ? "Creando..." : "Crear usuario"}
           </button>
         </form>
@@ -165,7 +227,10 @@ export default function UsuariosClient({
                     {u.nombre || u.username}{" "}
                     <span className="text-gray-400 text-sm">({u.username})</span>
                   </p>
-                  <p className="text-xs text-gray-400">{NOMBRE_ROL[u.rol]}</p>
+                  <p className="text-xs text-gray-400">
+                    {NOMBRE_ROL[u.rol]}{u.email ? ` · ${u.email}` : ""}
+                    {u.debeCambiarPassword && <span className="text-orange-600"> · Debe cambiar su contraseña</span>}
+                  </p>
                 </div>
                 <div className="flex items-center gap-2">
                   <select
@@ -180,8 +245,14 @@ export default function UsuariosClient({
                   <span className={u.activo ? "badge-verde" : "badge-rojo"}>
                     {u.activo ? "Activo" : "Inactivo"}
                   </span>
+                  <button type="button" onClick={() => abrirEdicion(u)} className="text-gray-500" title="Editar">
+                    <Pencil size={15} />
+                  </button>
+                  <button type="button" onClick={() => regenerarPassword(u.id)} className="text-gray-500" title="Regenerar contraseña">
+                    <KeyRound size={15} />
+                  </button>
                   {u.id !== usuarioActualId && (
-                    <button
+                    <button type="button"
                       onClick={() => actualizar(u.id, { activo: !u.activo })}
                       className="text-xs text-gray-500"
                     >
@@ -190,6 +261,51 @@ export default function UsuariosClient({
                   )}
                 </div>
               </div>
+
+              {passwordTemporal && passwordTemporal.id === u.id && (
+                <div className="bg-orange-50 border border-orange-200 rounded-lg p-3 text-sm flex items-center justify-between gap-2">
+                  <span>
+                    Contraseña temporal para <b>{u.username}</b>: <code className="bg-white px-1.5 py-0.5 rounded border">{passwordTemporal.valor}</code>{" "}
+                    — comuníquesela, se le va a pedir que la cambie al entrar. No se vuelve a mostrar.
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => { navigator.clipboard.writeText(passwordTemporal.valor); }}
+                    className="text-orange-700 shrink-0"
+                    title="Copiar"
+                  >
+                    <Copy size={15} />
+                  </button>
+                </div>
+              )}
+
+              {editandoId === u.id && (
+                <div className="border rounded-lg p-3 bg-gray-50 space-y-2">
+                  <div className="grid md:grid-cols-2 gap-2">
+                    <div>
+                      <label className="label">Nombre completo</label>
+                      <input className="input text-sm" value={editNombre} onChange={(e) => setEditNombre(e.target.value)} />
+                    </div>
+                    <div>
+                      <label className="label">Correo</label>
+                      <input type="email" className="input text-sm" value={editEmail} onChange={(e) => setEditEmail(e.target.value)} />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="label">Nueva contraseña (dejar vacío para no cambiarla)</label>
+                    <input type="password" className="input text-sm" value={editPassword} onChange={(e) => setEditPassword(e.target.value)} />
+                  </div>
+                  {errorEdit && <p className="text-red-600 text-xs">{errorEdit}</p>}
+                  <div className="flex gap-2">
+                    <button type="button" onClick={() => guardarEdicion(u.id)} disabled={guardandoEdit} className="btn-primario text-xs">
+                      {guardandoEdit ? "Guardando..." : "Guardar"}
+                    </button>
+                    <button type="button" onClick={() => setEditandoId(null)} className="btn-outline text-xs">
+                      Cancelar
+                    </button>
+                  </div>
+                </div>
+              )}
 
               {accesoTotal ? (
                 <p className="text-xs text-gray-400">Acceso total a todo el sistema.</p>

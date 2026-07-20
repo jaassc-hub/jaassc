@@ -69,18 +69,18 @@ export default function MoraClient({ configInicial }: { configInicial: { tramos:
               value={t.porcentaje}
               onChange={(e) => actualizarTramo(t.id, "porcentaje", parseFloat(e.target.value) || 0)}
             />
-            <button onClick={() => quitarTramo(t.id)} className="text-red-500">
+            <button type="button" onClick={() => quitarTramo(t.id)} className="text-red-500">
               <Trash2 size={16} />
             </button>
           </div>
         ))}
 
-        <button onClick={agregarTramo} className="btn-outline text-sm flex items-center gap-1.5 w-fit">
+        <button type="button" onClick={agregarTramo} className="btn-outline text-sm flex items-center gap-1.5 w-fit">
           <Plus size={14} /> Agregar tramo
         </button>
 
         <div className="flex items-center gap-3 pt-2 border-t">
-          <button onClick={guardar} disabled={guardando} className="btn-primario text-sm">
+          <button type="button" onClick={guardar} disabled={guardando} className="btn-primario text-sm">
             {guardando ? "Guardando..." : "Guardar"}
           </button>
           {mensaje && <span className="text-sm text-gray-500">{mensaje}</span>}

@@ -12722,12 +12722,7 @@
       2,
       3,
       4,
-      5,
-      6,
-      7,
-      8,
-      9,
-      10
+      5
     ],
     "tarifaMensual": 100.0,
     "metodoPago": "DEPOSITO",
@@ -12736,7 +12731,7 @@
     "montoReconexion": 0.0,
     "montoDescuento": 0.0,
     "motivoDescuento": null,
-    "totalEsperado": 1000.0
+    "totalEsperado": 500.0
   },
   {
     "numeroRecibo": "26-0671",
@@ -14248,5 +14243,2065 @@
     "montoDescuento": 0.0,
     "motivoDescuento": null,
     "totalEsperado": 600.0
+  },
+  {
+    "numeroRecibo": "26-0755",
+    "codigo": "SNJ088",
+    "anio": 2026,
+    "meses": [
+      5,
+      6
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T08:01:26.540000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 200.0
+  },
+  {
+    "numeroRecibo": "26-0756",
+    "codigo": "3MY002",
+    "anio": 2026,
+    "meses": [
+      4,
+      5,
+      6
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T08:02:34.990000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 300.0
+  },
+  {
+    "numeroRecibo": "26-0757",
+    "codigo": "GUA097",
+    "anio": 2026,
+    "meses": [
+      5,
+      6
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T08:17:55.200000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 200.0
+  },
+  {
+    "numeroRecibo": "26-0758",
+    "codigo": "GUA093",
+    "anio": 2026,
+    "meses": [
+      5,
+      6
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T08:18:18.690000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 200.0
+  },
+  {
+    "numeroRecibo": "26-0759",
+    "codigo": "GUA209",
+    "anio": 2026,
+    "meses": [
+      5,
+      6
+    ],
+    "tarifaMensual": 50.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T08:19:14.350000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 100.0
+  },
+  {
+    "numeroRecibo": "26-0760",
+    "codigo": "GUA102",
+    "anio": 2026,
+    "meses": [
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T08:28:46.740000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 500.0
+  },
+  {
+    "numeroRecibo": "26-0761",
+    "codigo": "GUA184",
+    "anio": 2026,
+    "meses": [
+      4,
+      5,
+      6
+    ],
+    "tarifaMensual": 50.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T08:31:26.880000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 150.0
+  },
+  {
+    "numeroRecibo": "26-0762",
+    "codigo": "3MY001",
+    "anio": 2026,
+    "meses": [
+      6
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T08:39:48.870000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 100.0
+  },
+  {
+    "numeroRecibo": "26-0763",
+    "codigo": "SNJ070",
+    "anio": 2026,
+    "meses": [
+      7,
+      8,
+      9,
+      10,
+      11,
+      12
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T08:41:32.120000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 600.0
+  },
+  {
+    "numeroRecibo": "26-0764",
+    "codigo": "SNJ083",
+    "anio": 2026,
+    "meses": [
+      7,
+      8,
+      9,
+      10,
+      11,
+      12
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T08:42:11.360000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 600.0
+  },
+  {
+    "numeroRecibo": "26-0765",
+    "codigo": "GUA038",
+    "anio": 2026,
+    "meses": [
+      5,
+      6
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T08:43:59.490000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 200.0
+  },
+  {
+    "numeroRecibo": "26-0766",
+    "codigo": "3MY021",
+    "anio": 2026,
+    "meses": [
+      5,
+      6
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T08:50:02.030000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 200.0
+  },
+  {
+    "numeroRecibo": "26-0767",
+    "codigo": "GUA205",
+    "anio": 2026,
+    "meses": [
+      6,
+      7
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T08:52:47.810000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 200.0
+  },
+  {
+    "numeroRecibo": "26-0768",
+    "codigo": "GUA179",
+    "anio": 2026,
+    "meses": [
+      6,
+      7
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T08:53:17.050000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 200.0
+  },
+  {
+    "numeroRecibo": "26-0769",
+    "codigo": "SNJ097",
+    "anio": 2026,
+    "meses": [
+      6,
+      7,
+      8,
+      9,
+      10
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T08:56:56.690000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 500.0
+  },
+  {
+    "numeroRecibo": "26-0770",
+    "codigo": "GUA106",
+    "anio": 2026,
+    "meses": [
+      7,
+      8,
+      9,
+      10,
+      11
+    ],
+    "tarifaMensual": 50.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T08:58:12.150000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 250.0
+  },
+  {
+    "numeroRecibo": "26-0771",
+    "codigo": "GUA177",
+    "anio": 2026,
+    "meses": [
+      5,
+      6
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T09:04:49.550000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 200.0
+  },
+  {
+    "numeroRecibo": "26-0772",
+    "codigo": "GUA005",
+    "anio": 2026,
+    "meses": [
+      5,
+      6
+    ],
+    "tarifaMensual": 50.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T09:05:33.830000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 100.0
+  },
+  {
+    "numeroRecibo": "26-0773",
+    "codigo": "LEM098",
+    "anio": 2026,
+    "meses": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "tarifaMensual": 50.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T09:11:12.810000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 250.0
+  },
+  {
+    "numeroRecibo": "26-0774",
+    "codigo": "GUA203",
+    "anio": 2026,
+    "meses": [
+      5,
+      6
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T09:18:19.100000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 200.0
+  },
+  {
+    "numeroRecibo": "26-0775",
+    "codigo": "LEM022",
+    "anio": 2026,
+    "meses": [
+      4,
+      5,
+      6
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T09:18:40.470000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 300.0
+  },
+  {
+    "numeroRecibo": "26-0776",
+    "codigo": "LEM044",
+    "anio": 2026,
+    "meses": [
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T09:29:50.830000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 600.0
+  },
+  {
+    "numeroRecibo": "26-0777",
+    "codigo": "GUA144",
+    "anio": 2026,
+    "meses": [
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T09:35:54.280000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 500.0
+  },
+  {
+    "numeroRecibo": "26-0778",
+    "codigo": "GUA065",
+    "anio": 2026,
+    "meses": [
+      7,
+      8,
+      9,
+      10,
+      11,
+      12
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T09:39:17.950000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 600.0
+  },
+  {
+    "numeroRecibo": "26-0779",
+    "codigo": "SNJ006",
+    "anio": 2026,
+    "meses": [
+      7,
+      8,
+      9
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T09:40:29.610000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 300.0
+  },
+  {
+    "numeroRecibo": "26-0780",
+    "codigo": "3MY068",
+    "anio": 2026,
+    "meses": [
+      6,
+      7,
+      8,
+      9,
+      10
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T09:43:13.890000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 500.0
+  },
+  {
+    "numeroRecibo": "26-0781",
+    "codigo": "GUA092",
+    "anio": 2026,
+    "meses": [
+      7,
+      8,
+      9,
+      10,
+      11,
+      12
+    ],
+    "tarifaMensual": 50.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T09:44:38.020000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 300.0
+  },
+  {
+    "numeroRecibo": "26-0782",
+    "codigo": "LEM088",
+    "anio": 2026,
+    "meses": [
+      6,
+      7,
+      8,
+      9,
+      10
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T09:45:11.250000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 500.0
+  },
+  {
+    "numeroRecibo": "26-0783",
+    "codigo": "GUA075",
+    "anio": 2026,
+    "meses": [
+      4,
+      5,
+      6
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T09:46:53.020000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 300.0
+  },
+  {
+    "numeroRecibo": "26-0784",
+    "codigo": "LEM006",
+    "anio": 2026,
+    "meses": [
+      3,
+      4
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "DEPOSITO",
+    "fechaPago": "2026-06-21T09:47:57.030000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 200.0
+  },
+  {
+    "numeroRecibo": "26-0785",
+    "codigo": "LEM006",
+    "anio": 2026,
+    "meses": [
+      5,
+      6,
+      7
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T09:49:03.160000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 300.0
+  },
+  {
+    "numeroRecibo": "26-0786",
+    "codigo": "LEM023",
+    "anio": 2026,
+    "meses": [
+      4
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T09:50:50.810000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 100.0
+  },
+  {
+    "numeroRecibo": "26-0787",
+    "codigo": "LEM058",
+    "anio": 2026,
+    "meses": [
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T09:52:36.200000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 500.0
+  },
+  {
+    "numeroRecibo": "26-0788",
+    "codigo": "GUA027",
+    "anio": 2026,
+    "meses": [
+      3,
+      4,
+      5,
+      6
+    ],
+    "tarifaMensual": 50.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T09:53:57.280000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 200.0
+  },
+  {
+    "numeroRecibo": "26-0789",
+    "codigo": "GUA023",
+    "anio": 2026,
+    "meses": [
+      6,
+      7,
+      8,
+      9,
+      10
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T09:55:00.640000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 500.0
+  },
+  {
+    "numeroRecibo": "26-0790",
+    "codigo": "GUA024",
+    "anio": 2026,
+    "meses": [
+      6,
+      7,
+      8,
+      9,
+      10
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T09:55:42.270000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 500.0
+  },
+  {
+    "numeroRecibo": "26-0791",
+    "codigo": "SNJ052",
+    "anio": 2026,
+    "meses": [
+      8,
+      9
+    ],
+    "tarifaMensual": 50.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T09:56:28.270000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 100.0
+  },
+  {
+    "numeroRecibo": "26-0792",
+    "codigo": "3MY031",
+    "anio": 2026,
+    "meses": [
+      3,
+      4,
+      5,
+      6
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T09:57:26.380000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 400.0
+  },
+  {
+    "numeroRecibo": "26-0793",
+    "codigo": "GUA195",
+    "anio": 2026,
+    "meses": [
+      9
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T09:57:59.780000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 100.0
+  },
+  {
+    "numeroRecibo": "26-0794",
+    "codigo": "SNJ081",
+    "anio": 2026,
+    "meses": [
+      5,
+      6
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T10:01:00.370000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 200.0
+  },
+  {
+    "numeroRecibo": "26-0795",
+    "codigo": "SNJ024",
+    "anio": 2025,
+    "meses": [
+      10,
+      11
+    ],
+    "tarifaMensual": 80.0,
+    "metodoPago": "DEPOSITO",
+    "fechaPago": "2026-06-21T10:09:39.950000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 160.0
+  },
+  {
+    "numeroRecibo": "26-0796",
+    "codigo": "SNJ024",
+    "anio": 2025,
+    "meses": [
+      12
+    ],
+    "tarifaMensual": 80.0,
+    "metodoPago": "DEPOSITO",
+    "fechaPago": "2026-06-21T10:10:01.490000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 80.0
+  },
+  {
+    "numeroRecibo": "26-0797",
+    "codigo": "SNJ024",
+    "anio": 2026,
+    "meses": [
+      1,
+      2,
+      3
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "DEPOSITO",
+    "fechaPago": "2026-06-21T10:10:47.280000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 300.0
+  },
+  {
+    "numeroRecibo": "26-0798",
+    "codigo": "GUA007",
+    "anio": 2026,
+    "meses": [
+      6,
+      7,
+      8,
+      9
+    ],
+    "tarifaMensual": 50.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T10:12:35.440000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 200.0
+  },
+  {
+    "numeroRecibo": "26-0799",
+    "codigo": "SNJ001",
+    "anio": 2026,
+    "meses": [
+      5,
+      6
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T10:13:16.040000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 200.0
+  },
+  {
+    "numeroRecibo": "26-0800",
+    "codigo": "SNJ035",
+    "anio": 2026,
+    "meses": [
+      6
+    ],
+    "tarifaMensual": 50.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T10:17:07.270000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 50.0
+  },
+  {
+    "numeroRecibo": "26-0801",
+    "codigo": "LEM091",
+    "anio": 2026,
+    "meses": [
+      5,
+      6
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T10:19:27.900000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 200.0
+  },
+  {
+    "numeroRecibo": "26-0802",
+    "codigo": "3MY035",
+    "anio": 2026,
+    "meses": [
+      6
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T10:19:54.900000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 100.0
+  },
+  {
+    "numeroRecibo": "26-0803",
+    "codigo": "3MY003",
+    "anio": 2026,
+    "meses": [
+      6,
+      7
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T10:21:49.690000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 200.0
+  },
+  {
+    "numeroRecibo": "26-0804",
+    "codigo": "LEM095",
+    "anio": 2026,
+    "meses": [
+      4,
+      5,
+      6
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T10:22:40.400000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 300.0
+  },
+  {
+    "numeroRecibo": "26-0805",
+    "codigo": "LEM051",
+    "anio": 2026,
+    "meses": [
+      6,
+      7,
+      8,
+      9,
+      10
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T10:23:07.860000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 500.0
+  },
+  {
+    "numeroRecibo": "26-0806",
+    "codigo": "GUA101",
+    "anio": 2026,
+    "meses": [
+      6
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T10:34:38.740000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 100.0
+  },
+  {
+    "numeroRecibo": "26-0807",
+    "codigo": "GUA073",
+    "anio": 2026,
+    "meses": [
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "DEPOSITO",
+    "fechaPago": "2026-06-21T10:35:52.890000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 500.0
+  },
+  {
+    "numeroRecibo": "26-0808",
+    "codigo": "SNJ089",
+    "anio": 2026,
+    "meses": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T10:42:03.580000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 1200.0
+  },
+  {
+    "numeroRecibo": "26-0809",
+    "codigo": "LEM099",
+    "anio": 2026,
+    "meses": [
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T10:44:27.260000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 700.0
+  },
+  {
+    "numeroRecibo": "26-0810",
+    "codigo": "LEM100",
+    "anio": 2026,
+    "meses": [
+      7,
+      8,
+      9,
+      10,
+      11,
+      12
+    ],
+    "tarifaMensual": 50.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T10:44:52.190000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 300.0
+  },
+  {
+    "numeroRecibo": "26-0811",
+    "codigo": "LEM135",
+    "anio": 2026,
+    "meses": [
+      1,
+      2
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T10:46:23.500000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 200.0
+  },
+  {
+    "numeroRecibo": "26-0812",
+    "codigo": "GUA207",
+    "anio": 2026,
+    "meses": [
+      3,
+      4
+    ],
+    "tarifaMensual": 50.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T10:47:31.630000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 100.0
+  },
+  {
+    "numeroRecibo": "26-0813",
+    "codigo": "3MY053",
+    "anio": 2026,
+    "meses": [
+      3,
+      4,
+      5
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "DEPOSITO",
+    "fechaPago": "2026-06-21T10:50:44.500000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 300.0
+  },
+  {
+    "numeroRecibo": "26-0814",
+    "codigo": "LEM004",
+    "anio": 2026,
+    "meses": [
+      3,
+      4,
+      5
+    ],
+    "tarifaMensual": 50.0,
+    "metodoPago": "DEPOSITO",
+    "fechaPago": "2026-06-21T10:51:10.450000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 150.0
+  },
+  {
+    "numeroRecibo": "26-0815",
+    "codigo": "GUA196",
+    "anio": 2026,
+    "meses": [
+      5,
+      6
+    ],
+    "tarifaMensual": 50.0,
+    "metodoPago": "DEPOSITO",
+    "fechaPago": "2026-06-21T10:51:40.990000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 100.0
+  },
+  {
+    "numeroRecibo": "26-0816",
+    "codigo": "GUA206",
+    "anio": 2026,
+    "meses": [
+      3,
+      4
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "DEPOSITO",
+    "fechaPago": "2026-06-21T10:54:53.380000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 200.0
+  },
+  {
+    "numeroRecibo": "26-0817",
+    "codigo": "GUA153",
+    "anio": 2026,
+    "meses": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "DEPOSITO",
+    "fechaPago": "2026-06-21T10:55:45.150000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 500.0
+  },
+  {
+    "numeroRecibo": "26-0818",
+    "codigo": "LEM110",
+    "anio": 2026,
+    "meses": [
+      3,
+      4,
+      5,
+      6
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T10:56:58.920000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 400.0
+  },
+  {
+    "numeroRecibo": "26-0819",
+    "codigo": "LEM041",
+    "anio": 2026,
+    "meses": [
+      5
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T11:00:57.490000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 100.0
+  },
+  {
+    "numeroRecibo": "26-0820",
+    "codigo": "3MY041",
+    "anio": 2026,
+    "meses": [
+      6,
+      7
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T11:02:32.430000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 200.0
+  },
+  {
+    "numeroRecibo": "26-0821",
+    "codigo": "3MY081",
+    "anio": 2026,
+    "meses": [
+      4,
+      5
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T11:03:35.590000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 200.0
+  },
+  {
+    "numeroRecibo": "26-0822",
+    "codigo": "GUA105",
+    "anio": 2026,
+    "meses": [
+      5,
+      6,
+      7
+    ],
+    "tarifaMensual": 50.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T11:10:03.260000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 150.0
+  },
+  {
+    "numeroRecibo": "26-0823",
+    "codigo": "SNJ090",
+    "anio": 2026,
+    "meses": [
+      6
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T11:13:29.840000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 100.0
+  },
+  {
+    "numeroRecibo": "26-0824",
+    "codigo": "SNJ032",
+    "anio": 2026,
+    "meses": [
+      6
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T11:16:34.220000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 100.0
+  },
+  {
+    "numeroRecibo": "26-0825",
+    "codigo": "GUA068",
+    "anio": 2025,
+    "meses": [
+      7,
+      8,
+      9,
+      10,
+      11,
+      12
+    ],
+    "tarifaMensual": 15.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T11:19:35.780000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 90.0
+  },
+  {
+    "numeroRecibo": "26-0826",
+    "codigo": "GUA068",
+    "anio": 2026,
+    "meses": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "tarifaMensual": 50.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T11:21:19.230000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 400.0
+  },
+  {
+    "numeroRecibo": "26-0827",
+    "codigo": "LEM012",
+    "anio": 2026,
+    "meses": [
+      5,
+      6
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T11:23:15.390000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 200.0
+  },
+  {
+    "numeroRecibo": "26-0828",
+    "codigo": "LEM120",
+    "anio": 2025,
+    "meses": [
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12
+    ],
+    "tarifaMensual": 40.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T11:26:24.770000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 280.0
+  },
+  {
+    "numeroRecibo": "26-0829",
+    "codigo": "LEM120",
+    "anio": 2026,
+    "meses": [
+      1,
+      2
+    ],
+    "tarifaMensual": 50.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T11:28:37.800000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 100.0
+  },
+  {
+    "numeroRecibo": "26-0830",
+    "codigo": "SNJ007",
+    "anio": 2026,
+    "meses": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T11:30:48.120000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 700.0
+  },
+  {
+    "numeroRecibo": "26-0831",
+    "codigo": "SNJ080",
+    "anio": 2026,
+    "meses": [
+      4,
+      5,
+      6
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T11:32:15.680000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 300.0
+  },
+  {
+    "numeroRecibo": "26-0832",
+    "codigo": "SNJ025",
+    "anio": 2026,
+    "meses": [
+      4,
+      5,
+      6
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T11:33:20.370000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 300.0
+  },
+  {
+    "numeroRecibo": "26-0833",
+    "codigo": "3MY063",
+    "anio": 2026,
+    "meses": [
+      5,
+      6
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T11:35:52.370000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 200.0
+  },
+  {
+    "numeroRecibo": "26-0834",
+    "codigo": "GUA174",
+    "anio": 2026,
+    "meses": [
+      6
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T11:38:35.730000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 100.0
+  },
+  {
+    "numeroRecibo": "26-0835",
+    "codigo": "LEM008",
+    "anio": 2026,
+    "meses": [
+      6
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T11:39:24.270000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 100.0
+  },
+  {
+    "numeroRecibo": "26-0836",
+    "codigo": "GUA112",
+    "anio": 2026,
+    "meses": [
+      4,
+      5,
+      6
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T11:40:55.590000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 300.0
+  },
+  {
+    "numeroRecibo": "26-0837",
+    "codigo": "LEM063",
+    "anio": 2026,
+    "meses": [
+      6,
+      7
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T12:03:33.840000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 200.0
+  },
+  {
+    "numeroRecibo": "26-0838",
+    "codigo": "GUA182",
+    "anio": 2026,
+    "meses": [
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T12:33:47.620000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 500.0
+  },
+  {
+    "numeroRecibo": "26-0839",
+    "codigo": "GUA170",
+    "anio": 2026,
+    "meses": [
+      3,
+      4,
+      5,
+      6
+    ],
+    "tarifaMensual": 50.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T12:34:52.390000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 200.0
+  },
+  {
+    "numeroRecibo": "26-0840",
+    "codigo": "GUA146",
+    "anio": 2026,
+    "meses": [
+      6,
+      7,
+      8
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T12:35:32.430000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 300.0
+  },
+  {
+    "numeroRecibo": "26-0841",
+    "codigo": "GUA226",
+    "anio": 2026,
+    "meses": [
+      5,
+      6,
+      7
+    ],
+    "tarifaMensual": 50.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T12:41:53.890000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 150.0
+  },
+  {
+    "numeroRecibo": "26-0842",
+    "codigo": "GUA098",
+    "anio": 2026,
+    "meses": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "tarifaMensual": 50.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T12:47:08.790000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 300.0
+  },
+  {
+    "numeroRecibo": "26-0843",
+    "codigo": "GUA008",
+    "anio": 2026,
+    "meses": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "tarifaMensual": 50.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T12:48:50.070000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 300.0
+  },
+  {
+    "numeroRecibo": "26-0844",
+    "codigo": "GUA143",
+    "anio": 2026,
+    "meses": [
+      5,
+      6,
+      7,
+      8
+    ],
+    "tarifaMensual": 50.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T12:58:00.330000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 200.0
+  },
+  {
+    "numeroRecibo": "26-0845",
+    "codigo": "SNJ018",
+    "anio": 2026,
+    "meses": [
+      4,
+      5,
+      6
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T12:59:31.980000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 300.0
+  },
+  {
+    "numeroRecibo": "26-0846",
+    "codigo": "LEM140",
+    "anio": 2026,
+    "meses": [
+      7,
+      8
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T13:01:21.450000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 200.0
+  },
+  {
+    "numeroRecibo": "26-0847",
+    "codigo": "GUA169",
+    "anio": 2026,
+    "meses": [
+      5,
+      6
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T13:04:40.900000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 200.0
+  },
+  {
+    "numeroRecibo": "26-0848",
+    "codigo": "LEM143",
+    "anio": 2026,
+    "meses": [
+      4,
+      5
+    ],
+    "tarifaMensual": 50.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T13:21:45.810000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 100.0
+  },
+  {
+    "numeroRecibo": "26-0849",
+    "codigo": "LEM143",
+    "anio": 2026,
+    "meses": [
+      6,
+      7,
+      8,
+      9
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T13:24:59.850000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 400.0
+  },
+  {
+    "numeroRecibo": "26-0850",
+    "codigo": "SNJ107",
+    "anio": 2026,
+    "meses": [
+      6,
+      7
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T13:27:40.370000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 200.0
+  },
+  {
+    "numeroRecibo": "26-0851",
+    "codigo": "SNJ058",
+    "anio": 2026,
+    "meses": [
+      5,
+      6
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T13:28:15.130000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 200.0
+  },
+  {
+    "numeroRecibo": "26-0852",
+    "codigo": "LEM049",
+    "anio": 2026,
+    "meses": [
+      5,
+      6
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T13:28:38.100000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 200.0
+  },
+  {
+    "numeroRecibo": "26-0853",
+    "codigo": "GUA108",
+    "anio": 2026,
+    "meses": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "tarifaMensual": 50.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T13:31:19.190000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 250.0
+  },
+  {
+    "numeroRecibo": "26-0854",
+    "codigo": "LEM008",
+    "anio": 2026,
+    "meses": [
+      7
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T13:31:58.760000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 100.0
+  },
+  {
+    "numeroRecibo": "26-0855",
+    "codigo": "GUA087",
+    "anio": 2026,
+    "meses": [
+      5
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T13:32:52.530000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 100.0
+  },
+  {
+    "numeroRecibo": "26-0856",
+    "codigo": "LEM007",
+    "anio": 2026,
+    "meses": [
+      6,
+      7,
+      8,
+      9,
+      10
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T13:33:17.050000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 500.0
+  },
+  {
+    "numeroRecibo": "26-0857",
+    "codigo": "LEM028",
+    "anio": 2026,
+    "meses": [
+      7,
+      8
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T13:35:01.690000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 200.0
+  },
+  {
+    "numeroRecibo": "26-0858",
+    "codigo": "LEM046",
+    "anio": 2026,
+    "meses": [
+      7,
+      8
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T13:35:17.690000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 200.0
+  },
+  {
+    "numeroRecibo": "26-0859",
+    "codigo": "LEM001",
+    "anio": 2026,
+    "meses": [
+      4,
+      5,
+      6
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T13:36:05.410000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 300.0
+  },
+  {
+    "numeroRecibo": "26-0860",
+    "codigo": "3MY087",
+    "anio": 2026,
+    "meses": [
+      3,
+      4,
+      5,
+      6
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T13:37:21.040000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 400.0
+  },
+  {
+    "numeroRecibo": "26-0861",
+    "codigo": "SNJ092",
+    "anio": 2026,
+    "meses": [
+      5,
+      6
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T13:37:50.050000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 200.0
+  },
+  {
+    "numeroRecibo": "26-0862",
+    "codigo": "GUA036",
+    "anio": 2026,
+    "meses": [
+      3,
+      4,
+      5,
+      6
+    ],
+    "tarifaMensual": 50.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T13:39:01.110000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 200.0
+  },
+  {
+    "numeroRecibo": "26-0863",
+    "codigo": "GUA148",
+    "anio": 2026,
+    "meses": [
+      5,
+      6
+    ],
+    "tarifaMensual": 50.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T13:39:36.850000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 100.0
+  },
+  {
+    "numeroRecibo": "26-0864",
+    "codigo": "GUA149",
+    "anio": 2026,
+    "meses": [
+      5,
+      6
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T13:40:04.260000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 200.0
+  },
+  {
+    "numeroRecibo": "26-0865",
+    "codigo": "SNJ019",
+    "anio": 2026,
+    "meses": [
+      5
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T13:43:11.530000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 100.0
+  },
+  {
+    "numeroRecibo": "26-0866",
+    "codigo": "GUA163",
+    "anio": 2026,
+    "meses": [
+      6,
+      7
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T13:44:44.390000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 200.0
+  },
+  {
+    "numeroRecibo": "26-0867",
+    "codigo": "SNJ073",
+    "anio": 2026,
+    "meses": [
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "tarifaMensual": 100.0,
+    "metodoPago": "EFECTIVO",
+    "fechaPago": "2026-06-21T14:04:16.600000",
+    "montoMora": 0.0,
+    "montoReconexion": 0.0,
+    "montoDescuento": 0.0,
+    "motivoDescuento": null,
+    "totalEsperado": 500.0
   }
 ]

@@ -177,14 +177,14 @@ export default function AbonadoDetalleClient({
             )}
             <p className="text-gray-500 flex items-center gap-2">
               Código de acceso al portal: <b className="text-azul">{abonado.pin}</b>
-              <button onClick={regenerarPin} disabled={regenerando} className="text-xs text-azul underline">
+              <button type="button" onClick={regenerarPin} disabled={regenerando} className="text-xs text-azul underline">
                 {regenerando ? "Generando..." : "Regenerar"}
               </button>
             </p>
             {abonado.telefono && <p className="text-gray-500">Tel: {abonado.telefono}</p>}
             {abonado.direccion && <p className="text-gray-500">{abonado.direccion}</p>}
           </div>
-          <button onClick={() => setEditando(!editando)} className="btn-outline text-sm flex items-center gap-1.5">
+          <button type="button" onClick={() => setEditando(!editando)} className="btn-outline text-sm flex items-center gap-1.5">
             <Pencil size={14} /> {editando ? "Cancelar" : "Editar datos"}
           </button>
         </div>
@@ -211,10 +211,10 @@ export default function AbonadoDetalleClient({
             </div>
             {errorDatos && <p className="text-red-600 text-sm">{errorDatos}</p>}
             <div className="flex items-center gap-3">
-              <button onClick={guardarDatos} disabled={guardandoDatos} className="btn-primario text-sm">
+              <button type="button" onClick={guardarDatos} disabled={guardandoDatos} className="btn-primario text-sm">
                 {guardandoDatos ? "Guardando..." : "Guardar cambios"}
               </button>
-              <button onClick={toggleActivo} className="text-sm text-gray-500">
+              <button type="button" onClick={toggleActivo} className="text-sm text-gray-500">
                 {abonado.activo ? "Marcar como inactivo" : "Marcar como activo"}
               </button>
             </div>
@@ -225,7 +225,7 @@ export default function AbonadoDetalleClient({
       <div className="card">
         <div className="flex items-center justify-between mb-3">
           <h2 className="font-semibold text-azul">Pegues de este abonado</h2>
-          <button onClick={() => setMostrarForm(!mostrarForm)} className="btn-primario text-sm flex items-center gap-1.5">
+          <button type="button" onClick={() => setMostrarForm(!mostrarForm)} className="btn-primario text-sm flex items-center gap-1.5">
             <Plus size={14} /> {mostrarForm ? "Cancelar" : "Agregar pegue"}
           </button>
         </div>
@@ -304,7 +304,7 @@ export default function AbonadoDetalleClient({
             </div>
 
             {error && <p className="text-red-600 text-sm">{error}</p>}
-            <button disabled={guardando} className="btn-primario">
+            <button type="submit" disabled={guardando} className="btn-primario">
               Guardar pegue
             </button>
           </form>

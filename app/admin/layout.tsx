@@ -38,6 +38,7 @@ export default async function AdminLayout({
 }) {
   const usuario = await obtenerUsuarioActual();
   if (!usuario) redirect("/login");
+  if (usuario.debeCambiarPassword) redirect("/cambiar-password");
 
   const navVisible = nav.filter((item) => !item.modulo || tienePermiso(usuario, item.modulo));
 

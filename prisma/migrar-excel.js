@@ -13,6 +13,25 @@ const path = require("path");
 
 const prisma = new PrismaClient();
 
+// Neon a veces cierra la conexion si estuvo inactiva un rato ("Server has closed the
+// connection", P1017). Esto reintenta esa operacion puntual antes de rendirse, esperando
+// cada vez un poco mas, y forzando una conexion nueva (no solo reintentar sobre la misma
+// conexion ya rota).
+async function conReintentos(fn, intentos = 6) {
+  for (let i = 0; i < intentos; i++) {
+    try {
+      return await fn();
+    } catch (e) {
+      const esErrorDeConexion = e.code === "P1017" || e.code === "P1001" || e.code === "P1008" || /closed the connection|timed out/i.test(e.message || "");
+      if (!esErrorDeConexion || i === intentos - 1) throw e;
+      const espera = 3000 * (i + 1); // 3s, 6s, 9s, 12s, 15s...
+      console.log(`  (conexion perdida, reintentando en ${espera / 1000}s... intento ${i + 1}/${intentos})`);
+      await prisma.$disconnect(); // fuerza una conexion nueva en el proximo intento
+      await new Promise((r) => setTimeout(r, espera));
+    }
+  }
+}
+
 const CARPETA = path.join(__dirname, "migracion");
 
 function generarPin() {
@@ -31,10 +50,10 @@ function normalizarNombre(nombre) {
 async function importarAbonados() {
   const abonados = JSON.parse(fs.readFileSync(path.join(CARPETA, "abonados.json"), "utf-8"));
 
-  const barrios = await prisma.barrio.findMany();
+  const barrios = await conReintentos(() => prisma.barrio.findMany());
   const barrioPorPrefijo = Object.fromEntries(barrios.map((b) => [b.prefijo, b]));
 
-  const servicios = await prisma.servicio.findMany();
+  const servicios = await conReintentos(() => prisma.servicio.findMany());
   const servicioAgua = servicios.find((s) => s.nombre === "Agua Potable");
   const servicioAlc = servicios.find((s) => s.nombre === "Alcantarillado");
 
@@ -149,7 +168,7 @@ async function importarPagos() {
   const pagos = JSON.parse(fs.readFileSync(path.join(CARPETA, "pagos.json"), "utf-8"));
 
   console.log(`Cargando pegues...`);
-  const pegues = await prisma.pegue.findMany({ select: { id: true, codigo: true } });
+  const pegues = await conReintentos(() => prisma.pegue.findMany({ select: { id: true, codigo: true } }));
   const pegueIdPorCodigo = Object.fromEntries(pegues.map((p) => [p.codigo, p.id]));
 
   // Se arma toda la lista de filas a insertar en memoria (sin tocar la base de datos todavia)
@@ -197,10 +216,12 @@ async function importarPagos() {
   console.log(`${filas.length} pagos por insertar (en lotes de 200)...`);
 
   let insertados = 0;
-  const LOTE = 200;
+  const LOTE = 75;
   for (let i = 0; i < filas.length; i += LOTE) {
     const bloque = filas.slice(i, i + LOTE);
-    const resultado = await prisma.pago.createMany({ data: bloque, skipDuplicates: true });
+    const resultado = await conReintentos(() =>
+      prisma.pago.createMany({ data: bloque, skipDuplicates: true })
+    );
     insertados += resultado.count;
     console.log(`  ${Math.min(i + LOTE, filas.length)} / ${filas.length} procesados (${insertados} nuevos hasta ahora)...`);
   }
@@ -216,14 +237,16 @@ async function importarPagos() {
   }
   for (const [anio, num] of Object.entries(anioMaxRecibo)) {
     const anioInt = parseInt(anio);
-    const actual = await prisma.contadorRecibo.findUnique({ where: { anio: anioInt } });
-    if (!actual || actual.ultimo < num) {
-      await prisma.contadorRecibo.upsert({
-        where: { anio: anioInt },
-        update: { ultimo: num },
-        create: { anio: anioInt, ultimo: num },
-      });
-    }
+    await conReintentos(async () => {
+      const actual = await prisma.contadorRecibo.findUnique({ where: { anio_tipo: { anio: anioInt, tipo: "PAGO" } } });
+      if (!actual || actual.ultimo < num) {
+        await prisma.contadorRecibo.upsert({
+          where: { anio_tipo: { anio: anioInt, tipo: "PAGO" } },
+          update: { ultimo: num },
+          create: { anio: anioInt, tipo: "PAGO", ultimo: num },
+        });
+      }
+    });
   }
 
   console.log(`\nPagos creados: ${insertados} | ya existían (se saltaron): ${saltadosDuplicado} | sin pegue: ${sinPegue}`);

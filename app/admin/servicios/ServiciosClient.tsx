@@ -93,7 +93,7 @@ export default function ServiciosClient({
             onChange={(e) => setPrecio(e.target.value)}
           />
         </div>
-        <button disabled={guardando} className="btn-primario whitespace-nowrap">
+        <button type="submit" disabled={guardando} className="btn-primario whitespace-nowrap">
           + Agregar servicio
         </button>
       </form>
@@ -115,13 +115,13 @@ export default function ServiciosClient({
                   value={editPrecio}
                   onChange={(e) => setEditPrecio(e.target.value)}
                 />
-                <button
+                <button type="button"
                   onClick={() => guardarEdicion(s.id)}
                   className="btn-primario text-sm"
                 >
                   Guardar
                 </button>
-                <button
+                <button type="button"
                   onClick={() => setEditandoId(null)}
                   className="btn-outline text-sm"
                 >
@@ -138,13 +138,13 @@ export default function ServiciosClient({
                   <span className={s.activo ? "badge-verde" : "badge-rojo"}>
                     {s.activo ? "Activo" : "Inactivo"}
                   </span>
-                  <button
+                  <button type="button"
                     onClick={() => empezarEdicion(s)}
                     className="text-azul text-sm font-medium"
                   >
                     Editar
                   </button>
-                  <button
+                  <button type="button"
                     onClick={() => toggleActivo(s)}
                     className="text-sm text-gray-500"
                   >

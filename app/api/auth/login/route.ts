@@ -24,5 +24,5 @@ export async function POST(req: NextRequest) {
   }
 
   await crearSesion(usuario.username);
-  return NextResponse.json({ ok: true });
+  return NextResponse.json({ ok: true, debeCambiarPassword: usuario.debeCambiarPassword });
 }

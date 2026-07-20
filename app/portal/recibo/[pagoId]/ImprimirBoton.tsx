@@ -2,7 +2,7 @@
 
 export default function ImprimirBoton() {
   return (
-    <button onClick={() => window.print()} className="btn-primario text-sm">
+    <button type="button" onClick={() => window.print()} className="btn-primario text-sm">
       🖨️ Descargar / Imprimir PDF
     </button>
   );

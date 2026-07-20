@@ -424,7 +424,59 @@ npx prisma db push
 npm run dev
 ```
 
-## 18. Sugerencias mías para más adelante
+## 19. Novedades de esta actualización (usuarios, botones, libro diario)
+
+- **Derecho de conexión en pegues ya existentes**: en la ficha de cualquier pegue que
+  todavía no tenga uno registrado, aparece un botón "Agregar derecho de conexión" con el
+  mismo formulario que ya existía al crear un pegue nuevo (costo, contado o en cuotas).
+  Útil para los pegues migrados del Excel, que nunca tuvieron ese registro.
+- **Gestión completa de usuarios** en Configuración → Usuarios:
+  - Editar nombre y correo de cualquier usuario.
+  - Cambiarle la contraseña directamente.
+  - **Regenerar contraseña**: le genera una temporal (ej. "rio4821"), se la muestra una
+    sola vez para que se la comunique, y al usuario se le obliga a cambiarla apenas
+    inicie sesión — no puede usar el sistema hasta hacerlo.
+  - La política de contraseñas es intermedia: mínimo 8 caracteres, mezclando letras y
+    números — ni tan estricta que sea un dolor de cabeza, ni tan floja que acepte
+    cualquier cosa.
+- **Libro diario mejorado**:
+  - Verde ✓ = pagado, **amarillo ✕ = inhabilitado**, **rojo "C" = cortado** (antes era
+    una X roja, que se prestaba a confusión con "mes malo"). Ambas marcas corren
+    automáticamente mes a mes mientras el pegue siga así, igual que antes.
+  - Filtro nuevo: ver todos, solo cortados, solo inhabilitados, o solo en mora.
+- **Corregido un bug de fondo en varios botones**: varios botones dentro de formularios
+  (como "Guardar" en distintas pantallas) no tenían `type="button"` explícito, lo que en
+  ciertos casos podía disparar el envío del formulario equivocado al hacer clic — el
+  mismo tipo de bug que ya habíamos corregido antes en el botón "Atrás". Se revisaron
+  los 9 formularios del sistema uno por uno.
+
+```bash
+npx prisma db push
+npm run dev
+```
+
+**Importante:** después del `db push`, si tiene usuarios ya creados, ninguno tendrá correo
+ni estará marcado para cambiar contraseña — eso es normal, son campos nuevos opcionales.
+
+## 21. Novedades de esta actualización (portal en dos pasos, corrección del libro diario)
+
+- **Portal con confirmación previa**: ahora el abonado primero escribe solo el código de
+  su pegue, el sistema le muestra a nombre de quién está y en qué barrio, y solo si
+  confirma "sí, es mi pegue" le pide la clave. Así, si se equivocó de código, se da cuenta
+  antes de intentar entrar con su identidad/PIN.
+- **Corregido el libro diario**: los meses inhabilitados/cortados que todavía están en
+  curso (sin fecha de fin) ya no se marcan hasta diciembre de una vez — ahora solo se
+  marcan hasta el mes actual real, y van avanzando mes a mes según pase el tiempo, tal
+  como se esperaba.
+- El símbolo de inhabilitado cambió de "✕" a **"I"**, para no confundirlo con el de cortado.
+
+```bash
+npm run dev
+```
+
+Esta actualización no cambia la base de datos.
+
+## 22. Sugerencias mías para más adelante
 
 Ya que me lo pidió, aquí van algunas ideas que se me ocurren, sin compromiso de hacerlas
 ya — dígame cuáles le interesan cuando quiera seguir:
@@ -443,7 +495,7 @@ ya — dígame cuáles le interesan cuando quiera seguir:
   que la directiva revise periódicamente si alguno debería reactivarse o darse de baja
   definitiva.
 
-## 19. Pendiente para la próxima conversación
+## 23. Pendiente para la próxima conversación
 
 Quedó anotado para cuando usted diga:
 - Ayuda migrando sus abonados/pegues desde una hoja de Excel.
@@ -451,7 +503,7 @@ Quedó anotado para cuando usted diga:
   cobro tarda un par de segundos porque cada clic hace una consulta nueva a la base de
   datos en Neon; hay formas de acelerarlo, mas adelante lo vemos con calma).
 
-## 20. Notas importantes
+## 24. Notas importantes
 
 - Si alguna vez le vuelve a aparecer una pregunta pidiendo "resetear" el schema de la base
   de datos: **cancele con Ctrl+C y no acepte**. Eso borra todos los datos. Use siempre

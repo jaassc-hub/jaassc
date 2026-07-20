@@ -46,10 +46,10 @@ export default function ReciboClient({
       <div className="no-imprimir flex items-center justify-between mb-4">
         <BotonAtras href="/admin/pagos" />
         <div className="flex gap-2">
-          <button onClick={() => setEditando(!editando)} className="btn-outline text-sm flex items-center gap-1.5">
+          <button type="button" onClick={() => setEditando(!editando)} className="btn-outline text-sm flex items-center gap-1.5">
             <Pencil size={14} /> {editando ? "Cerrar" : "Editar formato"}
           </button>
-          <button onClick={() => window.print()} className="btn-primario text-sm flex items-center gap-1.5">
+          <button type="button" onClick={() => window.print()} className="btn-primario text-sm flex items-center gap-1.5">
             <Printer size={14} /> Imprimir
           </button>
         </div>
@@ -111,7 +111,7 @@ export default function ReciboClient({
           </div>
 
           <div className="flex items-center gap-3">
-            <button onClick={guardarConfig} disabled={guardando} className="btn-primario text-sm">
+            <button type="button" onClick={guardarConfig} disabled={guardando} className="btn-primario text-sm">
               {guardando ? "Guardando..." : "Guardar"}
             </button>
             {mensaje && <span className="text-sm text-gray-500">{mensaje}</span>}

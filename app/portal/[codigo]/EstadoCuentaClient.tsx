@@ -105,7 +105,7 @@ export default function EstadoCuentaClient({
                 />
                 {errorIdentidad && <p className="text-red-600 text-xs">{errorIdentidad}</p>}
                 <div className="flex gap-2">
-                  <button disabled={guardandoIdentidad} className="btn-primario text-sm">
+                  <button type="submit" disabled={guardandoIdentidad} className="btn-primario text-sm">
                     {guardandoIdentidad ? "Guardando..." : "Guardar"}
                   </button>
                   <button
@@ -118,7 +118,7 @@ export default function EstadoCuentaClient({
                 </div>
               </form>
             ) : (
-              <button onClick={() => setMostrarFormIdentidad(true)} className="btn-primario text-sm">
+              <button type="button" onClick={() => setMostrarFormIdentidad(true)} className="btn-primario text-sm">
                 Agregar mi identidad
               </button>
             )}

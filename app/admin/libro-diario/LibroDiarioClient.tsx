@@ -19,6 +19,7 @@ export default function LibroDiarioClient({
   const [orientacion, setOrientacion] = useState<"horizontal" | "vertical">("horizontal");
   const [filas, setFilas] = useState<any[] | null>(null);
   const [cargando, setCargando] = useState(false);
+  const [filtro, setFiltro] = useState<"TODOS" | "CORTADOS" | "INHABILITADOS" | "MORA">("TODOS");
 
   async function cargar() {
     setCargando(true);
@@ -36,6 +37,13 @@ export default function LibroDiarioClient({
   }, []);
 
   const barrioNombre = barrios.find((b) => b.id === barrioId)?.nombre || "Todos los barrios";
+
+  const filasFiltradas = (filas || []).filter((f) => {
+    if (filtro === "CORTADOS") return f.meses.some((m: any) => m.cortado);
+    if (filtro === "INHABILITADOS") return f.estado === "INACTIVO";
+    if (filtro === "MORA") return f.mesesMora > 0;
+    return true;
+  });
 
   return (
     <div>
@@ -78,10 +86,19 @@ export default function LibroDiarioClient({
               <option value="vertical">Vertical</option>
             </select>
           </div>
-          <button onClick={cargar} disabled={cargando} className="btn-outline text-sm">
+          <div>
+            <label className="label">Mostrar</label>
+            <select className="input w-40" value={filtro} onChange={(e) => setFiltro(e.target.value as any)}>
+              <option value="TODOS">Todos</option>
+              <option value="CORTADOS">Solo cortados</option>
+              <option value="INHABILITADOS">Solo inhabilitados</option>
+              <option value="MORA">Solo en mora</option>
+            </select>
+          </div>
+          <button type="button" onClick={cargar} disabled={cargando} className="btn-outline text-sm">
             {cargando ? "Cargando..." : "Actualizar"}
           </button>
-          <button onClick={() => window.print()} className="btn-primario text-sm flex items-center gap-1.5">
+          <button type="button" onClick={() => window.print()} className="btn-primario text-sm flex items-center gap-1.5">
             <Printer size={14} /> Imprimir
           </button>
         </div>
@@ -117,33 +134,61 @@ export default function LibroDiarioClient({
               <tr className="bg-azul text-white">
                 <th className="border border-azul/50 p-1 text-left">Código</th>
                 <th className="border border-azul/50 p-1 text-left">Nombre</th>
+                <th className="border border-azul/50 p-1 text-left">Servicios</th>
+                <th className="border border-azul/50 p-1 text-right">Tarifa</th>
                 {MESES_CORTOS.map((m) => (
                   <th key={m} className="border border-azul/50 p-1 w-9">{m}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
-              {filas.map((f) => (
+              {filasFiltradas.map((f) => (
                 <tr key={f.codigo} className={f.estado !== "ACTIVO" ? "bg-gray-50 text-gray-400" : ""}>
                   <td className="border border-gray-300 p-1 font-medium">{f.codigo}</td>
                   <td className="border border-gray-300 p-1">{f.nombre}</td>
-                  {f.meses.map((pagado: boolean, i: number) => (
-                    <td key={i} className={`border border-gray-300 p-1 text-center ${pagado ? "bg-green-100 font-bold text-green-700" : ""}`}>
-                      {pagado ? "✓" : ""}
-                    </td>
-                  ))}
+                  <td className="border border-gray-300 p-1">{f.servicios}</td>
+                  <td className="border border-gray-300 p-1 text-right">L {f.tarifa.toFixed(2)}</td>
+                  {f.meses.map((m: { pagado: boolean; cortado: boolean; inhabilitado: boolean }, i: number) => {
+                    let clase = "";
+                    let simbolo = "";
+                    let titulo = "";
+                    if (m.cortado) {
+                      clase = "bg-red-100 text-red-700 font-bold";
+                      simbolo = "C";
+                      titulo = "Cortado este mes";
+                    } else if (m.inhabilitado) {
+                      clase = "bg-yellow-100 text-yellow-700 font-bold";
+                      simbolo = "I";
+                      titulo = "Inhabilitado este mes";
+                    } else if (m.pagado) {
+                      clase = "bg-green-100 font-bold text-green-700";
+                      simbolo = "✓";
+                      titulo = "Pagado";
+                    }
+                    return (
+                      <td key={i} className={`border border-gray-300 p-1 text-center ${clase}`} title={titulo}>
+                        {simbolo}
+                      </td>
+                    );
+                  })}
                 </tr>
               ))}
-              {filas.length === 0 && (
+              {filasFiltradas.length === 0 && (
                 <tr>
-                  <td colSpan={14} className="text-center text-gray-400 py-4">Sin abonados en este barrio.</td>
+                  <td colSpan={16} className="text-center text-gray-400 py-4">Sin abonados que cumplan este filtro.</td>
                 </tr>
               )}
             </tbody>
           </table>
 
+          <div className="flex items-center gap-4 mt-2 text-xs text-gray-500">
+            <span className="flex items-center gap-1"><span className="inline-block w-3 h-3 bg-green-100 border border-green-300"></span> Pagado</span>
+            <span className="flex items-center gap-1"><span className="inline-block w-3 h-3 bg-red-100 border border-red-300"></span> Cortado (C)</span>
+            <span className="flex items-center gap-1"><span className="inline-block w-3 h-3 bg-yellow-100 border border-yellow-300"></span> Inhabilitado</span>
+          </div>
+
           <p className="text-xs text-gray-400 mt-4">
-            Generado el {new Date().toLocaleDateString("es-HN")} · {filas.length} pegue(s)
+            Generado el {new Date().toLocaleDateString("es-HN")} · {filasFiltradas.length} pegue(s)
           </p>
           </div>
         </>

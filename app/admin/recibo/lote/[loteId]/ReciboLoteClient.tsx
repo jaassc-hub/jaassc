@@ -36,7 +36,7 @@ export default function ReciboLoteClient({
     <div className="max-w-lg mx-auto p-4 md:p-8">
       <div className="no-imprimir flex items-center justify-between mb-4">
         <BotonAtras href="/admin/pagos" />
-        <button onClick={() => window.print()} className="btn-primario text-sm flex items-center gap-1.5">
+        <button type="button" onClick={() => window.print()} className="btn-primario text-sm flex items-center gap-1.5">
           <Printer size={14} /> Imprimir
         </button>
       </div>

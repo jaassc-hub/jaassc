@@ -22,14 +22,16 @@ enum RolUsuario {
 }
 
 model Usuario {
-  id           String     @id @default(cuid())
-  username     String     @unique
-  passwordHash String
-  nombre       String?
-  rol          RolUsuario @default(VOCAL)
-  permisos     String     @default("[]") // JSON string array de claves de modulo
-  activo       Boolean    @default(true)
-  createdAt    DateTime   @default(now())
+  id                   String     @id @default(cuid())
+  username             String     @unique
+  passwordHash         String
+  nombre               String?
+  email                String?
+  rol                  RolUsuario @default(VOCAL)
+  permisos             String     @default("[]") // JSON string array de claves de modulo
+  activo               Boolean    @default(true)
+  debeCambiarPassword  Boolean    @default(false) // true tras un reset del admin; se limpia al cambiarla
+  createdAt            DateTime   @default(now())
 }
 
 // Configuracion editable del recibo (secciones visibles, orden, textos libres)
@@ -121,6 +123,7 @@ model Pegue {
   barrioId     String
   estado       EstadoPegue     @default(ACTIVO)
   ubicacion    String?         // direccion/referencia donde esta instalado el pegue
+  actaNumero   String?         // correlativo del acta de instalacion (tipo "ACTA")
   servicios    PegueServicio[]
   pagos        Pago[]
   eventos      EventoPegue[]
@@ -181,10 +184,15 @@ model Pago {
 }
 
 // Contador correlativo de recibos, uno por anio de emision (ej. 2026 -> 428).
+// Correlativo de recibos, uno por año y por TIPO de documento, para no mezclar la
+// numeracion de pagos mensuales con la de conexiones, constancias o actas.
 model ContadorRecibo {
   id     String @id @default(cuid())
-  anio   Int    @unique
+  anio   Int
+  tipo   String @default("PAGO") // "PAGO" | "CONEXION" | "EVENTO" | "ACTA"
   ultimo Int    @default(0)
+
+  @@unique([anio, tipo])
 }
 
 // ---------- Historial de eventos del pegue ----------
@@ -205,6 +213,7 @@ model EventoPegue {
   tipo         TipoEvento
   nota         String?
   realizadoPor String?    // usuario que hizo el cambio, para trazabilidad
+  numeroRecibo String?    // correlativo de la constancia (tipo "EVENTO"), independiente de los pagos
   fecha        DateTime   @default(now())
 }
 

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { obtenerUsuarioActual } from "@/lib/auth";
+import { generarCorrelativo } from "@/lib/correlativo";
 
 export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
   const body = await req.json();
@@ -16,13 +17,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
   }
 
   const actualizada = await prisma.$transaction(async (tx) => {
-    const anioEmision = new Date().getFullYear();
-    const contador = await tx.contadorRecibo.upsert({
-      where: { anio: anioEmision },
-      update: { ultimo: { increment: 1 } },
-      create: { anio: anioEmision, ultimo: 1 },
-    });
-    const numeroRecibo = `${String(anioEmision).slice(-2)}-${String(contador.ultimo).padStart(4, "0")}`;
+    const numeroRecibo = await generarCorrelativo(tx, "CONEXION");
 
     return tx.cuotaPegue.update({
       where: { id: params.id },

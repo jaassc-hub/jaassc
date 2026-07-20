@@ -150,7 +150,7 @@ export default function NotaMoraTextoClient({ configInicial }: { configInicial: 
               />
             </label>
             {config.logoBase64 && (
-              <button onClick={() => set("logoBase64", null)} className="text-xs text-red-500">
+              <button type="button" onClick={() => set("logoBase64", null)} className="text-xs text-red-500">
                 Quitar (usar sello por defecto)
               </button>
             )}
@@ -158,7 +158,7 @@ export default function NotaMoraTextoClient({ configInicial }: { configInicial: 
         </div>
 
         <div className="flex items-center gap-3 pt-2">
-          <button onClick={guardar} disabled={guardando} className="btn-primario text-sm">
+          <button type="button" onClick={guardar} disabled={guardando} className="btn-primario text-sm">
             {guardando ? "Guardando..." : "Guardar"}
           </button>
           {mensaje && <span className="text-sm text-gray-500">{mensaje}</span>}

@@ -121,6 +121,46 @@ export default function PegueDetalleClient({
     }
   }
 
+  // --- Agregar derecho de conexion a un pegue que no tenia ninguno ---
+  const [mostrarFormConexion, setMostrarFormConexion] = useState(false);
+  const [costoConexion, setCostoConexion] = useState("");
+  const [formaPagoConexion, setFormaPagoConexion] = useState<"CONTADO" | "CUOTAS">("CONTADO");
+  const [cantidadCuotasConexion, setCantidadCuotasConexion] = useState(2);
+  const [metodoPagoContado, setMetodoPagoContado] = useState("EFECTIVO");
+  const [referenciaContado, setReferenciaContado] = useState("");
+  const [guardandoConexion, setGuardandoConexion] = useState(false);
+  const [errorConexion, setErrorConexion] = useState("");
+
+  async function guardarConexion() {
+    if (!parseFloat(costoConexion) || parseFloat(costoConexion) <= 0) {
+      setErrorConexion("Indique un costo mayor a cero.");
+      return;
+    }
+    setGuardandoConexion(true);
+    setErrorConexion("");
+    const res = await fetch(`/api/pegues/${pegue.id}/conexion`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        costoConexion,
+        formaPagoConexion,
+        cantidadCuotas: cantidadCuotasConexion,
+        metodoPagoContado,
+        referenciaContado,
+      }),
+    });
+    setGuardandoConexion(false);
+    if (res.ok) {
+      const actualizado = await res.json();
+      setPegue({ ...pegue, cuotas: actualizado.cuotas });
+      setMostrarFormConexion(false);
+      setCostoConexion("");
+    } else {
+      const data = await res.json();
+      setErrorConexion(data.error || "Error al guardar");
+    }
+  }
+
   const barrioActual = barrios.find((b) => b.id === pegue.barrioId);
 
   return (
@@ -180,7 +220,7 @@ export default function PegueDetalleClient({
       <div className="card space-y-3">
         <div className="flex items-center justify-between">
           <p className="font-semibold text-azul">Datos del pegue</p>
-          <button onClick={() => setEditando(!editando)} className="text-azul text-sm font-medium flex items-center gap-1.5">
+          <button type="button" onClick={() => setEditando(!editando)} className="text-azul text-sm font-medium flex items-center gap-1.5">
             <Pencil size={14} /> {editando ? "Cancelar" : "Editar"}
           </button>
         </div>
@@ -213,7 +253,7 @@ export default function PegueDetalleClient({
               </div>
             </div>
             {error && <p className="text-red-600 text-sm">{error}</p>}
-            <button onClick={guardarEdicion} disabled={guardando} className="btn-primario text-sm">
+            <button type="button" onClick={guardarEdicion} disabled={guardando} className="btn-primario text-sm">
               {guardando ? "Guardando..." : "Guardar cambios"}
             </button>
           </div>
@@ -225,17 +265,17 @@ export default function PegueDetalleClient({
 
         <div className="border-t pt-3 flex flex-wrap gap-2">
           {pegue.estado !== "CORTADO" && (
-            <button onClick={() => setEstadoPendiente("CORTADO")} className="btn-outline text-xs flex items-center gap-1.5 border-red-300 text-red-600">
+            <button type="button" onClick={() => setEstadoPendiente("CORTADO")} className="btn-outline text-xs flex items-center gap-1.5 border-red-300 text-red-600">
               <Ban size={14} /> Cortar por mora
             </button>
           )}
           {pegue.estado !== "INACTIVO" && (
-            <button onClick={() => setEstadoPendiente("INACTIVO")} className="btn-outline text-xs flex items-center gap-1.5 border-orange-300 text-orange-600">
+            <button type="button" onClick={() => setEstadoPendiente("INACTIVO")} className="btn-outline text-xs flex items-center gap-1.5 border-orange-300 text-orange-600">
               <PauseCircle size={14} /> Inhabilitar (ausencia larga)
             </button>
           )}
           {pegue.estado !== "ACTIVO" && (
-            <button onClick={() => setEstadoPendiente("ACTIVO")} className="btn-outline text-xs flex items-center gap-1.5 border-green-300 text-green-700">
+            <button type="button" onClick={() => setEstadoPendiente("ACTIVO")} className="btn-outline text-xs flex items-center gap-1.5 border-green-300 text-green-700">
               <PlayCircle size={14} /> Reactivar
             </button>
           )}
@@ -257,10 +297,10 @@ export default function PegueDetalleClient({
             />
             {errorEstado && <p className="text-red-600 text-xs">{errorEstado}</p>}
             <div className="flex gap-2">
-              <button onClick={confirmarCambioEstado} disabled={guardandoEstado} className="btn-primario text-xs">
+              <button type="button" onClick={confirmarCambioEstado} disabled={guardandoEstado} className="btn-primario text-xs">
                 {guardandoEstado ? "Guardando..." : "Confirmar"}
               </button>
-              <button
+              <button type="button"
                 onClick={() => { setEstadoPendiente(null); setMotivoEstado(""); setErrorEstado(""); }}
                 className="btn-outline text-xs"
               >
@@ -272,6 +312,87 @@ export default function PegueDetalleClient({
       </div>
 
       {/* Cuotas de conexion */}
+      {pegue.cuotas && pegue.cuotas.length === 0 && (
+        <div className="card">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="font-semibold text-azul">Derecho de conexión</p>
+              <p className="text-sm text-gray-500">Este pegue no tiene ningún derecho de conexión registrado.</p>
+            </div>
+            {!mostrarFormConexion && (
+              <button type="button" onClick={() => setMostrarFormConexion(true)} className="btn-outline text-sm shrink-0">
+                Agregar derecho de conexión
+              </button>
+            )}
+          </div>
+
+          {mostrarFormConexion && (
+            <div className="mt-4 border-t pt-4 space-y-3">
+              <div className="grid md:grid-cols-2 gap-3">
+                <div>
+                  <label className="label">Costo de conexión (L)</label>
+                  <input
+                    type="number"
+                    className="input"
+                    placeholder="0.00"
+                    value={costoConexion}
+                    onChange={(e) => setCostoConexion(e.target.value)}
+                  />
+                </div>
+                <div>
+                  <label className="label">Forma de pago</label>
+                  <select className="input" value={formaPagoConexion} onChange={(e) => setFormaPagoConexion(e.target.value as any)}>
+                    <option value="CONTADO">De contado (ya se cobró)</option>
+                    <option value="CUOTAS">En cuotas</option>
+                  </select>
+                </div>
+              </div>
+
+              {formaPagoConexion === "CONTADO" ? (
+                <div className="grid md:grid-cols-2 gap-3">
+                  <div>
+                    <label className="label">Método de pago</label>
+                    <select className="input" value={metodoPagoContado} onChange={(e) => setMetodoPagoContado(e.target.value)}>
+                      <option value="EFECTIVO">Efectivo</option>
+                      <option value="TRANSFERENCIA">Transferencia</option>
+                      <option value="DEPOSITO">Depósito bancario</option>
+                      <option value="OTRO">Otro</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="label">Referencia (opcional)</label>
+                    <input className="input" value={referenciaContado} onChange={(e) => setReferenciaContado(e.target.value)} />
+                  </div>
+                </div>
+              ) : (
+                <div>
+                  <label className="label">¿En cuántas cuotas?</label>
+                  <input
+                    type="number"
+                    min={2}
+                    max={24}
+                    className="input w-32"
+                    value={cantidadCuotasConexion}
+                    onChange={(e) => setCantidadCuotasConexion(Math.max(2, parseInt(e.target.value) || 2))}
+                  />
+                </div>
+              )}
+
+              {errorConexion && <p className="text-red-600 text-sm">{errorConexion}</p>}
+
+              <div className="flex gap-2">
+                <button type="button" onClick={guardarConexion} disabled={guardandoConexion} className="btn-primario text-sm">
+                  {guardandoConexion ? "Guardando..." : "Guardar"}
+                </button>
+                <button type="button" onClick={() => setMostrarFormConexion(false)} className="btn-outline text-sm">
+                  Cancelar
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
       {pegue.cuotas && pegue.cuotas.length > 0 && (
         <div className="card">
           <p className="font-semibold text-azul mb-1">Derecho de conexión</p>
@@ -311,7 +432,7 @@ export default function PegueDetalleClient({
                         </Link>
                       </>
                     ) : cuotaCobrando === c.id ? null : (
-                      <button onClick={() => setCuotaCobrando(c.id)} className="btn-outline text-xs">
+                      <button type="button" onClick={() => setCuotaCobrando(c.id)} className="btn-outline text-xs">
                         Cobrar
                       </button>
                     )}
@@ -335,14 +456,14 @@ export default function PegueDetalleClient({
                       />
                     </div>
                     <div className="flex gap-2">
-                      <button
+                      <button type="button"
                         onClick={() => cobrarCuota(c.id)}
                         disabled={guardandoCuota}
                         className="btn-primario text-xs"
                       >
                         {guardandoCuota ? "Guardando..." : `Confirmar cobro de L ${c.monto.toFixed(2)}`}
                       </button>
-                      <button onClick={() => setCuotaCobrando(null)} className="btn-outline text-xs">
+                      <button type="button" onClick={() => setCuotaCobrando(null)} className="btn-outline text-xs">
                         Cancelar
                       </button>
                     </div>

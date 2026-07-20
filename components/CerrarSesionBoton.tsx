@@ -13,7 +13,7 @@ export default function CerrarSesionBoton() {
   }
 
   return (
-    <button
+    <button type="button"
       onClick={salir}
       className="text-sm text-white/80 hover:text-white flex items-center gap-2"
     >

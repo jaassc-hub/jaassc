@@ -23,7 +23,8 @@ export default function LoginPage() {
     });
     setCargando(false);
     if (res.ok) {
-      router.push("/admin");
+      const data = await res.json();
+      router.push(data.debeCambiarPassword ? "/cambiar-password" : "/admin");
       router.refresh();
     } else {
       const data = await res.json();
