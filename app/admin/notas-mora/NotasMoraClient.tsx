@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Plus, Trash2, Printer, Search, FileWarning } from "lucide-react";
 import NotaMora from "@/components/NotaMora";
+import EnviarWhatsApp from "@/components/EnviarWhatsApp";
 
 export default function NotasMoraClient({
   juntaNombre,
@@ -226,26 +227,39 @@ export default function NotasMoraClient({
               @page { size: ${tamanoPapel === "A4" ? "A4" : "letter"} portrait; margin: 6mm; }
             }
           `}</style>
-          {notas.map((nota, i) => (
-            <div key={nota.abonadoId} className={i < notas.length - 1 ? "nota-pagina" : ""}>
-              <NotaMora
-                juntaNombre={juntaNombre}
-                abonadoNombre={nota.abonadoNombre}
-                pegues={nota.pegues}
-                totalMontoNeto={nota.totalMontoNeto}
-                totalRecargo={nota.totalRecargo}
-                montoReconexion={montoReconexion}
-                diaCobro={diaCobro || "____________"}
-                formasPago={formasPago.filter((f) => f.trim())}
-                mensajeAdicional={mensajeAdicional}
-                firmantes={firmantesParaImprimir}
-                mostrarImagenesFirma={mostrarImagenesFirma}
-                numeroRegistro={nota.pegues[0]?.codigo || ""}
-                config={notaConfig}
-                tamanoPapel={tamanoPapel}
-              />
-            </div>
-          ))}
+          {notas.map((nota, i) => {
+            const totalConRecargo = nota.totalMontoNeto + nota.totalRecargo + montoReconexion;
+            const mensajeMora =
+              `Estimado(a) *${nota.abonadoNombre}*, le escribimos de ${juntaNombre} porque su pegue ` +
+              `${nota.pegues.map((p: any) => p.codigo).join(", ")} tiene ${nota.pegues.reduce((s: number, p: any) => s + p.mesesPendientes, 0)} mes(es) pendiente(s) de pago, ` +
+              `por un total de L${nota.totalMontoNeto.toFixed(2)}. Si paga antes del ${diaCobro || "próximo día de cobro"} evita el recargo por mora ` +
+              `(quedaría en L${totalConRecargo.toFixed(2)} si paga después). Cualquier duda, con gusto le ayudamos. - ${juntaNombre}`;
+            return (
+              <div key={nota.abonadoId} className="flex flex-col items-center gap-2">
+                <div className="no-imprimir">
+                  <EnviarWhatsApp telefono={nota.abonadoTelefono} mensaje={mensajeMora} texto={`Avisar a ${nota.abonadoNombre} por WhatsApp`} />
+                </div>
+                <div className={i < notas.length - 1 ? "nota-pagina" : ""}>
+                  <NotaMora
+                    juntaNombre={juntaNombre}
+                    abonadoNombre={nota.abonadoNombre}
+                    pegues={nota.pegues}
+                    totalMontoNeto={nota.totalMontoNeto}
+                    totalRecargo={nota.totalRecargo}
+                    montoReconexion={montoReconexion}
+                    diaCobro={diaCobro || "____________"}
+                    formasPago={formasPago.filter((f) => f.trim())}
+                    mensajeAdicional={mensajeAdicional}
+                    firmantes={firmantesParaImprimir}
+                    mostrarImagenesFirma={mostrarImagenesFirma}
+                    numeroRegistro={nota.pegues[0]?.codigo || ""}
+                    config={notaConfig}
+                    tamanoPapel={tamanoPapel}
+                  />
+                </div>
+              </div>
+            );
+          })}
         </div>
       )}
     </div>

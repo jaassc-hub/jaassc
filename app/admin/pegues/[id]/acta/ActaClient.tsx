@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { Printer, Plus, Trash2, Save } from "lucide-react";
 import BotonAtras from "@/components/BotonAtras";
+import EnviarWhatsApp from "@/components/EnviarWhatsApp";
 import { nombreMes } from "@/lib/mora";
 
 export default function ActaClient({
@@ -116,9 +117,15 @@ export default function ActaClient({
             </label>
           </div>
 
-          <button type="button" onClick={() => window.print()} className="btn-primario text-sm flex items-center gap-1.5">
-            <Printer size={14} /> Imprimir
-          </button>
+          <div className="flex gap-2 flex-wrap">
+            <EnviarWhatsApp
+              telefono={pegue.abonado.telefono}
+              mensaje={`Estimado(a) *${pegue.abonado.nombre}*, se generó el acta de instalación de su pegue ${pegue.codigo} (#${pegue.actaNumero}). Cualquier duda, comuníquese con la Junta. - ${juntaNombre}`}
+            />
+            <button type="button" onClick={() => window.print()} className="btn-primario text-sm flex items-center gap-1.5">
+              <Printer size={14} /> Imprimir
+            </button>
+          </div>
         </div>
       </div>
 

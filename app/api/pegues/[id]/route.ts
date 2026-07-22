@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { obtenerUsuarioActual } from "@/lib/auth";
-import { generarCorrelativo } from "@/lib/correlativo";
+import { armarCorrelativoPorPegue } from "@/lib/correlativo";
 
 export async function PATCH(
   req: NextRequest,
@@ -13,6 +13,8 @@ export async function PATCH(
   if (body.estado !== undefined) data.estado = body.estado;
   if (body.barrioId !== undefined) data.barrioId = body.barrioId;
   if (body.ubicacion !== undefined) data.ubicacion = body.ubicacion;
+  if (body.tipoConexion !== undefined) data.tipoConexion = body.tipoConexion;
+  if (body.observaciones !== undefined) data.observaciones = body.observaciones;
 
   try {
     const anterior = await prisma.pegue.findUnique({ where: { id: params.id } });
@@ -37,17 +39,18 @@ export async function PATCH(
       const tipoEvento =
         body.estado === "CORTADO" ? "CORTE" : body.estado === "INACTIVO" ? "INHABILITACION" : "REACTIVACION";
       const usuarioActual = await obtenerUsuarioActual();
-      await prisma.$transaction(async (tx) => {
-        const numeroRecibo = await generarCorrelativo(tx, "EVENTO");
-        await tx.eventoPegue.create({
-          data: {
-            pegueId: params.id,
-            tipo: tipoEvento,
-            nota: body.motivo?.trim() || null,
-            realizadoPor: usuarioActual ? usuarioActual.nombre || usuarioActual.username : null,
-            numeroRecibo,
-          },
-        });
+      const vecesAnteriores = await prisma.eventoPegue.count({
+        where: { pegueId: params.id, tipo: tipoEvento },
+      });
+      const numeroRecibo = armarCorrelativoPorPegue(tipoEvento, pegue.codigo, vecesAnteriores + 1);
+      await prisma.eventoPegue.create({
+        data: {
+          pegueId: params.id,
+          tipo: tipoEvento,
+          nota: body.motivo?.trim() || null,
+          realizadoPor: usuarioActual ? usuarioActual.nombre || usuarioActual.username : null,
+          numeroRecibo,
+        },
       });
     }
 

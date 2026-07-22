@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { Printer } from "lucide-react";
 import BotonAtras from "@/components/BotonAtras";
+import EnviarWhatsApp from "@/components/EnviarWhatsApp";
 import TicketRecibo from "@/components/TicketRecibo";
 import { IMPRESORA_DEFAULT } from "@/lib/impresoraConfig";
 
@@ -11,11 +12,13 @@ export default function ReciboLoteClient({
   configInicial,
   mesesMoraActual,
   corteActual,
+  mensajeWhatsApp,
 }: {
   pagos: any[];
   configInicial: any;
   mesesMoraActual: number;
   corteActual: boolean;
+  mensajeWhatsApp?: string;
 }) {
   const [impresora, setImpresora] = useState(IMPRESORA_DEFAULT);
   const primero = pagos[0];
@@ -36,9 +39,14 @@ export default function ReciboLoteClient({
     <div className="max-w-lg mx-auto p-4 md:p-8">
       <div className="no-imprimir flex items-center justify-between mb-4">
         <BotonAtras href="/admin/pagos" />
-        <button type="button" onClick={() => window.print()} className="btn-primario text-sm flex items-center gap-1.5">
-          <Printer size={14} /> Imprimir
-        </button>
+        <div className="flex gap-2">
+          {mensajeWhatsApp && (
+            <EnviarWhatsApp telefono={primero.pegue.abonado.telefono} mensaje={mensajeWhatsApp} texto="WhatsApp" />
+          )}
+          <button type="button" onClick={() => window.print()} className="btn-primario text-sm flex items-center gap-1.5">
+            <Printer size={14} /> Imprimir
+          </button>
+        </div>
       </div>
 
       <div className="flex justify-center">

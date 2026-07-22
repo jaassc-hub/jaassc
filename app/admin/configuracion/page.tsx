@@ -2,7 +2,7 @@ import Link from "next/link";
 import { obtenerUsuarioActual } from "@/lib/auth";
 import { tienePermiso } from "@/lib/permisos";
 import AccesoDenegado from "@/components/AccesoDenegado";
-import { Users, Printer, Receipt, Percent, Gift, MessageCircle, PenTool, FileWarning, FileSignature } from "lucide-react";
+import { Users, Printer, Receipt, Percent, Gift, MessageCircle, PenTool, FileWarning, FileSignature, Bell, Megaphone } from "lucide-react";
 import GenerarPinsBoton from "./GenerarPinsBoton";
 
 export default async function ConfiguracionPage() {
@@ -90,6 +90,22 @@ export default async function ConfiguracionPage() {
             <p className="font-semibold text-azul">Cláusulas del acta de instalación</p>
             <p className="text-sm text-gray-500 mt-1">
               Edite las cláusulas que aparecen al formalizar la instalación de un pegue nuevo.
+            </p>
+          </Link>
+
+          <Link href="/admin/configuracion/notificaciones" className="card hover:shadow-md transition-shadow">
+            <Bell className="text-azul mb-2" size={24} strokeWidth={1.8} />
+            <p className="font-semibold text-azul">Notificaciones</p>
+            <p className="text-sm text-gray-500 mt-1">
+              Ajuste los umbrales de irregularidades y la multa por cuota de conexión atrasada.
+            </p>
+          </Link>
+
+          <Link href="/admin/configuracion/avisos-portal" className="card hover:shadow-md transition-shadow">
+            <Megaphone className="text-azul mb-2" size={24} strokeWidth={1.8} />
+            <p className="font-semibold text-azul">Avisos del portal</p>
+            <p className="text-sm text-gray-500 mt-1">
+              Suba comunicados o imágenes que verán los abonados al consultar su cuenta.
             </p>
           </Link>
         </div>

@@ -8,6 +8,7 @@ import { IMPRESORA_DEFAULT } from "@/lib/impresoraConfig";
 import TicketCuota from "@/components/TicketCuota";
 import BotonAtras from "@/components/BotonAtras";
 import BotonImprimir from "@/components/BotonImprimir";
+import EnviarWhatsApp from "@/components/EnviarWhatsApp";
 
 export default async function ReciboCuotaPage({ params }: { params: { cuotaId: string } }) {
   const usuario = await obtenerUsuarioActual();
@@ -31,9 +32,15 @@ export default async function ReciboCuotaPage({ params }: { params: { cuotaId: s
 
   return (
     <div className="max-w-lg mx-auto p-4 md:p-8">
-      <div className="no-imprimir flex items-center justify-between mb-4">
+      <div className="no-imprimir flex items-center justify-between mb-4 flex-wrap gap-2">
         <BotonAtras href={`/admin/pegues/${cuota.pegueId}`} />
-        <BotonImprimir />
+        <div className="flex gap-2">
+          <EnviarWhatsApp
+            telefono={cuota.pegue.abonado.telefono}
+            mensaje={`Estimado(a) *${cuota.pegue.abonado.nombre}*, recibimos su pago de la cuota ${cuota.numero} de ${cuota.totalCuotas} de conexión del pegue ${cuota.pegue.codigo}, por L${cuota.monto.toFixed(2)}. Recibo #${cuota.numeroRecibo}. ¡Gracias! - ${junta}`}
+          />
+          <BotonImprimir />
+        </div>
       </div>
       <div className="flex justify-center">
         <TicketCuota

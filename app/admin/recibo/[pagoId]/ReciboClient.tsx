@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { Printer, Pencil } from "lucide-react";
 import BotonAtras from "@/components/BotonAtras";
+import EnviarWhatsApp from "@/components/EnviarWhatsApp";
 import TicketRecibo from "@/components/TicketRecibo";
 import { IMPRESORA_DEFAULT } from "@/lib/impresoraConfig";
 
@@ -11,11 +12,13 @@ export default function ReciboClient({
   configInicial,
   mesesMoraActual,
   corteActual,
+  mensajeWhatsApp,
 }: {
   pago: any;
   configInicial: any;
   mesesMoraActual: number;
   corteActual: boolean;
+  mensajeWhatsApp?: string;
 }) {
   const [config, setConfig] = useState(configInicial);
   const [impresora, setImpresora] = useState(IMPRESORA_DEFAULT);
@@ -46,6 +49,9 @@ export default function ReciboClient({
       <div className="no-imprimir flex items-center justify-between mb-4">
         <BotonAtras href="/admin/pagos" />
         <div className="flex gap-2">
+          {mensajeWhatsApp && (
+            <EnviarWhatsApp telefono={pago.pegue.abonado.telefono} mensaje={mensajeWhatsApp} texto="WhatsApp" />
+          )}
           <button type="button" onClick={() => setEditando(!editando)} className="btn-outline text-sm flex items-center gap-1.5">
             <Pencil size={14} /> {editando ? "Cerrar" : "Editar formato"}
           </button>

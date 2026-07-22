@@ -107,9 +107,9 @@ export async function POST(req: NextRequest) {
   const meses = mesesConsecutivos(parseInt(mesPagado), parseInt(anioPagado), cantidad);
 
   const fecha = fechaPago ? new Date(fechaPago) : new Date();
-  const montoServicios = pegue.servicios
-    .filter((ps) => ps.habilitado)
-    .reduce((sum, ps) => sum + ps.servicio.precio, 0);
+  const montoServicios = pegue.tipoConexion === "BIEN_COMUN"
+    ? 0
+    : pegue.servicios.filter((ps) => ps.habilitado).reduce((sum, ps) => sum + ps.servicio.precio, 0);
 
   // La mora se calcula UNA sola vez sobre el total adeudado, segun cuantos meses de
   // atraso tiene el mes mas antiguo de este cobro (no mes por mes).

@@ -79,6 +79,11 @@ export function siguienteMesPendiente(
   fechaAlta: Date
 ): { mes: number; anio: number } {
   if (!ultimoPago) {
+    // Si nunca ha pagado nada, se asume que debe desde la fecha en que el pegue se
+    // dio de alta (fechaAlta). Para los pegues migrados del Excel, esa fecha se dejo
+    // puesta en marzo de 2025 (cuando esta directiva tomo posesion) al momento de
+    // migrarlos -- no aqui en la funcion -- para no confundir un pegue viejo sin
+    // historial con uno genuinamente nuevo que se acaba de instalar.
     return { mes: fechaAlta.getMonth() + 1, anio: fechaAlta.getFullYear() };
   }
   let mes = ultimoPago.mesPagado + 1;

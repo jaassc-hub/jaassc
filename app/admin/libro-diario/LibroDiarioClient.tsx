@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { Printer, BookOpen } from "lucide-react";
 import Image from "next/image";
+import { NOMBRE_TIPO_CONEXION } from "@/lib/tipoConexion";
 
 const MESES_CORTOS = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
 
@@ -20,6 +21,7 @@ export default function LibroDiarioClient({
   const [filas, setFilas] = useState<any[] | null>(null);
   const [cargando, setCargando] = useState(false);
   const [filtro, setFiltro] = useState<"TODOS" | "CORTADOS" | "INHABILITADOS" | "MORA">("TODOS");
+  const [filtroTipo, setFiltroTipo] = useState<"TODOS" | "VIVIENDA" | "SOLAR" | "CORRAL" | "BIEN_COMUN">("TODOS");
 
   async function cargar() {
     setCargando(true);
@@ -39,6 +41,7 @@ export default function LibroDiarioClient({
   const barrioNombre = barrios.find((b) => b.id === barrioId)?.nombre || "Todos los barrios";
 
   const filasFiltradas = (filas || []).filter((f) => {
+    if (filtroTipo !== "TODOS" && f.tipoConexion !== filtroTipo) return false;
     if (filtro === "CORTADOS") return f.meses.some((m: any) => m.cortado);
     if (filtro === "INHABILITADOS") return f.estado === "INACTIVO";
     if (filtro === "MORA") return f.mesesMora > 0;
@@ -95,6 +98,16 @@ export default function LibroDiarioClient({
               <option value="MORA">Solo en mora</option>
             </select>
           </div>
+          <div>
+            <label className="label">Tipo de pegue</label>
+            <select className="input w-36" value={filtroTipo} onChange={(e) => setFiltroTipo(e.target.value as any)}>
+              <option value="TODOS">Todos</option>
+              <option value="VIVIENDA">Vivienda</option>
+              <option value="SOLAR">Solar</option>
+              <option value="CORRAL">Corral</option>
+              <option value="BIEN_COMUN">Bien común</option>
+            </select>
+          </div>
           <button type="button" onClick={cargar} disabled={cargando} className="btn-outline text-sm">
             {cargando ? "Cargando..." : "Actualizar"}
           </button>
@@ -134,6 +147,7 @@ export default function LibroDiarioClient({
               <tr className="bg-azul text-white">
                 <th className="border border-azul/50 p-1 text-left">Código</th>
                 <th className="border border-azul/50 p-1 text-left">Nombre</th>
+                <th className="border border-azul/50 p-1 text-left">Tipo</th>
                 <th className="border border-azul/50 p-1 text-left">Servicios</th>
                 <th className="border border-azul/50 p-1 text-right">Tarifa</th>
                 {MESES_CORTOS.map((m) => (
@@ -146,9 +160,10 @@ export default function LibroDiarioClient({
                 <tr key={f.codigo} className={f.estado !== "ACTIVO" ? "bg-gray-50 text-gray-400" : ""}>
                   <td className="border border-gray-300 p-1 font-medium">{f.codigo}</td>
                   <td className="border border-gray-300 p-1">{f.nombre}</td>
+                  <td className="border border-gray-300 p-1">{NOMBRE_TIPO_CONEXION[f.tipoConexion]?.replace(" (exento)", "") || f.tipoConexion}</td>
                   <td className="border border-gray-300 p-1">{f.servicios}</td>
                   <td className="border border-gray-300 p-1 text-right">L {f.tarifa.toFixed(2)}</td>
-                  {f.meses.map((m: { pagado: boolean; cortado: boolean; inhabilitado: boolean }, i: number) => {
+                  {f.meses.map((m: { pagado: boolean; cortado: boolean; inhabilitado: boolean; exento: boolean }, i: number) => {
                     let clase = "";
                     let simbolo = "";
                     let titulo = "";
@@ -164,6 +179,10 @@ export default function LibroDiarioClient({
                       clase = "bg-green-100 font-bold text-green-700";
                       simbolo = "✓";
                       titulo = "Pagado";
+                    } else if (m.exento) {
+                      clase = "bg-purple-100 text-purple-700 font-bold";
+                      simbolo = "E";
+                      titulo = "Exento de pago (Bien Común)";
                     }
                     return (
                       <td key={i} className={`border border-gray-300 p-1 text-center ${clase}`} title={titulo}>
@@ -175,7 +194,7 @@ export default function LibroDiarioClient({
               ))}
               {filasFiltradas.length === 0 && (
                 <tr>
-                  <td colSpan={16} className="text-center text-gray-400 py-4">Sin abonados que cumplan este filtro.</td>
+                  <td colSpan={17} className="text-center text-gray-400 py-4">Sin abonados que cumplan este filtro.</td>
                 </tr>
               )}
             </tbody>
@@ -185,6 +204,7 @@ export default function LibroDiarioClient({
             <span className="flex items-center gap-1"><span className="inline-block w-3 h-3 bg-green-100 border border-green-300"></span> Pagado</span>
             <span className="flex items-center gap-1"><span className="inline-block w-3 h-3 bg-red-100 border border-red-300"></span> Cortado (C)</span>
             <span className="flex items-center gap-1"><span className="inline-block w-3 h-3 bg-yellow-100 border border-yellow-300"></span> Inhabilitado</span>
+            <span className="flex items-center gap-1"><span className="inline-block w-3 h-3 bg-purple-100 border border-purple-300"></span> Exento (Bien Común)</span>
           </div>
 
           <p className="text-xs text-gray-400 mt-4">

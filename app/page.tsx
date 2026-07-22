@@ -1,9 +1,15 @@
 import Link from "next/link";
 import Logo from "@/components/Logo";
+import CarruselAvisos from "@/components/CarruselAvisos";
 import { Droplets, FileText, Search } from "lucide-react";
+import { prisma } from "@/lib/prisma";
+import { AVISOS_PORTAL_DEFAULT } from "@/lib/avisosPortalConfig";
 
-export default function Home() {
+export default async function Home() {
   const nombreJunta = process.env.NEXT_PUBLIC_JUNTA_NOMBRE || "Junta de Agua";
+
+  const row = await prisma.configuracion.findUnique({ where: { clave: "avisosPortal" } });
+  const config = row ? JSON.parse(row.valor) : AVISOS_PORTAL_DEFAULT;
 
   return (
     <main className="min-h-screen bg-azul flex flex-col">
@@ -20,7 +26,7 @@ export default function Home() {
         </Link>
       </header>
 
-      <div className="flex-1 flex items-center justify-center px-4 pb-16">
+      <div className="flex-1 flex flex-col items-center justify-center px-4 pb-16 gap-10">
         <div className="text-center max-w-lg">
           <Droplets className="text-white mx-auto mb-4" size={56} strokeWidth={1.5} />
           <h1 className="text-white text-2xl md:text-3xl font-bold mb-2">{nombreJunta}</h1>
@@ -41,6 +47,8 @@ export default function Home() {
             <span>Necesita el código de su pegue y su número de identidad.</span>
           </div>
         </div>
+
+        <CarruselAvisos avisos={config.avisos} />
       </div>
     </main>
   );

@@ -46,9 +46,9 @@ export default async function EstadoCuentaPage({
     );
   }
 
-  const montoServicios = pegue.servicios
-    .filter((ps) => ps.habilitado)
-    .reduce((s, ps) => s + ps.servicio.precio, 0);
+  const montoServicios = pegue.tipoConexion === "BIEN_COMUN"
+    ? 0
+    : pegue.servicios.filter((ps) => ps.habilitado).reduce((s, ps) => s + ps.servicio.precio, 0);
 
   const moraConfigRow = await prisma.configuracion.findUnique({ where: { clave: "mora" } });
   const tramos = moraConfigRow ? JSON.parse(moraConfigRow.valor).tramos : MORA_DEFAULT.tramos;
@@ -67,6 +67,7 @@ export default async function EstadoCuentaPage({
       mesesMora={mesesMoraActual}
       montoMora={montoMoraActual}
       corte={corte}
+      sinPagos={pegue.pagos.length === 0}
       clave={clave}
     />
   );

@@ -47,12 +47,23 @@ export async function GET(req: NextRequest) {
     let periodosCorte = periodosDeEstado(p.eventos, "CORTE");
     let periodosInhabilitado = periodosDeEstado(p.eventos, "INHABILITACION");
     // Respaldo para pegues migrados que ya estaban cortados/inhabilitados sin tener
-    // el evento correspondiente registrado en el sistema.
+    // el evento correspondiente registrado en el sistema: se marca desde el mes
+    // siguiente a su ultimo pago (o desde marzo 2025, cuando esta directiva tomo
+    // cargo, si nunca ha pagado nada) hasta ahora.
+    const ultimoPagoGlobal = p.pagos[0] || null;
+    const inicioRespaldo = ultimoPagoGlobal
+      ? new Date(
+          ultimoPagoGlobal.mesPagado === 12 ? ultimoPagoGlobal.anioPagado + 1 : ultimoPagoGlobal.anioPagado,
+          ultimoPagoGlobal.mesPagado === 12 ? 0 : ultimoPagoGlobal.mesPagado,
+          1
+        )
+      : new Date(2025, 2, 1); // marzo 2025
+
     if (periodosCorte.length === 0 && p.estado === "CORTADO") {
-      periodosCorte = [{ inicio: p.updatedAt, fin: null }];
+      periodosCorte = [{ inicio: inicioRespaldo, fin: null }];
     }
     if (periodosInhabilitado.length === 0 && p.estado === "INACTIVO") {
-      periodosInhabilitado = [{ inicio: p.updatedAt, fin: null }];
+      periodosInhabilitado = [{ inicio: inicioRespaldo, fin: null }];
     }
     const pagosDelAnio = p.pagos.filter((pg) => pg.anioPagado === anio);
     const hoy = new Date();
@@ -64,15 +75,22 @@ export async function GET(req: NextRequest) {
       // Un mes que todavia no llega (es futuro respecto a hoy) no puede estar
       // "cortado" ni "inhabilitado" todavia -- eso se sabra cuando llegue ese mes.
       if (inicioMes > hoy) {
-        return { pagado: false, cortado: false, inhabilitado: false };
+        return { pagado: false, cortado: false, inhabilitado: false, exento: false };
       }
 
       const enPeriodo = (periodos: { inicio: Date; fin: Date | null }[]) =>
         periodos.some((per) => per.inicio <= finMes && (per.fin === null || per.fin >= inicioMes));
+
+      // Los pegues de Bien Comun no pagan -- se marcan como exentos desde su ultimo
+      // pago (o marzo 2025 si nunca pago nada) hasta hoy, igual que se hace con los
+      // cortados/inhabilitados.
+      const exento = p.tipoConexion === "BIEN_COMUN" && inicioRespaldo <= finMes;
+
       return {
         pagado: pagosDelAnio.some((pg) => pg.mesPagado === mes),
         cortado: enPeriodo(periodosCorte),
         inhabilitado: enPeriodo(periodosInhabilitado),
+        exento,
       };
     });
 
@@ -85,8 +103,9 @@ export async function GET(req: NextRequest) {
       nombre: p.abonado.nombre,
       barrio: p.barrio.nombre,
       estado: p.estado,
+      tipoConexion: p.tipoConexion,
       mesesMora,
-      tarifa: serviciosHabilitados.reduce((s, ps) => s + ps.servicio.precio, 0),
+      tarifa: p.tipoConexion === "BIEN_COMUN" ? 0 : serviciosHabilitados.reduce((s, ps) => s + ps.servicio.precio, 0),
       servicios: serviciosHabilitados.map((ps) => ps.servicio.nombre).join(", ") || "—",
       meses,
     };

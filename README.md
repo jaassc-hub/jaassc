@@ -476,7 +476,190 @@ npm run dev
 
 Esta actualización no cambia la base de datos.
 
-## 22. Sugerencias mías para más adelante
+## 23. Novedades de esta actualización (avisos por WhatsApp Web, sin Twilio)
+
+Como el trámite de Twilio quedó bloqueado (sin RTN/personería jurídica ni dominio propio,
+Twilio rechaza la verificación), se agregó una forma de avisar por WhatsApp **sin ningún
+trámite, sin costo, y sin riesgo de que bloqueen el número**:
+
+- Aparece un botón **"Enviar por WhatsApp"** en:
+  - El recibo individual y el recibo por lote (admin).
+  - Cada nota de mora generada (si el abonado tiene teléfono).
+- Al hacer clic, abre **WhatsApp Web** (o la app si está en el celular) con el mensaje ya
+  escrito — solo hay que darle "Enviar". Usa el mismo texto configurado en
+  Configuración → Avisos de pago.
+- Esto requiere tener WhatsApp Web abierto y con sesión iniciada en la computadora que use
+  para cobrar (con cualquier número normal de WhatsApp, no hace falta cuenta de negocio).
+- Es a propósito **no automático del todo** (un clic por mensaje): automatizarlo del todo
+  por fuera de la API oficial de Meta viola sus reglas y arriesga que bloqueen el número.
+
+La configuración de SMS/WhatsApp por Twilio (Configuración → Avisos de pago) se queda ahí
+tal cual, por si en el futuro la Junta se formaliza y quiere retomarlo — no hay que tocarla
+para nada de esto.
+
+```bash
+npm run dev
+```
+
+Esta actualización no cambia la base de datos.
+
+## 25. Novedades de esta actualización (bug "al día", notificaciones, delegaciones)
+
+- **Corregido**: un pegue sin ningún pago registrado (por ejemplo, migrado del Excel sin
+  historial) ya no aparece como "Al día" — ahora dice claramente "⚠ No se ha registrado
+  ningún pago para este pegue todavía", tanto en el portal público como en la ficha admin.
+  El problema era que el sistema asumía que el pegue "empezó a deber" desde la fecha en que
+  se creó su registro en la base de datos, no desde una fecha real de instalación.
+- **Nuevo mensaje de WhatsApp/SMS por defecto**, con el formato de lista que pidió. Si ya
+  había personalizado el mensaje desde Configuración → Avisos de pago, ese cambio no se le
+  pisa solo — entre ahí y actualícelo a mano si quiere el nuevo formato.
+- **Notificaciones de irregularidades** (`/admin/notificaciones`): avisa de
+  - Pegues **cortados por mora** que llevan mucho tiempo sin reconectarse (3+ meses por
+    defecto — los inhabilitados no cuentan).
+  - **Cuotas de conexión atrasadas** (4+ meses sin pagar ninguna) — desde ahí mismo puede
+    aplicarle la multa configurable a esa cuota con un clic.
+  - Ambos umbrales y el monto de la multa se ajustan en Configuración → Notificaciones.
+- **Delegaciones** (`/admin/delegaciones`): se puede asignar a una persona en concreto el
+  seguimiento de una cuota de conexión pendiente o de un corte por mora — con botón
+  "Delegar" desde la ficha del pegue y desde su historial. Cada usuario ve "Asignadas a mí"
+  por defecto, o "Todas" para ver el panorama completo. Los cobros normales (la tarifa
+  mensual de siempre) no pasan por aquí, siguen igual que hasta ahora.
+
+```bash
+npx prisma db push
+npm run dev
+```
+
+## 27. Novedades de esta actualización (planes de pago, tipo de pegue, WhatsApp everywhere, carrusel)
+
+Esta fue una actualización grande, con 8 mejoras pedidas de una sola vez:
+
+1. **Consultar estado de cuenta desde el panel admin** (`/admin/consulta-pegue`): busca
+   cualquier pegue por código, identidad o nombre, y muestra exactamente lo mismo que ve
+   el abonado al consultar en línea — sin necesitar su clave. Con accesos directos a
+   "Cobrar" y a la ficha completa.
+
+2. **Planes de pago** para dividir deudas grandes: desde la ficha del pegue, si la deuda
+   es de L500 o más (umbral fijo en el código, en `lib/planPagoConfig.ts`, no editable
+   desde el sistema), aparece la opción de dividirla en 4 cuotas iguales. Cada cuota
+   incluye: una parte de la deuda vieja + la tarifa del mes que va corriendo + una parte
+   de la mora ya generada, redondeado siempre hacia abajo al múltiplo de 5 más cercano.
+   Al completar las 4 cuotas, el sistema liquida automáticamente todos los meses viejos en
+   el histórico normal, para que el resto de la app (mora, libro diario, portal) vea la
+   cuenta al día sin tratamiento especial. Los recibos de cada cuota usan la misma
+   numeración que los recibos normales, y muestran el progreso del plan.
+
+3. **Tipo de pegue y observaciones**: cada pegue ahora se puede marcar como Vivienda,
+   Solar, Corral, o Bien Común (con su ícono correspondiente). Los de **Bien Común quedan
+   exentos de cobro automáticamente**, aunque tengan servicios habilitados — aplica en el
+   cobro, la ficha, el portal público y las notas de mora. También se agregó un campo de
+   observaciones libres en cada pegue (visible y editable desde su ficha).
+
+4. **Libro diario**: nueva columna de tipo de pegue, y un filtro para imprimir solo un
+   tipo en concreto (por ejemplo, solo los corrales).
+
+5. **Corregido**: los pegues inhabilitados sin el evento registrado (de antes de tener el
+   sistema) ahora se marcan retroactivamente desde el mes siguiente a su último pago (o
+   marzo de 2025, cuando esta directiva tomó cargo, si nunca pagaron nada) — no solo hacia
+   adelante como antes.
+
+6. **Botón de WhatsApp en todos lados relevantes**: cuotas de conexión, planes de pago,
+   actas de instalación, y constancias de corte/inhabilitación/reactivación. Si el
+   abonado no tiene teléfono registrado, aparece la opción "Notificar a un número" para
+   escribirlo ahí mismo y mandarle el mismo mensaje de todas formas.
+
+7. **Correlativos propios para actas y constancias**: ya no comparten numeración con los
+   recibos de pago. Formato `ACTIN_CODIGO_N` (acta de instalación), `ACTCOR_CODIGO_N`
+   (corte), `ACTINH_CODIGO_N` (inhabilitación), `ACTREA_CODIGO_N` (reactivación) — donde
+   N es cuántas veces le ha pasado eso a ESE pegue en concreto.
+
+8. **Carrusel de avisos en la página de inicio**: desde Configuración → Avisos del
+   portal se pueden publicar avisos de texto (próximo cobro, reunión, enlace a Facebook,
+   etc.) o con imagen — para la imagen se pega un enlace externo (Facebook, imgur, etc.),
+   nunca se guarda el archivo en la base de datos. Si no hay ningún aviso activo, se
+   muestra un mensaje genérico invitando a que la Junta publique novedades.
+
+```bash
+npx prisma db push
+npm run dev
+```
+
+## 29. Novedades de esta actualización (velocidad de impresión matricial)
+
+Se corrigió el problema de que los recibos se imprimían muy lento (o corridos, sin
+formato) en su impresora matricial TM-U220D con el controlador "Generic / Text Only".
+
+**Qué se cambió:** los recibos (pago, cuota de conexión, cuota de plan de pagos) y las
+constancias en formato matricial ya no se arman con muchas líneas y tablas separadas por
+dentro — ahora cada uno se arma como **un solo bloque de texto**, con los espacios y
+saltos de línea ya puestos exactamente donde van. Así, cuando Windows usa el controlador
+de "solo texto" para mandarlo a la impresora, no tiene que adivinar el orden ni el
+espaciado (que es lo que causaba que saliera corrido) — todo llega ya ordenado.
+
+**Se ve exactamente igual** en pantalla, al imprimir en PDF, o en cualquier impresora
+normal — este cambio es solo de cómo está armado por dentro, no de cómo se ve.
+
+**Para que la matricial imprima rápido de verdad**, recuerde:
+1. Tener instalado el controlador **"Generic / Text Only"** para esa impresora en Windows.
+2. Seleccionar esa impresora (la de "solo texto") al momento de imprimir desde el
+   sistema — no la impresora normal.
+
+```bash
+npm run dev
+```
+
+Esta actualización no cambia la base de datos.
+
+## 31. Novedades de esta actualización (marzo 2025 por defecto, cuotas elegibles, exentos)
+
+- **Sin pagos registrados**: ya no asume que el pegue está "al día desde que se dio de
+  alta en el sistema" — ahora asume que debe desde **marzo de 2025** (cuando esta
+  directiva tomó posesión), tanto en el portal como en la ficha admin, cobro, notas de
+  mora y planes de pago. Ojo con esto: un pegue genuinamente nuevo que se instale hoy y
+  aún no tenga ningún pago también va a mostrar deuda desde marzo 2025 hasta que se le
+  registre su primer pago — si eso llega a pasarle con una instalación reciente,
+  avíseme y lo afinamos para distinguir ese caso.
+- **Plan de pagos con cuotas a elección**: ya no está forzado a 4 cuotas siempre — se
+  puede elegir de 1 hasta 4 (el máximo sigue siendo 4, en código, tal como pidió). La
+  vista previa se recalcula sola al cambiar la cantidad.
+- **Libro diario**: los pegues de Bien Común ahora se marcan con una **"E" en morado**
+  (exento), usando la misma lógica retroactiva que ya teníamos para inhabilitados —
+  desde su último pago (o marzo 2025 si nunca pagó) hasta hoy.
+
+```bash
+npm run dev
+```
+
+Esta actualización no cambia la base de datos.
+
+## 32. Corrección del caso "pegue nuevo vs. pegue viejo sin historial"
+
+En la actualización anterior dejé una advertencia pendiente: forzar "marzo 2025" para
+todo pegue sin pagos también afectaba a un pegue genuinamente nuevo recién instalado.
+Ya quedó bien resuelto, sin ese efecto secundario:
+
+- El cálculo volvió a basarse en la **fecha de alta real** de cada pegue (como era
+  originalmente) — un pegue nuevo de hoy debe desde hoy, no desde 2025.
+- El **dato** de los pegues migrados del Excel se corrigió para que su fecha de alta
+  sea marzo de 2025 (cuando esta directiva tomó posesión), en vez de la fecha en que se
+  corrió la migración — así el cálculo automáticamente sale bien para ellos también,
+  sin necesidad de ningún caso especial en el código.
+
+**Para los pegues que ya tiene migrados**, corra este script una sola vez:
+
+```bash
+node prisma/arreglar-fecha-alta.js
+```
+
+Es seguro — solo toca pegues que **todavía no tienen ningún pago registrado** (que son
+exactamente los únicos afectados por esto). Si un pegue ya tiene aunque sea un pago, no
+se toca para nada.
+
+De ahí en adelante, cuando migre el Excel de 2025 (o cualquier otro), los pegues nuevos
+que cree esa migración ya van a nacer con la fecha correcta automáticamente, sin tener
+que correr este script de nuevo.
+
+## 33. Sugerencias mías para más adelante
 
 Ya que me lo pidió, aquí van algunas ideas que se me ocurren, sin compromiso de hacerlas
 ya — dígame cuáles le interesan cuando quiera seguir:
@@ -495,15 +678,19 @@ ya — dígame cuáles le interesan cuando quiera seguir:
   que la directiva revise periódicamente si alguno debería reactivarse o darse de baja
   definitiva.
 
-## 23. Pendiente para la próxima conversación
+## 34. Pendiente para la próxima conversación
 
 Quedó anotado para cuando usted diga:
 - Ayuda migrando sus abonados/pegues desde una hoja de Excel.
 - Tips para que la pantalla de cobro responda más rápido (ahora mismo cada búsqueda/
   cobro tarda un par de segundos porque cada clic hace una consulta nueva a la base de
   datos en Neon; hay formas de acelerarlo, mas adelante lo vemos con calma).
+- **Recordatorio pedido por usted**: rediseñar el panel de Notificaciones como un
+  apartado propio y más completo (en vez de la lista simple que hay ahora dentro del
+  mismo menú) — quedó pendiente hasta que usted lo retome.
+- Los datos del Excel de 2025 (formato con Tren de Aseo) para terminar esa migración.
 
-## 24. Notas importantes
+## 35. Notas importantes
 
 - Si alguna vez le vuelve a aparecer una pregunta pidiendo "resetear" el schema de la base
   de datos: **cancele con Ctrl+C y no acepte**. Eso borra todos los datos. Use siempre

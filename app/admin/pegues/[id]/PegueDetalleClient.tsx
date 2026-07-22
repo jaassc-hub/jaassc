@@ -5,6 +5,10 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Wallet, History, Pencil, Ban, PauseCircle, PlayCircle, FileSignature } from "lucide-react";
 import BotonAtras from "@/components/BotonAtras";
+import DelegarBoton from "@/components/DelegarBoton";
+import PlanPagoSeccion from "@/components/PlanPagoSeccion";
+import IconoTipoConexion from "@/components/IconoTipoConexion";
+import { NOMBRE_TIPO_CONEXION } from "@/lib/tipoConexion";
 import { nombreMes } from "@/lib/mora";
 
 type Servicio = { id: string; nombre: string; precio: number };
@@ -36,6 +40,7 @@ export default function PegueDetalleClient({
     mesesMora: number;
     montoMora: number;
     corte: boolean;
+    sinPagos: boolean;
     totalEstimado: number;
   };
 }) {
@@ -44,6 +49,8 @@ export default function PegueDetalleClient({
   const [editando, setEditando] = useState(false);
   const [codigo, setCodigo] = useState(pegue.codigo);
   const [barrioId, setBarrioId] = useState(pegue.barrioId);
+  const [tipoConexion, setTipoConexion] = useState(pegue.tipoConexion || "VIVIENDA");
+  const [observaciones, setObservaciones] = useState(pegue.observaciones || "");
   const [serviciosSel, setServiciosSel] = useState<string[]>(
     pegue.servicios.filter((ps: any) => ps.habilitado).map((ps: any) => ps.servicioId)
   );
@@ -60,7 +67,7 @@ export default function PegueDetalleClient({
     const res = await fetch(`/api/pegues/${pegue.id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ codigo, barrioId, servicioIds: serviciosSel }),
+      body: JSON.stringify({ codigo, barrioId, servicioIds: serviciosSel, tipoConexion, observaciones }),
     });
     setGuardando(false);
     if (res.ok) {
@@ -170,10 +177,11 @@ export default function PegueDetalleClient({
       <div className="flex items-start justify-between flex-wrap gap-3">
         <div>
           <div className="flex items-center gap-2">
+            <IconoTipoConexion tipo={pegue.tipoConexion || "VIVIENDA"} size={22} />
             <h1 className="text-2xl font-bold text-azul">{pegue.codigo}</h1>
             <span className={badgeEstado[pegue.estado]}>{nombreEstado[pegue.estado]}</span>
           </div>
-          <p className="text-gray-500">{barrioActual?.nombre}</p>
+          <p className="text-gray-500">{barrioActual?.nombre} · {NOMBRE_TIPO_CONEXION[pegue.tipoConexion || "VIVIENDA"]}</p>
         </div>
         <div className="flex gap-2 flex-wrap">
           <Link href={`/admin/pagos/nuevo?pegue=${pegue.codigo}`} className="btn-primario text-sm flex items-center gap-1.5">
@@ -193,7 +201,7 @@ export default function PegueDetalleClient({
         className={`card ${
           estadoCuenta.corte
             ? "border-red-300 bg-red-50"
-            : estadoCuenta.mesesMora > 0
+            : estadoCuenta.sinPagos || estadoCuenta.mesesMora > 0
             ? "border-orange-300 bg-orange-50"
             : "border-green-300 bg-green-50"
         }`}
@@ -202,7 +210,11 @@ export default function PegueDetalleClient({
         <p className="text-sm text-gray-600">
           Próximo mes a pagar: <b>{nombreMes(estadoCuenta.pendiente.mes)} {estadoCuenta.pendiente.anio}</b>
         </p>
-        {estadoCuenta.mesesMora > 0 ? (
+        {estadoCuenta.sinPagos ? (
+          <p className="text-orange-700 font-medium mt-1">
+            ⚠ No se ha registrado ningún pago para este pegue todavía
+          </p>
+        ) : estadoCuenta.mesesMora > 0 ? (
           <>
             <p className="text-sm mt-1">Meses en mora: <b>{estadoCuenta.mesesMora}</b></p>
             <p className="text-sm">Multa por mora: <b>L {estadoCuenta.montoMora.toFixed(2)}</b></p>
@@ -215,6 +227,9 @@ export default function PegueDetalleClient({
           Total estimado a pagar: L {estadoCuenta.totalEstimado.toFixed(2)}
         </p>
       </div>
+
+      {/* Plan de pagos */}
+      <PlanPagoSeccion pegue={pegue} onActualizar={(p: any) => setPegue({ ...pegue, planesPago: p })} />
 
       {/* Datos del pegue */}
       <div className="card space-y-3">
@@ -240,6 +255,19 @@ export default function PegueDetalleClient({
                   ))}
                 </select>
               </div>
+              <div>
+                <label className="label">Tipo de conexión</label>
+                <select className="input" value={tipoConexion} onChange={(e) => setTipoConexion(e.target.value)}>
+                  <option value="VIVIENDA">Vivienda</option>
+                  <option value="SOLAR">Solar</option>
+                  <option value="CORRAL">Corral</option>
+                  <option value="BIEN_COMUN">Bien común (exento de cobro)</option>
+                </select>
+              </div>
+            </div>
+            <div>
+              <label className="label">Observaciones</label>
+              <textarea className="input text-sm" value={observaciones} onChange={(e) => setObservaciones(e.target.value)} />
             </div>
             <div>
               <label className="label">Servicios habilitados</label>
@@ -258,9 +286,16 @@ export default function PegueDetalleClient({
             </button>
           </div>
         ) : (
-          <p className="text-sm text-gray-600">
-            {pegue.servicios.filter((ps: any) => ps.habilitado).map((ps: any) => ps.servicio.nombre).join(", ") || "Sin servicios habilitados"}
-          </p>
+          <>
+            <p className="text-sm text-gray-600">
+              {pegue.servicios.filter((ps: any) => ps.habilitado).map((ps: any) => ps.servicio.nombre).join(", ") || "Sin servicios habilitados"}
+            </p>
+            {pegue.observaciones && (
+              <p className="text-sm text-gray-500 bg-gray-50 rounded-lg px-3 py-2 mt-2">
+                📝 {pegue.observaciones}
+              </p>
+            )}
+          </>
         )}
 
         <div className="border-t pt-3 flex flex-wrap gap-2">
@@ -432,9 +467,12 @@ export default function PegueDetalleClient({
                         </Link>
                       </>
                     ) : cuotaCobrando === c.id ? null : (
-                      <button type="button" onClick={() => setCuotaCobrando(c.id)} className="btn-outline text-xs">
-                        Cobrar
-                      </button>
+                      <>
+                        <button type="button" onClick={() => setCuotaCobrando(c.id)} className="btn-outline text-xs">
+                          Cobrar
+                        </button>
+                        <DelegarBoton pegueId={pegue.id} tipo="COBRO_CUOTA" cuotaId={c.id} />
+                      </>
                     )}
                   </div>
                 </div>

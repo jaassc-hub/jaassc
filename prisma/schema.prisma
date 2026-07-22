@@ -31,6 +31,7 @@ model Usuario {
   permisos             String     @default("[]") // JSON string array de claves de modulo
   activo               Boolean    @default(true)
   debeCambiarPassword  Boolean    @default(false) // true tras un reset del admin; se limpia al cambiarla
+  delegacionesAsignadas Delegacion[]
   createdAt            DateTime   @default(now())
 }
 
@@ -114,6 +115,13 @@ enum EstadoPegue {
   INACTIVO
 }
 
+enum TipoConexionPegue {
+  VIVIENDA
+  SOLAR
+  CORRAL
+  BIEN_COMUN // exento de cobro aunque tenga servicios habilitados
+}
+
 model Pegue {
   id           String          @id @default(cuid())
   codigo       String          @unique // Ej: GUA001
@@ -123,11 +131,15 @@ model Pegue {
   barrioId     String
   estado       EstadoPegue     @default(ACTIVO)
   ubicacion    String?         // direccion/referencia donde esta instalado el pegue
-  actaNumero   String?         // correlativo del acta de instalacion (tipo "ACTA")
+  actaNumero   String?         // correlativo del acta de instalacion, ej ACTIN_LEM126_1
+  observaciones String?        // notas libres: "Segun libro X debe", "lo usa para ordeñar", etc
+  tipoConexion TipoConexionPegue @default(VIVIENDA)
   servicios    PegueServicio[]
   pagos        Pago[]
   eventos      EventoPegue[]
   cuotas       CuotaPegue[]
+  delegaciones Delegacion[]
+  planesPago   PlanPago[]
   createdAt    DateTime        @default(now())
   updatedAt    DateTime        @updatedAt
 }
@@ -235,5 +247,67 @@ model CuotaPegue {
   referencia String?
   numeroRecibo String?  // correlativo del recibo, comparte la misma numeracion que los pagos mensuales
   emitidoPor String?
+  multaAplicada Boolean @default(false) // evita cobrar la multa por atraso mas de una vez
   createdAt  DateTime   @default(now())
+}
+
+// ---------- Delegacion de casos especificos a un usuario ----------
+// Para casos puntuales (cobrar una cuota de conexion pendiente, dar seguimiento a un
+// corte por mora) que se le asignan a una persona en concreto, sin tocar los cobros
+// normales del dia a dia que siguen igual para todos los que tengan el permiso.
+
+enum TipoDelegacion {
+  COBRO_CUOTA
+  CORTE_MORA
+}
+
+model Delegacion {
+  id           String         @id @default(cuid())
+  pegue        Pegue          @relation(fields: [pegueId], references: [id])
+  pegueId      String
+  tipo         TipoDelegacion
+  cuotaId      String?        // si aplica a una cuota de conexion especifica
+  eventoId     String?        // si aplica a un evento de corte especifico
+  asignadoA    Usuario        @relation(fields: [asignadoAId], references: [id])
+  asignadoAId  String
+  asignadoPor  String?        // nombre de quien delego
+  nota         String?
+  resuelto     Boolean        @default(false)
+  notaResolucion String?
+  createdAt    DateTime       @default(now())
+  resueltoAt   DateTime?
+}
+
+// ---------- Planes de pago (dividir una deuda grande) ----------
+// Para deudas grandes (por defecto L500+, ver lib/planPagoConfig.ts) se puede dividir
+// en un plazo fijo de cuotas iguales, sumando la deuda vieja + la tarifa corriente de
+// cada mes del plan + la mora ya generada, todo prorrateado.
+
+model PlanPago {
+  id             String          @id @default(cuid())
+  pegue          Pegue           @relation(fields: [pegueId], references: [id])
+  pegueId        String
+  deudaOriginal  Float           // capital (servicios) que se dividio
+  moraOriginal   Float           // mora ya generada al momento de armar el plan
+  cantidadCuotas Int             @default(4)
+  montoCuota     Float           // monto fijo por cuota, redondeado
+  estado         String          @default("ACTIVO") // ACTIVO | COMPLETADO | CANCELADO
+  creadoPor      String?
+  createdAt      DateTime        @default(now())
+  cuotas         CuotaPlanPago[]
+}
+
+model CuotaPlanPago {
+  id           String      @id @default(cuid())
+  planPago     PlanPago    @relation(fields: [planPagoId], references: [id])
+  planPagoId   String
+  numero       Int
+  mesEtiqueta  String      // ej "Agosto 2026" -- no se fija un dia exacto, la fecha de cobro varia
+  monto        Float
+  pagada       Boolean     @default(false)
+  fechaPago    DateTime?
+  metodoPago   MetodoPago?
+  referencia   String?
+  numeroRecibo String?     // mismo correlativo/numeracion que los recibos normales (tipo PAGO)
+  emitidoPor   String?
 }

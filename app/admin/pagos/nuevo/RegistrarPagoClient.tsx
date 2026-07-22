@@ -158,9 +158,11 @@ function RegistrarPagoInner() {
   const listaMeses = pendiente ? mesesConsecutivos(pendiente.mes, pendiente.anio, cantidadMeses) : [];
 
   const montoServicios = pegue
-    ? pegue.servicios
-        .filter((ps: any) => ps.habilitado)
-        .reduce((s: number, ps: any) => s + ps.servicio.precio, 0)
+    ? pegue.tipoConexion === "BIEN_COMUN"
+      ? 0
+      : pegue.servicios
+          .filter((ps: any) => ps.habilitado)
+          .reduce((s: number, ps: any) => s + ps.servicio.precio, 0)
     : 0;
 
   // Mora: se calcula UNA vez sobre el total adeudado, no mes por mes

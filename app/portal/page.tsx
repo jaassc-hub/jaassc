@@ -120,7 +120,9 @@ export default function PortalPage() {
             </button>
 
             <form onSubmit={consultar}>
-
+              <label className="label flex items-center gap-1.5">
+                <CheckCircle2 size={15} className="text-green-600" /> Sí, es mi pegue — ahora ingrese su clave
+              </label>
               <input
                 className="input mb-1 mt-1"
                 value={clave}

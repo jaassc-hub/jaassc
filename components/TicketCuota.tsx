@@ -1,3 +1,14 @@
+function fila(izquierda: string, derecha: string, ancho: number): string {
+  const espacio = Math.max(1, ancho - izquierda.length - derecha.length);
+  return izquierda + " ".repeat(espacio) + derecha;
+}
+
+function centrado(texto: string, ancho: number): string {
+  const espacio = Math.max(0, ancho - texto.length);
+  const izq = Math.floor(espacio / 2);
+  return " ".repeat(izq) + texto;
+}
+
 export default function TicketCuota({
   numeroRecibo,
   fecha,
@@ -45,8 +56,9 @@ export default function TicketCuota({
   mostrarEmitidoPor?: boolean;
   mostrarPin?: boolean;
 }) {
-  const linea = "=".repeat(anchoColumnas);
-  const guion = "-".repeat(anchoColumnas);
+  const A = anchoColumnas;
+  const linea = "=".repeat(A);
+  const guion = "-".repeat(A);
   const ABREV_METODO: Record<string, string> = {
     EFECTIVO: "EFE",
     TRANSFERENCIA: "TRA",
@@ -54,75 +66,61 @@ export default function TicketCuota({
     OTRO: "OTR",
   };
 
+  const renglones: string[] = [];
+  renglones.push(centrado(juntaNombre.toUpperCase(), A));
+  if (juntaSubtitulo) renglones.push(centrado(juntaSubtitulo, A));
+  renglones.push(linea);
+  renglones.push(centrado("RECIBO DE CONEXION", A));
+  renglones.push(linea);
+  renglones.push("");
+  renglones.push(`Recibo #  ${numeroRecibo}`);
+  renglones.push(
+    `Fecha emision: ${fecha.toLocaleDateString("es-HN")} ${fecha.toLocaleTimeString("es-HN", { hour: "2-digit", minute: "2-digit" })}`
+  );
+  renglones.push("");
+  renglones.push(guion);
+  renglones.push("DATOS DEL ABONADO");
+  renglones.push(guion);
+  renglones.push(`Nombre:  ${abonadoNombre}`);
+  renglones.push(`Codigo:  ${codigo}`);
+  if (mostrarDNI && identidad) renglones.push(`DNI:     ${identidad}`);
+  if (mostrarBarrio) renglones.push(`Barrio:  ${barrioNombre}`);
+  renglones.push("");
+  renglones.push(guion);
+  renglones.push("DETALLE DEL COBRO");
+  renglones.push(guion);
+  renglones.push(totalCuotas > 1 ? `Cuota ${numero} de ${totalCuotas} de conexion` : "Derecho de conexion (pago unico)");
+  renglones.push(`MDP: ${ABREV_METODO[metodoPago] || metodoPago.slice(0, 3)}${referencia ? `  Ref: ${referencia}` : ""}`);
+  renglones.push(guion);
+  renglones.push(fila("TOTAL A PAGAR:", `L${monto.toFixed(2)}`, A));
+
+  if (mostrarEmitidoPor && emitidoPor) {
+    renglones.push("");
+    renglones.push(`Emitido por: ${emitidoPor}`);
+  }
+  if (mostrarPin && pin) {
+    renglones.push("");
+    renglones.push("Consulte su cuenta en linea con el");
+    renglones.push(`codigo de pegue y este codigo: ${pin}`);
+  }
+  renglones.push("");
+  renglones.push(centrado(textoPie, A));
+  renglones.push(linea);
+
   return (
-    <div
+    <pre
       className="ticket-recibo bg-white text-black mx-auto p-4"
       style={{
         fontFamily: fuente,
-        width: `${anchoColumnas}ch`,
+        width: `${A}ch`,
         fontSize: 13,
         lineHeight: 1.5,
         boxSizing: "content-box",
+        margin: "0 auto",
+        whiteSpace: "pre-wrap",
       }}
     >
-      <div className="text-center font-bold">
-        <p>{juntaNombre.toUpperCase()}</p>
-        {juntaSubtitulo && <p>{juntaSubtitulo}</p>}
-      </div>
-
-      <p className="whitespace-pre">{linea}</p>
-      <p className="text-center font-bold text-lg my-1">RECIBO DE CONEXIÓN</p>
-      <p className="whitespace-pre">{linea}</p>
-
-      <div className="mt-2">
-        <p>Recibo #  <b>{numeroRecibo}</b></p>
-        <p>
-          Fecha emision: {fecha.toLocaleDateString("es-HN")}{" "}
-          {fecha.toLocaleTimeString("es-HN", { hour: "2-digit", minute: "2-digit" })}
-        </p>
-      </div>
-
-      <p className="whitespace-pre mt-2">{guion}</p>
-      <p className="font-bold">DATOS DEL ABONADO</p>
-      <p className="whitespace-pre">{guion}</p>
-      <table className="w-full">
-        <tbody>
-          <tr><td className="pr-2 align-top">Nombre:</td><td>{abonadoNombre}</td></tr>
-          <tr><td className="pr-2 align-top">Codigo:</td><td>{codigo}</td></tr>
-          {mostrarDNI && identidad && <tr><td className="pr-2 align-top">DNI:</td><td>{identidad}</td></tr>}
-          {mostrarBarrio && <tr><td className="pr-2 align-top">Barrio:</td><td>{barrioNombre}</td></tr>}
-        </tbody>
-      </table>
-
-      <p className="whitespace-pre mt-2">{guion}</p>
-      <p className="font-bold">DETALLE DEL COBRO</p>
-      <p className="whitespace-pre">{guion}</p>
-      <p className="font-bold">
-        {totalCuotas > 1 ? `Cuota ${numero} de ${totalCuotas} de conexion` : "Derecho de conexion (pago unico)"}
-      </p>
-      <p>MDP: {ABREV_METODO[metodoPago] || metodoPago.slice(0, 3)}{referencia ? `  Ref: ${referencia}` : ""}</p>
-
-      <p className="whitespace-pre border-t border-black mt-2 pt-1" />
-      <table className="w-full">
-        <tbody>
-          <tr className="font-bold text-lg">
-            <td>TOTAL A PAGAR:</td>
-            <td className="text-right">L{monto.toFixed(2)}</td>
-          </tr>
-        </tbody>
-      </table>
-
-      {mostrarEmitidoPor && emitidoPor && (
-        <p className="mt-2 text-xs">Emitido por: {emitidoPor}</p>
-      )}
-      {mostrarPin && pin && (
-        <p className="mt-2 text-xs border-t border-dashed border-black pt-2">
-          Consulte su cuenta en línea con el código de pegue y este código de acceso: <b>{pin}</b>
-        </p>
-      )}
-
-      <p className="text-center font-bold text-lg mt-4">{textoPie}</p>
-      <p className="whitespace-pre mt-2">{linea}</p>
-    </div>
+      {renglones.join("\n")}
+    </pre>
   );
 }

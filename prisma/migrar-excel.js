@@ -127,6 +127,11 @@ async function importarAbonados() {
           abonadoId: abonado.id,
           barrioId: barrio.id,
           estado: a.estado,
+          // Se fija la fecha de alta en marzo 2025 (cuando esta directiva tomo
+          // posesion), no la fecha real en que se corrio esta migracion -- para que
+          // un pegue migrado sin ningun pago se calcule correctamente como que debe
+          // desde entonces, y no como si estuviera "al dia desde hoy".
+          createdAt: new Date(2025, 2, 1),
           servicios: {
             create: servicioIds.map((servicioId) => ({ servicioId, habilitado: true })),
           },

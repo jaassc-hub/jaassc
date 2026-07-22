@@ -6,6 +6,7 @@ import AccesoDenegado from "@/components/AccesoDenegado";
 import { mesesDeMora, calcularMontoMora, sujetoACorte, siguienteMesPendiente } from "@/lib/mora";
 import { MORA_DEFAULT } from "@/lib/moraConfig";
 import { asegurarPin } from "@/lib/pin";
+import { esTipoExento } from "@/lib/tipoConexion";
 import PegueDetalleClient from "./PegueDetalleClient";
 
 export default async function PegueDetallePage({ params }: { params: { id: string } }) {
@@ -23,6 +24,7 @@ export default async function PegueDetallePage({ params }: { params: { id: strin
         servicios: { include: { servicio: true } },
         pagos: { orderBy: [{ anioPagado: "desc" }, { mesPagado: "desc" }] },
         cuotas: { orderBy: { numero: "asc" } },
+        planesPago: { include: { cuotas: { orderBy: { numero: "asc" } } }, orderBy: { createdAt: "desc" } },
       },
     }),
     prisma.barrio.findMany({ orderBy: { nombre: "asc" } }),
@@ -36,9 +38,9 @@ export default async function PegueDetallePage({ params }: { params: { id: strin
   pegue.abonado.pin = pin;
 
   const tramos = moraConfigRow ? JSON.parse(moraConfigRow.valor).tramos : MORA_DEFAULT.tramos;
-  const montoServicios = pegue.servicios
-    .filter((ps) => ps.habilitado)
-    .reduce((s, ps) => s + ps.servicio.precio, 0);
+  const montoServicios = esTipoExento(pegue.tipoConexion)
+    ? 0
+    : pegue.servicios.filter((ps) => ps.habilitado).reduce((s, ps) => s + ps.servicio.precio, 0);
   const pendiente = siguienteMesPendiente(pegue.pagos[0] || null, pegue.createdAt);
   const mesesMora = mesesDeMora(pendiente.mes, pendiente.anio);
   const montoAdeudado = montoServicios * mesesMora; // deuda total estimada (todos los meses vencidos)
@@ -56,6 +58,7 @@ export default async function PegueDetallePage({ params }: { params: { id: strin
         mesesMora,
         montoMora,
         corte,
+        sinPagos: pegue.pagos.length === 0,
         totalEstimado: montoAdeudado + montoMora,
       }}
     />

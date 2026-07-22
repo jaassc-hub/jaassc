@@ -52,6 +52,17 @@ export default function AvisosClient({
 
   return (
     <div className="max-w-xl space-y-4">
+      <div className="card border-green-300 bg-green-50">
+        <p className="text-sm text-green-700">
+          <b>Ya no necesita configurar nada aquí para avisar por WhatsApp.</b> Ahora hay un
+          botón de "Enviar por WhatsApp" directo en cada recibo y en las notas de mora — abre
+          WhatsApp Web con el mensaje ya escrito, listo para darle "Enviar". No usa Twilio, no
+          tiene costo, y funciona con cualquier número normal de WhatsApp abierto en su
+          computadora. Lo de aquí abajo (SMS/WhatsApp automático por Twilio) es opcional, para
+          más adelante si formalizan la Junta.
+        </p>
+      </div>
+
       {!credencialesConfiguradas && (
         <div className="card border-orange-300 bg-orange-50">
           <p className="text-sm text-orange-700">

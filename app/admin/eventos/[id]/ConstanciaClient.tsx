@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { Printer } from "lucide-react";
 import BotonAtras from "@/components/BotonAtras";
+import EnviarWhatsApp from "@/components/EnviarWhatsApp";
 import { IMPRESORA_DEFAULT } from "@/lib/impresoraConfig";
 
 const TITULOS: Record<string, string> = {
@@ -25,9 +26,15 @@ export default function ConstanciaClient({ evento, juntaNombre }: { evento: any;
 
   return (
     <div>
-      <div className="no-imprimir flex items-center justify-between mb-4 max-w-2xl mx-auto">
+      <div className="no-imprimir flex items-center justify-between mb-4 max-w-2xl mx-auto flex-wrap gap-2">
         <BotonAtras href={`/admin/pegues/${evento.pegueId}/historial`} />
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
+          <EnviarWhatsApp
+            telefono={evento.pegue.abonado.telefono}
+            mensaje={`Hola ${evento.pegue.abonado.nombre}, le informamos que su pegue ${evento.pegue.codigo} ${
+              evento.tipo === "CORTE" ? "fue cortado" : evento.tipo === "INHABILITACION" ? "fue inhabilitado" : "fue reactivado"
+            }.${evento.nota ? ` Motivo: ${evento.nota}.` : ""} Cualquier duda, comuníquese con la Junta. - ${juntaNombre}`}
+          />
           <select className="input w-auto text-sm" value={formato} onChange={(e) => setFormato(e.target.value as any)}>
             <option value="CARTA">Tamaño Carta</option>
             <option value="A4">Tamaño A4</option>
@@ -40,7 +47,7 @@ export default function ConstanciaClient({ evento, juntaNombre }: { evento: any;
       </div>
 
       {formato === "MATRICIAL" ? (
-        <div
+        <pre
           className="ticket-recibo bg-white text-black mx-auto p-4"
           style={{
             fontFamily: impresora.fuente,
@@ -48,25 +55,30 @@ export default function ConstanciaClient({ evento, juntaNombre }: { evento: any;
             fontSize: 13,
             lineHeight: 1.5,
             boxSizing: "content-box",
+            margin: "0 auto",
+            whiteSpace: "pre-wrap",
           }}
         >
-          <p className="text-center font-bold">{juntaNombre.toUpperCase()}</p>
-          <p className="whitespace-pre">{"=".repeat(impresora.anchoColumnas)}</p>
-          <p className="text-center font-bold">{titulo.toUpperCase()}</p>
-          <p className="whitespace-pre">{"=".repeat(impresora.anchoColumnas)}</p>
-          <p className="mt-2">Constancia # {evento.numeroRecibo || "—"}</p>
-          <p>Fecha: {fecha.toLocaleDateString("es-HN")} {fecha.toLocaleTimeString("es-HN", { hour: "2-digit", minute: "2-digit" })}</p>
-          <p className="whitespace-pre mt-2">{"-".repeat(impresora.anchoColumnas)}</p>
-          <p>Pegue: {evento.pegue.codigo}</p>
-          <p>Abonado: {evento.pegue.abonado.nombre}</p>
-          <p>Barrio: {evento.pegue.barrio.nombre}</p>
-          <p className="whitespace-pre mt-2">{"-".repeat(impresora.anchoColumnas)}</p>
-          <p>Motivo:</p>
-          <p>{evento.nota || "(sin motivo registrado)"}</p>
-          <p className="whitespace-pre mt-2">{"-".repeat(impresora.anchoColumnas)}</p>
-          <p>Realizado por: {evento.realizadoPor || "—"}</p>
-          <p className="whitespace-pre mt-2">{"=".repeat(impresora.anchoColumnas)}</p>
-        </div>
+          {[
+            juntaNombre.toUpperCase(),
+            "=".repeat(impresora.anchoColumnas),
+            titulo.toUpperCase(),
+            "=".repeat(impresora.anchoColumnas),
+            "",
+            `Constancia # ${evento.numeroRecibo || "—"}`,
+            `Fecha: ${fecha.toLocaleDateString("es-HN")} ${fecha.toLocaleTimeString("es-HN", { hour: "2-digit", minute: "2-digit" })}`,
+            "-".repeat(impresora.anchoColumnas),
+            `Pegue: ${evento.pegue.codigo}`,
+            `Abonado: ${evento.pegue.abonado.nombre}`,
+            `Barrio: ${evento.pegue.barrio.nombre}`,
+            "-".repeat(impresora.anchoColumnas),
+            "Motivo:",
+            evento.nota || "(sin motivo registrado)",
+            "-".repeat(impresora.anchoColumnas),
+            `Realizado por: ${evento.realizadoPor || "—"}`,
+            "=".repeat(impresora.anchoColumnas),
+          ].join("\n")}
+        </pre>
       ) : (
         <div
           className="nota-mora bg-white text-gray-900 mx-auto p-10"

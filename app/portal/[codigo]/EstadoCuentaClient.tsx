@@ -19,6 +19,7 @@ export default function EstadoCuentaClient({
   mesesMora,
   montoMora,
   corte,
+  sinPagos,
   clave,
 }: {
   pegue: any;
@@ -27,6 +28,7 @@ export default function EstadoCuentaClient({
   mesesMora: number;
   montoMora: number;
   corte: boolean;
+  sinPagos: boolean;
   clave: string;
 }) {
   const [pegue, setPegue] = useState(pegueInicial);
@@ -125,10 +127,14 @@ export default function EstadoCuentaClient({
           </div>
         )}
 
-        <div className={`card ${corte ? "border-red-300 bg-red-50" : mesesMora > 0 ? "border-orange-300 bg-orange-50" : "border-green-300 bg-green-50"}`}>
+        <div className={`card ${corte ? "border-red-300 bg-red-50" : sinPagos ? "border-orange-300 bg-orange-50" : mesesMora > 0 ? "border-orange-300 bg-orange-50" : "border-green-300 bg-green-50"}`}>
           <p className="text-sm text-gray-500">Próximo mes a pagar</p>
           <p className="font-semibold">{nombreMes(pendiente.mes)} {pendiente.anio}</p>
-          {mesesMora > 0 ? (
+          {sinPagos ? (
+            <p className="text-orange-700 font-medium mt-1">
+              ⚠ No se ha registrado ningún pago para este pegue todavía
+            </p>
+          ) : mesesMora > 0 ? (
             <>
               <p className="text-sm mt-2">Meses en mora: <b>{mesesMora}</b></p>
               <p className="text-sm">Multa por mora: <b>L {montoMora.toFixed(2)}</b></p>

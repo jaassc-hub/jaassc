@@ -5,7 +5,8 @@ import { CONFIG_DEFAULT } from "@/lib/reciboConfig";
 import { obtenerUsuarioActual } from "@/lib/auth";
 import { tienePermiso } from "@/lib/permisos";
 import AccesoDenegado from "@/components/AccesoDenegado";
-import { mesesDeMora, sujetoACorte, siguienteMesPendiente } from "@/lib/mora";
+import { mesesDeMora, sujetoACorte, siguienteMesPendiente, nombreMes } from "@/lib/mora";
+import { obtenerConfigAvisos, llenarPlantilla } from "@/lib/avisos";
 
 export default async function ReciboPage({ params }: { params: { pagoId: string } }) {
   const usuario = await obtenerUsuarioActual();
@@ -42,12 +43,25 @@ export default async function ReciboPage({ params }: { params: { pagoId: string 
   const mesesMoraActual = mesesDeMora(pendiente.mes, pendiente.anio);
   const corteActual = sujetoACorte(mesesMoraActual);
 
+  const avisosConfig = await obtenerConfigAvisos();
+  const mensajeWhatsApp = llenarPlantilla(avisosConfig.plantilla, {
+    nombre: pago.pegue.abonado.nombre,
+    codigo: pago.pegue.codigo,
+    barrio: pago.pegue.barrio.nombre,
+    meses: `${nombreMes(pago.mesPagado)} ${pago.anioPagado}`,
+    total: pago.total.toFixed(2),
+    numeroRecibo: pago.numeroRecibo || "",
+    fecha: new Date(pago.fechaPago).toLocaleDateString("es-HN"),
+    junta: process.env.NEXT_PUBLIC_JUNTA_NOMBRE || "Junta de Agua",
+  });
+
   return (
     <ReciboClient
       pago={pago}
       configInicial={config}
       mesesMoraActual={mesesMoraActual}
       corteActual={corteActual}
+      mensajeWhatsApp={mensajeWhatsApp}
     />
   );
 }

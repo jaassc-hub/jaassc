@@ -40,9 +40,9 @@ export async function GET(req: NextRequest) {
   }
 
   const detalles = peguesRelevantes.map((p) => {
-    const montoServicios = p.servicios
-      .filter((ps) => ps.habilitado)
-      .reduce((s, ps) => s + ps.servicio.precio, 0);
+    const montoServicios = p.tipoConexion === "BIEN_COMUN"
+      ? 0
+      : p.servicios.filter((ps) => ps.habilitado).reduce((s, ps) => s + ps.servicio.precio, 0);
     const pendiente = siguienteMesPendiente(p.pagos[0] || null, p.createdAt);
     const mesesMora = mesesDeMora(pendiente.mes, pendiente.anio);
     const montoNeto = montoServicios * mesesMora;
@@ -63,11 +63,12 @@ export async function GET(req: NextRequest) {
       abonadoId: p.abonadoId,
       abonadoNombre: p.abonado.nombre,
       abonadoIdentidad: p.abonado.identidad,
+      abonadoTelefono: p.abonado.telefono,
     };
   });
 
   const umbralUsado = modo === "individual" ? 1 : umbral;
-  const conDeuda = detalles.filter((d) => d.mesesPendientes >= umbralUsado);
+  const conDeuda = detalles.filter((d) => d.mesesPendientes >= umbralUsado && d.montoNeto > 0);
 
   const porAbonado = new Map<string, typeof conDeuda>();
   for (const d of conDeuda) {
@@ -79,6 +80,7 @@ export async function GET(req: NextRequest) {
     abonadoId,
     abonadoNombre: pegues[0].abonadoNombre,
     abonadoIdentidad: pegues[0].abonadoIdentidad,
+    abonadoTelefono: pegues[0].abonadoTelefono,
     pegues: pegues.map((p) => ({
       codigo: p.codigo,
       barrio: p.barrio,

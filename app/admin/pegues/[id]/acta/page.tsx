@@ -5,7 +5,7 @@ import { tienePermiso } from "@/lib/permisos";
 import AccesoDenegado from "@/components/AccesoDenegado";
 import { CLAUSULAS_DEFAULT } from "@/lib/clausulasConfig";
 import { FIRMAS_DEFAULT } from "@/lib/firmasConfig";
-import { generarCorrelativo } from "@/lib/correlativo";
+import { armarCorrelativoPorPegue } from "@/lib/correlativo";
 import ActaClient from "./ActaClient";
 
 export default async function ActaInstalacionPage({ params }: { params: { id: string } }) {
@@ -33,7 +33,7 @@ export default async function ActaInstalacionPage({ params }: { params: { id: st
   // El numero de acta se genera una sola vez y se reutiliza cada vez que se reimprime.
   let peguesConActa = pegue;
   if (!pegue.actaNumero) {
-    const numero = await prisma.$transaction((tx) => generarCorrelativo(tx, "ACTA"));
+    const numero = armarCorrelativoPorPegue("ACTA", pegue.codigo, 1);
     peguesConActa = await prisma.pegue.update({
       where: { id: pegue.id },
       data: { actaNumero: numero },

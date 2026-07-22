@@ -38,6 +38,8 @@ export default function NuevoPegueClient({
 
   // --- Derecho de conexion ---
   const [costoConexion, setCostoConexion] = useState("");
+  const [tipoConexion, setTipoConexion] = useState("VIVIENDA");
+  const [observaciones, setObservaciones] = useState("");
   const [formaPagoConexion, setFormaPagoConexion] = useState<"SIN_COBRO" | "CONTADO" | "CUOTAS">("SIN_COBRO");
   const [cantidadCuotas, setCantidadCuotas] = useState(2);
   const [metodoPagoContado, setMetodoPagoContado] = useState("EFECTIVO");
@@ -101,6 +103,8 @@ export default function NuevoPegueClient({
         barrioId,
         servicioIds: serviciosSel,
         codigoManual: codigoManual || undefined,
+        tipoConexion,
+        observaciones: observaciones || undefined,
         costoConexion: costoConexion || undefined,
         formaPagoConexion,
         cantidadCuotas,
@@ -257,6 +261,28 @@ export default function NuevoPegueClient({
               </label>
             ))}
           </div>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-3">
+          <div>
+            <label className="label">Tipo de conexión</label>
+            <select className="input" value={tipoConexion} onChange={(e) => setTipoConexion(e.target.value)}>
+              <option value="VIVIENDA">Vivienda</option>
+              <option value="SOLAR">Solar</option>
+              <option value="CORRAL">Corral</option>
+              <option value="BIEN_COMUN">Bien común (exento de cobro)</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label className="label">Observaciones (opcional)</label>
+          <textarea
+            className="input text-sm"
+            placeholder='Ej: "Según libro 2023 debe desde marzo", "lo usa para ordeñar"...'
+            value={observaciones}
+            onChange={(e) => setObservaciones(e.target.value)}
+          />
         </div>
       </div>
 

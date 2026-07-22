@@ -5,6 +5,7 @@ import { nombreMes } from "@/lib/mora";
 import { obtenerUsuarioActual } from "@/lib/auth";
 import { tienePermiso } from "@/lib/permisos";
 import AccesoDenegado from "@/components/AccesoDenegado";
+import DelegarBoton from "@/components/DelegarBoton";
 
 export default async function HistorialPeguePage({ params }: { params: { id: string } }) {
   const usuario = await obtenerUsuarioActual();
@@ -77,14 +78,17 @@ export default async function HistorialPeguePage({ params }: { params: { id: str
                     <p className="text-xs text-gray-500">Motivo: {(item.detalle as any).nota}</p>
                   )}
                 </div>
-                <div className="text-right">
+                <div className="text-right space-y-1">
                   <p className="text-gray-400 text-xs">
                     {new Date(item.fecha).toLocaleDateString("es-HN")}
                   </p>
                   {["CORTE", "INHABILITACION", "REACTIVACION"].includes((item.detalle as any).tipo) && (
-                    <Link href={`/admin/eventos/${(item.detalle as any).id}`} className="text-azul text-xs font-medium">
+                    <Link href={`/admin/eventos/${(item.detalle as any).id}`} className="text-azul text-xs font-medium block">
                       Ver constancia
                     </Link>
+                  )}
+                  {(item.detalle as any).tipo === "CORTE" && (
+                    <DelegarBoton pegueId={pegue.id} tipo="CORTE_MORA" eventoId={(item.detalle as any).id} />
                   )}
                 </div>
               </>

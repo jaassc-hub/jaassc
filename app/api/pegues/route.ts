@@ -49,6 +49,8 @@ export async function POST(req: NextRequest) {
     cantidadCuotas,
     metodoPagoContado,
     referenciaContado,
+    tipoConexion,
+    observaciones,
   } = body;
 
   if (!abonadoId || !barrioId) {
@@ -81,6 +83,8 @@ export async function POST(req: NextRequest) {
           codigo,
           abonadoId,
           barrioId,
+          tipoConexion: tipoConexion || "VIVIENDA",
+          observaciones: observaciones || null,
           servicios: {
             create: (servicioIds || []).map((servicioId: string) => ({
               servicioId,

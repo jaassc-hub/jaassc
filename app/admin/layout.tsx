@@ -16,16 +16,22 @@ import {
   FileWarning,
   BookOpen,
   Banknote,
+  Bell,
+  UserCog,
+  Search,
 } from "lucide-react";
 
 const nav: { href: string; label: string; icon: any; modulo?: ModuloKey }[] = [
   { href: "/admin", label: "Panel", icon: LayoutDashboard },
   { href: "/admin/pagos/nuevo", label: "Cobrar", icon: Banknote, modulo: "pagos" },
+  { href: "/admin/consulta-pegue", label: "Consultar estado de cuenta", icon: Search, modulo: "abonados" },
   { href: "/admin/abonados", label: "Pegues y abonados", icon: Users, modulo: "abonados" },
   { href: "/admin/pagos", label: "Historial de pagos", icon: Wallet, modulo: "pagos" },
   { href: "/admin/caja", label: "Informe de caja", icon: BarChart3, modulo: "caja" },
   { href: "/admin/notas-mora", label: "Notas de mora", icon: FileWarning, modulo: "abonados" },
   { href: "/admin/libro-diario", label: "Libro diario", icon: BookOpen, modulo: "caja" },
+  { href: "/admin/notificaciones", label: "Notificaciones", icon: Bell, modulo: "abonados" },
+  { href: "/admin/delegaciones", label: "Delegaciones", icon: UserCog },
   { href: "/admin/servicios", label: "Servicios y tarifas", icon: Wrench, modulo: "servicios" },
   { href: "/admin/barrios", label: "Barrios / códigos", icon: MapPin, modulo: "barrios" },
   { href: "/admin/configuracion", label: "Configuración", icon: Settings, modulo: "configuracion" },
